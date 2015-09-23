@@ -1,0 +1,31 @@
+{
+  "parser": "babel-eslint",
+
+  "env": {
+    "node": true
+  },
+
+  "rules": {
+    "brace-style": 2,
+    "comma-dangle": [2, "always-multiline"],
+    "consistent-return": 2,
+    "curly": [2, "multi-line"],
+    "dot-notation": 2,
+    "eol-last": 2,
+    "indent": [2, 2, {"SwitchCase": 1, "VariableDeclarator": 2}],
+    "no-else-return": 2,
+    "no-eq-null": 2,
+    "no-floating-decimal": 2,
+    "no-param-reassign": 2,
+    "no-self-compare": 2,
+    "no-shadow": 0,
+    "no-throw-literal": 2,
+    "no-underscore-dangle": 0,
+    "object-shorthand": 2,
+    "quotes": [2, "single"],
+    "space-after-keywords": 2,
+    "strict": 0,
+    "vars-on-top": 2,
+    "wrap-iife": 2,
+  }
+}
