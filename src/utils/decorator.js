@@ -1,8 +1,7 @@
 import assign from 'lodash/object/assign';
 import merge from 'lodash/object/merge';
 
-import createStamp, { compose } from '../';
-import { initDescriptor } from './';
+import createStamp from '..';
 
 /**
  * Get the non-enum properties of an object.
@@ -12,9 +11,9 @@ import { initDescriptor } from './';
  * @return {Object} An object of enum properties.
  */
 function getNonEnum(src) {
-  const props = Object.getOwnPropertyNames(src);
-  const enumOnly = Object.keys(src);
   let obj = {};
+  const props = Object.getOwnPropertyNames(src),
+      enumOnly = Object.keys(src);
 
   props.forEach(function(key) {
     var indexInEnum = enumOnly.indexOf(key);
@@ -34,8 +33,8 @@ function getNonEnum(src) {
  * @return {Object} An object of enum properties.
  */
 function getEnum(src) {
-  const props = Object.keys(src);
   let obj = {};
+  const props = Object.keys(src);
 
   props.forEach(function(key) {
     obj[key] = src[key];
@@ -47,9 +46,9 @@ function getEnum(src) {
 /**
  * ES7 decorator for converting an ES6 class to a stamp.
  *
- * @param  {Class} Class An ES6 class.
+ * @param  {Object} Class An ES6 class.
  *
- * @return {Function} A stamp.
+ * @return {Object} A stamp.
  */
 export default function stamp(Class) {
   const desc = {};

@@ -34,7 +34,7 @@ const reactSpec = {
  */
 export function dupeFilter(prev, next, key, targ) {
   if (targ[key]) {
-    throw new TypeError('Cannot mixin key `' + key + '` because it is provided by multiple sources.');
+    throw new TypeError('Cannot mixin key `' + key + '` because it has a unique constraint.');
   }
 
   return next;
@@ -59,10 +59,8 @@ export function wrapMethods(targ, src) {
     switch (reactSpec[key]) {
       case 'many':
         return function () {
-          /* eslint-disable no-unused-expressions */
           targ[key] && targ[key].apply(this, arguments);
           val.apply(this, arguments);
-          /* eslint-disable no-unused-expressions */
         };
       case 'many_merged_dupe':
         return function () {
@@ -73,11 +71,7 @@ export function wrapMethods(targ, src) {
         };
       case 'once':
       default:
-        if (targ[key]) {
-          throw new TypeError('Cannot mixin `' + key + '` because it has a unique constraint.');
-        }
-
-        return val;
+        return dupeFilter(null, val, key, targ);
     }
   });
 

@@ -1,5 +1,4 @@
 import assign from 'lodash/object/assign';
-import isEmpty from 'lodash/lang/isEmpty';
 import isFunction from 'lodash/lang/isFunction';
 import merge from 'lodash/object/merge';
 
@@ -11,12 +10,13 @@ import {
 } from './utils';
 
 /**
- * [createStamp description]
+ * Given a description object, return a stamp
+ * aka composable.
  *
- * @param  {[type]} React [description]
- * @param  {Object} desc [description]
+ * @param  {Object} React The React library.
+ * @param  {Object} desc A description object.
  *
- * @return {[type]} [description]
+ * @return {Object} A stamp.
  */
 export default function createStamp(React, desc = {}) {
   let reactDesc = getReactDescriptor(React && React.Component);

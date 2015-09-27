@@ -1,12 +1,12 @@
 import assign from 'lodash/object/assign';
 import isEmpty from 'lodash/lang/isEmpty';
 
-import { isSpecDescriptor } from './type';
+import { isSpecDescriptor } from '.';
 
 /**
  * Initialize descriptor with property defaults.
  *
- * @return {Object} Default desriptor.
+ * @return {Object} Default descriptor.
  */
 export function initDescriptor() {
   return {
@@ -25,7 +25,7 @@ export function initDescriptor() {
 /**
  * Convert React component class to descriptor.
  *
- * @param  {Class} Component The React component class.
+ * @param  {Object} Component The React component class.
  *
  * @return {Object} The React component descriptor.
  */
@@ -43,11 +43,12 @@ export function getReactDescriptor(Component) {
 };
 
 /**
- * [parseDesc description]
+ * Verify a description object is compliant
+ * to the stamp specification.
  *
- * @param  {Object} desc [description]
+ * @param  {Object} desc A description object.
  *
- * @return {[type]} [description]
+ * @return {Object} A stamp spec compliant description object.
  */
 export function parseDesc(desc = {}) {
   if (isSpecDescriptor(desc) || isEmpty(desc)) return desc;
@@ -59,16 +60,16 @@ export function parseDesc(desc = {}) {
   } = desc;
   let parsedDesc = initDescriptor();
 
-  if (!displayName) displayName = 'ReactStamp';
-  if (init) parsedDesc.initializers.push(init);
-  if (state) parsedDesc.deepProperties.state = state;
-  if (methods) assign(parsedDesc.methods, methods);
+  !displayName && (displayName = 'ReactStamp');
+  init && parsedDesc.initializers.push(init);
+  state && (parsedDesc.deepProperties.state = state);
+  methods && assign(parsedDesc.methods, methods);
 
   parsedDesc.staticProperties = { ...statics, displayName };
-  if (contextTypes) parsedDesc.staticProperties.contextTypes = contextTypes;
-  if (childContextTypes) parsedDesc.staticProperties.childContextTypes = childContextTypes;
-  if (propTypes) parsedDesc.staticProperties.propTypes = propTypes;
-  if (defaultProps) parsedDesc.staticProperties.defaultProps = defaultProps;
+  contextTypes && (parsedDesc.staticProperties.contextTypes = contextTypes);
+  childContextTypes && (parsedDesc.staticProperties.childContextTypes = childContextTypes);
+  propTypes && (parsedDesc.staticProperties.propTypes = propTypes);
+  defaultProps && (parsedDesc.staticProperties.defaultProps = defaultProps);
 
   return parsedDesc;
 }

@@ -14,11 +14,13 @@ import {
 } from '.';
 
 /**
- * [compose description]
+ * Take any number of stamps or descriptors. Return a new stamp
+ * that encapsulates combined behavior. If nothing is passed in,
+ * it returns an empty stamp.
  *
- * @param  {...[type]} args [description]
+ * @param  {...Object} args Stamps and/or descriptors.
  *
- * @return {[type]} [description]
+ * @return {Object} A new stamp composed from arguments.
  */
 export default function compose (...args) {
   const compDesc = initDescriptor();
@@ -43,9 +45,7 @@ export default function compose (...args) {
      */
     const { state, ...deepProperties } = desc.deepProperties || {};
 
-    if (state) {
-      compDesc.deepProperties.state = assign(compDesc.deepProperties.state || {}, state, dupeFilter);
-    }
+    state && (compDesc.deepProperties.state = assign(compDesc.deepProperties.state || {}, state, dupeFilter));
     compDesc.methods = wrapMethods(compDesc.methods, desc.methods);
     compDesc.staticProperties = extractStatics(compDesc.staticProperties, desc.staticProperties);
 

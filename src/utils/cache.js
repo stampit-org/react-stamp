@@ -1,30 +1,30 @@
 import uniqueId from 'lodash/utility/uniqueId';
 
-let cache = {};
+const cache = {};
 
 /**
- * [find description]
+ * Find and return an object with matching id.
  *
- * @param  {[type]} id [description]
+ * @param  {Number} id The index of the object.
  *
- * @return {[type]} [description]
+ * @return {Object} The cached object.
  */
 export function find(id) {
   return cache[id];
 }
 
 /**
- * [save description]
+ * Cache an object using the passed id as the index.
  *
- * @param  {[type]} val [description]
- * @param  {[type]} id [description]
+ * @param  {Object} obj An object.
+ * @param  {Number} id The object's key.
  *
- * @return {[type]} [description]
+ * @return {Object} The object.
  */
-export function save(val, id) {
-  if (id) cache[id] = val;
+export function save(obj, id) {
+  id && (cache[id] = obj);
 
-  return val;
+  return obj;
 }
 
 export { uniqueId };
