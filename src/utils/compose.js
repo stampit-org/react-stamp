@@ -32,7 +32,7 @@ export default function compose (...args) {
 
   forEach(descs, desc => {
     // state is handled special for React
-    const { state, ...properties } = desc.properties;
+    const { state, ...properties } = desc.properties || {};
 
     if (state) {
       compDesc.properties.state = assign(compDesc.properties.state || {}, state, dupeFilter);
