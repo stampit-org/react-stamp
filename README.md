@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/troutowicz/react-stamp.svg)](https://travis-ci.org/troutowicz/react-stamp)
+
 # react-stamp
 > Composables for React.
 
