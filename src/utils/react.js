@@ -22,6 +22,16 @@ const reactSpec = {
   componentWillUnmount: 'many',
 };
 
+/**
+ * [dupeFilter description]
+ *
+ * @param  {[type]} prev [description]
+ * @param  {Function} next [description]
+ * @param  {[type]} key [description]
+ * @param  {[type]} targ [description]
+ *
+ * @return {[type]} [description]
+ */
 export function dupeFilter(prev, next, key, targ) {
   if (targ[key]) {
     throw new TypeError('Cannot mixin key `' + key + '` because it is provided by multiple sources.');
@@ -31,13 +41,14 @@ export function dupeFilter(prev, next, key, targ) {
 };
 
 /**
- * Iterate through stamp methods, creating wrapper
+ * Iterate through object methods, creating wrapper
  * functions for mixable React methods, starting
  * execution with first-in.
  *
- * @param {Object} targ Method destination
- * @param {Object} src New methods
- * @return {Object} An object of methods
+ * @param  {Object} targ The target object.
+ * @param  {Object} src The src object.
+ *
+ * @return {Object} The new object.
  */
 export function wrapMethods(targ, src) {
   let methods;
@@ -74,12 +85,13 @@ export function wrapMethods(targ, src) {
 }
 
 /**
- * Process the static properties of a stamp and
- * combine the result with the passed in statics object.
+ * Process the properties of an object and
+ * combine the result with the passed in target object.
  *
- * @param {Object} stamp A stamp
- * @param {Object} prev An object of past static properties
- * @return {Object} A processed object of static properties
+ * @param  {Object} targ The target object.
+ * @param  {Object} src The src object.
+ *
+ * @return {Object} The processed/combined object.
  */
 export function extractStatics(targ, src) {
   let statics = { ...targ };

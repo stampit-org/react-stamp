@@ -3,6 +3,11 @@ import isEmpty from 'lodash/lang/isEmpty';
 
 import { isSpecDescriptor } from './type';
 
+/**
+ * Initialize descriptor with property defaults.
+ *
+ * @return {Object} Default desriptor.
+ */
 export function initDescriptor() {
   return {
     methods: {},
@@ -17,32 +22,46 @@ export function initDescriptor() {
   };
 };
 
-export function getReactDescriptor(React) {
+/**
+ * Convert React component class to descriptor.
+ *
+ * @param  {Class} Component The React component class.
+ *
+ * @return {Object} The React component descriptor.
+ */
+export function getReactDescriptor(Component) {
   const desc = initDescriptor();
 
-  if (React) {
-    desc.methods = React.prototype;
+  if (Component) {
+    desc.methods = { ...Component.prototype };
     desc.initializers.push(
-      (args, { instance, stamp }) => React.apply(instance, args)
+      (args, { instance, stamp }) => Component.apply(instance, args)
     );
   }
 
   return desc;
 };
 
-export function parseDesc(desc, targ = {}) {
-  if (isSpecDescriptor(desc)) return desc;
+/**
+ * [parseDesc description]
+ *
+ * @param  {Object} desc [description]
+ *
+ * @return {[type]} [description]
+ */
+export function parseDesc(desc = {}) {
+  if (isSpecDescriptor(desc) || isEmpty(desc)) return desc;
 
   let {
     displayName, init, state, statics,
     contextTypes, childContextTypes, propTypes, defaultProps,
     ...methods,
   } = desc;
-  let parsedDesc = !isEmpty(targ) ? { ...targ } : initDescriptor();
+  let parsedDesc = initDescriptor();
 
   if (!displayName) displayName = 'ReactStamp';
   if (init) parsedDesc.initializers.push(init);
-  if (state) parsedDesc.properties.state = state;
+  if (state) parsedDesc.deepProperties.state = state;
   if (methods) assign(parsedDesc.methods, methods);
 
   parsedDesc.staticProperties = { ...statics, displayName };

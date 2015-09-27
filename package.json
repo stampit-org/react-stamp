@@ -7,7 +7,7 @@
     "build": "npm run clean && npm run transpile",
     "clean": "rimraf lib",
     "lint": "eslint src test",
-    "test": "npm run lint && babel-node --stage 1 test/test.js",
+    "test": "npm run lint && babel-node --stage 1 test",
     "transpile": "babel --stage 1 src --out-dir lib"
   },
   "repository": {

@@ -10,17 +10,27 @@ import {
   dupeFilter,
 } from './utils';
 
+/**
+ * [createStamp description]
+ *
+ * @param  {[type]} React [description]
+ * @param  {Object} desc [description]
+ *
+ * @return {[type]} [description]
+ */
 export default function createStamp(React, desc = {}) {
   let reactDesc = getReactDescriptor(React && React.Component);
+  const { methods, ...specDesc } = parseDesc(desc);
 
-  if (!isEmpty(desc)) reactDesc = parseDesc(desc, reactDesc);
+  /**
+   * Make sure the descriptor is not overriding React's
+   * `setState` and `forceUpdate` methods.
+   */
+  assign(reactDesc.methods, methods, dupeFilter);
+  merge(reactDesc, specDesc);
 
   const stamp = (...args) => {
     const instance = Object.create(reactDesc.methods);
-    /*
-     * State is handled special for React
-     */
-    const { state, ...properties } = reactDesc.properties;
 
     reactDesc.initializers.forEach(initializer => {
       if (!isFunction(initializer)) return;
@@ -28,11 +38,7 @@ export default function createStamp(React, desc = {}) {
       initializer.apply(instance, [ args, { instance, stamp } ]);
     });
 
-    if (state) {
-      instance.state = assign(instance.state || {}, state, dupeFilter);
-    }
-
-    assign(instance, properties);
+    assign(instance, reactDesc.properties);
     merge(instance, reactDesc.deepProperties);
     Object.defineProperties(instance, reactDesc.propertyDescriptors);
     merge(instance, reactDesc.configuration);

@@ -2,12 +2,12 @@ import has from 'lodash/object/has';
 import React from 'react';
 import test from 'tape';
 
-import stampit from '../src';
+import createStamp from '../src';
 
-test('stampit(React, { statics: obj })', (t) => {
+test('createStamp(React, { statics: obj })', (t) => {
   t.plan(1);
 
-  const stamp = stampit(React, {
+  const stamp = createStamp(React, {
     statics: {
       foo: '',
     },
@@ -19,10 +19,10 @@ test('stampit(React, { statics: obj })', (t) => {
   );
 });
 
-test('stampit(React, { displayName: str })', (t) => {
+test('createStamp(React, { displayName: str })', (t) => {
   t.plan(1);
 
-  const stamp = stampit(React, {
+  const stamp = createStamp(React, {
     displayName: 'stamp',
   });
 
@@ -32,10 +32,10 @@ test('stampit(React, { displayName: str })', (t) => {
   );
 });
 
-test('stampit(React, { contextTypes: obj })', (t) => {
+test('createStamp(React, { contextTypes: obj })', (t) => {
   t.plan(1);
 
-  const stamp = stampit(React, {
+  const stamp = createStamp(React, {
     contextTypes: {},
   });
 
@@ -45,10 +45,10 @@ test('stampit(React, { contextTypes: obj })', (t) => {
   );
 });
 
-test('stampit(React, { childContextTypes: obj })', (t) => {
+test('createStamp(React, { childContextTypes: obj })', (t) => {
   t.plan(1);
 
-  const stamp = stampit(React, {
+  const stamp = createStamp(React, {
     childContextTypes: {},
   });
 
@@ -58,10 +58,10 @@ test('stampit(React, { childContextTypes: obj })', (t) => {
   );
 });
 
-test('stampit(React, { propTypes: obj })', (t) => {
+test('createStamp(React, { propTypes: obj })', (t) => {
   t.plan(1);
 
-  const stamp = stampit(React, {
+  const stamp = createStamp(React, {
     propTypes: {},
   });
 
@@ -71,10 +71,10 @@ test('stampit(React, { propTypes: obj })', (t) => {
   );
 });
 
-test('stampit(React, { defaultProps: obj })', (t) => {
+test('createStamp(React, { defaultProps: obj })', (t) => {
   t.plan(1);
 
-  const stamp = stampit(React, {
+  const stamp = createStamp(React, {
     defaultProps: {},
   });
 

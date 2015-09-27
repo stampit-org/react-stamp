@@ -13,6 +13,13 @@ import {
   extractStatics,
 } from '.';
 
+/**
+ * [compose description]
+ *
+ * @param  {...[type]} args [description]
+ *
+ * @return {[type]} [description]
+ */
 export default function compose (...args) {
   const compDesc = initDescriptor();
   const descs = args.map(arg => {
@@ -21,7 +28,7 @@ export default function compose (...args) {
   });
 
   if (isComposable(this)) {
-    /*
+    /**
      * Speical handling is required for statics when using
      * the ES7 stamp decorator... worth it?
      */
@@ -31,17 +38,19 @@ export default function compose (...args) {
   }
 
   forEach(descs, desc => {
-    // state is handled special for React
-    const { state, ...properties } = desc.properties || {};
+    /**
+     * State is handled special for React
+     */
+    const { state, ...deepProperties } = desc.deepProperties || {};
 
     if (state) {
-      compDesc.properties.state = assign(compDesc.properties.state || {}, state, dupeFilter);
+      compDesc.deepProperties.state = assign(compDesc.deepProperties.state || {}, state, dupeFilter);
     }
     compDesc.methods = wrapMethods(compDesc.methods, desc.methods);
     compDesc.staticProperties = extractStatics(compDesc.staticProperties, desc.staticProperties);
 
-    assign(compDesc.properties, properties);
-    merge(compDesc.deepProperties, desc.deepProperties);
+    assign(compDesc.properties, desc.properties);
+    merge(compDesc.deepProperties, deepProperties);
     compDesc.initializers = compDesc.initializers.concat(desc.initializers);
     merge(compDesc.deepStaticProperties, desc.deepStaticProperties);
     assign(compDesc.propertyDescriptors, desc.propertyDescriptors);

@@ -5,17 +5,21 @@ import createStamp, { compose } from '../';
 import { initDescriptor } from './';
 
 /**
- * Get object of non-enum properties
+ * Get the non-enum properties of an object.
+ *
+ * @param  {Object} src An object.
+ *
+ * @return {Object} An object of enum properties.
  */
-function getNonEnum(target) {
-  const props = Object.getOwnPropertyNames(target);
-  const enumOnly = Object.keys(target);
+function getNonEnum(src) {
+  const props = Object.getOwnPropertyNames(src);
+  const enumOnly = Object.keys(src);
   let obj = {};
 
   props.forEach(function(key) {
     var indexInEnum = enumOnly.indexOf(key);
     if (indexInEnum === -1 && key !== 'constructor') {
-      obj[key] = target[key];
+      obj[key] = src[key];
     }
   });
 
@@ -23,36 +27,41 @@ function getNonEnum(target) {
 }
 
 /**
- * Get object of enum properties
+ * Get the enum properties of an object.
+ *
+ * @param  {Object} src An object.
+ *
+ * @return {Object} An object of enum properties.
  */
-function getEnum(target) {
-  const props = Object.keys(target);
+function getEnum(src) {
+  const props = Object.keys(src);
   let obj = {};
 
   props.forEach(function(key) {
-    obj[key] = target[key];
+    obj[key] = src[key];
   });
 
   return obj;
 }
 
 /**
- * ES7 decorator for converting ES6 class to stamp
+ * ES7 decorator for converting an ES6 class to a stamp.
+ *
+ * @param  {Class} Class An ES6 class.
+ *
+ * @return {Function} A stamp.
  */
 export default function stamp(Class) {
-  const desc = initDescriptor();
+  const desc = {};
+  const init = function() {
+    merge(this, new Class());
+  }
 
-  desc.initializers.push(
-    function() {
-      merge(this, new Class());
-    }
-  );
-
-  assign(
-    desc.methods,
+  desc.initializers = [ init ];
+  desc.methods = assign({},
     Object.getPrototypeOf(Class).prototype,
     getNonEnum(Class.prototype)
-  );
+  )
 
   return createStamp(null, desc);
 }
