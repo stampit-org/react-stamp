@@ -1,34 +1,10 @@
-import isFunction from 'lodash/lang/isFunction';
-import isObject from 'lodash/lang/isObject';
-
 /**
- * [isComposable description]
+ * Check if descriptor object is stamp
+ * spec compliant.
  *
- * @param  {[type]} obj [description]
+ * @param  {Object} desc A decriptor object.
  *
- * @return {Boolean} [description]
- */
-export function isComposable(obj) {
-  return isFunction(obj) && isFunction(obj.compose);
-}
-
-/**
- * [isDescriptor description]
- *
- * @param  {[type]} obj [description]
- *
- * @return {Boolean} [description]
- */
-export function isDescriptor(obj) {
-  return isObject(obj);
-}
-
-/**
- * [isSpecDescriptor description]
- *
- * @param  {[type]} desc [description]
- *
- * @return {Boolean} [description]
+ * @return {Boolean}
  */
 export function isSpecDescriptor(desc) {
   return (

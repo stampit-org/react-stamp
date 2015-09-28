@@ -6,8 +6,6 @@ import createStamp from '..';
 import {
   initDescriptor,
   parseDesc,
-  isComposable,
-  isDescriptor,
   dupeFilter,
   wrapMethods,
   extractStatics,
@@ -25,11 +23,10 @@ import {
 export default function compose (...args) {
   const compDesc = initDescriptor();
   const descs = args.map(arg => {
-    if (isComposable(arg)) return arg.compose;
-    else if (isDescriptor(arg)) return parseDesc(arg);
+    return arg.compose || parseDesc(arg);
   });
 
-  if (isComposable(this)) {
+  if (this && this.compose) {
     /**
      * Speical handling is required for statics when using
      * the ES7 stamp decorator... worth it?

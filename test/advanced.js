@@ -3,7 +3,7 @@ import React from 'react';
 import test from 'tape';
 
 import createStamp from '../src';
-import { cache, isComposable, stamp } from '../src/utils';
+import { cache, stamp } from '../src/utils';
 
 test('stamp decorator', (t) => {
   t.plan(4);
@@ -37,7 +37,7 @@ test('stamp decorator', (t) => {
     },
   };
 
-  t.ok(isComposable(Component), 'converts class to stamp');
+  t.ok(Component.compose, 'converts class to stamp');
   /* eslint-disable new-cap */
   t.ok(Component().render, 'maps methods');
   t.deepEqual(

@@ -22,16 +22,6 @@ const reactSpec = {
   componentWillUnmount: 'many',
 };
 
-/**
- * [dupeFilter description]
- *
- * @param  {[type]} prev [description]
- * @param  {Function} next [description]
- * @param  {[type]} key [description]
- * @param  {[type]} targ [description]
- *
- * @return {[type]} [description]
- */
 export function dupeFilter(prev, next, key, targ) {
   if (targ[key]) {
     throw new TypeError('Cannot mixin key `' + key + '` because it has a unique constraint.');

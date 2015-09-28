@@ -3,7 +3,7 @@ import compose from './compose';
 import stamp from './decorator';
 import { initDescriptor, getReactDescriptor, parseDesc } from './descriptor';
 import { dupeFilter, wrapMethods, extractStatics } from './react';
-import { isComposable, isDescriptor, isSpecDescriptor } from './type';
+import { isSpecDescriptor } from './type';
 
 export {
   cache,
@@ -15,7 +15,5 @@ export {
   dupeFilter,
   wrapMethods,
   extractStatics,
-  isComposable,
-  isDescriptor,
   isSpecDescriptor,
 };

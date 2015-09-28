@@ -2,7 +2,6 @@ import React from 'react/addons';
 import test from 'tape';
 
 import createStamp from '../src';
-import { isComposable } from '../src/utils';
 
 const TestUtils = React.addons.TestUtils;
 
@@ -10,7 +9,7 @@ test('createStamp()', (t) => {
   t.plan(1);
 
   t.ok(
-    isComposable(createStamp()),
+    createStamp().compose,
     'should return a stamp'
   );
 });
@@ -21,7 +20,7 @@ test('createStamp(React, props)', (t) => {
   const stamp = createStamp(React, {});
 
   t.ok(
-    isComposable(stamp),
+    stamp.compose,
     'should return a stamp'
   );
 });
@@ -32,7 +31,7 @@ test('createStamp(React)', (t) => {
   const stamp = createStamp(React);
 
   t.ok(
-    isComposable(stamp),
+    stamp.compose,
     'should return a stamp'
   );
 });
@@ -43,7 +42,7 @@ test('createStamp(null, props)', (t) => {
   const stamp = createStamp(null, {});
 
   t.ok(
-    isComposable(stamp),
+    stamp.compose,
     'should return a stamp'
   );
 });
