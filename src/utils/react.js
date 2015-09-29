@@ -1,6 +1,5 @@
 import assign from 'lodash/object/assign';
 import forEach from 'lodash/collection/forEach';
-import isFunction from 'lodash/lang/isFunction';
 import mapValues from 'lodash/object/mapValues';
 
 /**

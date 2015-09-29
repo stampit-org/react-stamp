@@ -30,13 +30,13 @@ export function initDescriptor() {
  * @return {Object} The React component descriptor.
  */
 export function getReactDescriptor(Component) {
-  const desc = initDescriptor();
+  const desc = {};
 
   if (Component) {
     desc.methods = { ...Component.prototype };
-    desc.initializers.push(
-      (args, { instance, stamp }) => Component.apply(instance, args)
-    );
+    desc.initializers = [
+      (args, { instance, stamp }) => Component.apply(instance, args),
+    ];
   }
 
   return desc;
@@ -58,7 +58,12 @@ export function parseDesc(desc = {}) {
     contextTypes, childContextTypes, propTypes, defaultProps,
     ...methods,
   } = desc;
-  let parsedDesc = initDescriptor();
+  const parsedDesc = {
+    initializers: [],
+    deepProperties: {},
+    methods: {},
+    staticProperties: {},
+  };
 
   !displayName && (displayName = 'ReactStamp');
   init && parsedDesc.initializers.push(init);

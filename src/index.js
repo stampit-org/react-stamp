@@ -1,6 +1,4 @@
 import assign from 'lodash/object/assign';
-import isFunction from 'lodash/lang/isFunction';
-import merge from 'lodash/object/merge';
 
 import {
   compose,
@@ -19,39 +17,39 @@ import {
  * @return {Object} A stamp.
  */
 export default function createStamp(React, desc = {}) {
-  let reactDesc = getReactDescriptor(React && React.Component);
-  const { methods, ...specDesc } = parseDesc(desc);
+  const specDesc = parseDesc(desc);
+  const { methods, initializers } = getReactDescriptor(React && React.Component);
 
   /**
    * Make sure the descriptor is not overriding React's
    * `setState` and `forceUpdate` methods.
    */
-  assign(reactDesc.methods, methods, dupeFilter);
-  merge(reactDesc, specDesc);
+  specDesc.methods = assign({}, methods, specDesc.methods, dupeFilter);
+  specDesc.initializers = (initializers || []).concat(specDesc.initializers);
 
   const stamp = (...args) => {
-    const instance = Object.create(reactDesc.methods);
+    const instance = Object.create(specDesc.methods);
     /**
      * State is handled special for React
      */
-    const { state, ...deepProperties } = reactDesc.deepProperties;
+    const { state, ...deepProperties } = specDesc.deepProperties || {};
 
-    reactDesc.initializers.forEach(initializer => {
+    specDesc.initializers.forEach(initializer => {
       initializer.apply(instance, [ args, { instance, stamp } ]);
     });
 
     state && (instance.state = assign(instance.state || {}, state));
-    assign(instance, deepProperties, reactDesc.properties);
-    Object.defineProperties(instance, reactDesc.propertyDescriptors);
-    assign(instance, reactDesc.configuration);
+    assign(instance, deepProperties, specDesc.properties);
+    Object.defineProperties(instance, specDesc.propertyDescriptors || {});
+    assign(instance, specDesc.configuration);
 
     return instance;
   }
 
-  assign(stamp, reactDesc.deepStaticProperties, reactDesc.staticProperties);
-  Object.defineProperties(stamp, reactDesc.staticPropertyDescriptors);
+  assign(stamp, specDesc.deepStaticProperties, specDesc.staticProperties);
+  Object.defineProperties(stamp, specDesc.staticPropertyDescriptors || {});
 
-  stamp.compose = assign(compose.bind(stamp), reactDesc);
+  stamp.compose = assign(compose.bind(stamp), specDesc);
 
   return stamp;
 }
