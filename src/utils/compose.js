@@ -20,7 +20,7 @@ import {
  *
  * @return {Object} A new stamp composed from arguments.
  */
-export default function compose (...args) {
+export default function compose(...args) {
   const compDesc = initDescriptor();
   const descs = args.map(arg => {
     return arg.compose || parseDesc(arg);
@@ -46,9 +46,10 @@ export default function compose (...args) {
     compDesc.methods = wrapMethods(compDesc.methods, desc.methods);
     compDesc.staticProperties = extractStatics(compDesc.staticProperties, desc.staticProperties);
 
-    assign(compDesc.properties, desc.properties);
+    compDesc.initializers = compDesc.initializers.concat(desc.initializers)
+      .filter(initializer => initializer !== undefined);
     merge(compDesc.deepProperties, deepProperties);
-    compDesc.initializers = compDesc.initializers.concat(desc.initializers);
+    assign(compDesc.properties, desc.properties);
     merge(compDesc.deepStaticProperties, desc.deepStaticProperties);
     assign(compDesc.propertyDescriptors, desc.propertyDescriptors);
     assign(compDesc.staticPropertyDescriptors, desc.staticPropertyDescriptors);

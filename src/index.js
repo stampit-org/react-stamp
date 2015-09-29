@@ -31,23 +31,24 @@ export default function createStamp(React, desc = {}) {
 
   const stamp = (...args) => {
     const instance = Object.create(reactDesc.methods);
+    /**
+     * State is handled special for React
+     */
+    const { state, ...deepProperties } = reactDesc.deepProperties;
 
     reactDesc.initializers.forEach(initializer => {
-      if (!isFunction(initializer)) return;
-
       initializer.apply(instance, [ args, { instance, stamp } ]);
     });
 
-    assign(instance, reactDesc.properties);
-    merge(instance, reactDesc.deepProperties);
+    state && (instance.state = assign(instance.state || {}, state));
+    assign(instance, deepProperties, reactDesc.properties);
     Object.defineProperties(instance, reactDesc.propertyDescriptors);
-    merge(instance, reactDesc.configuration);
+    assign(instance, reactDesc.configuration);
 
     return instance;
   }
 
-  assign(stamp, reactDesc.staticProperties);
-  merge(stamp, reactDesc.deepStaticProperties);
+  assign(stamp, reactDesc.deepStaticProperties, reactDesc.staticProperties);
   Object.defineProperties(stamp, reactDesc.staticPropertyDescriptors);
 
   stamp.compose = assign(compose.bind(stamp), reactDesc);

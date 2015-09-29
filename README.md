@@ -13,7 +13,7 @@ react-stamp has an API similar to `React.createClass`. The factory accepts two p
 
 ```js
 createStamp(React, {
-  init: [],
+  init() {},
   state: {},
   statics: {},
 
