@@ -1,7 +1,7 @@
 import assign from 'lodash/object/assign';
 import merge from 'lodash/object/merge';
 
-import createStamp from '..';
+import reactStamp from '..';
 
 /**
  * Get the non-enum properties of an object.
@@ -63,5 +63,5 @@ export default function stamp(Class) {
     getNonEnum(Class.prototype)
   )
 
-  return createStamp(null, desc);
+  return reactStamp(null, desc);
 }

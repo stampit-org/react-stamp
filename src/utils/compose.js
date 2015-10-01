@@ -2,7 +2,7 @@ import assign from 'lodash/object/assign';
 import forEach from 'lodash/collection/forEach';
 import merge from 'lodash/object/merge';
 
-import createStamp from '..';
+import reactStamp from '..';
 import {
   initDescriptor,
   parseDesc,
@@ -54,5 +54,5 @@ export default function compose(...args) {
     merge(compDesc.configuration, desc.configuration);
   });
 
-  return createStamp(null, compDesc);
+  return reactStamp(null, compDesc);
 }

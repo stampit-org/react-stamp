@@ -16,7 +16,7 @@ import {
  *
  * @return {Object} A stamp.
  */
-export default function createStamp(React, desc = {}) {
+export default function reactStamp(React, desc = {}) {
   const specDesc = parseDesc(desc);
   const { methods, initializers } = getReactDescriptor(React && React.Component);
 

@@ -1,34 +1,23 @@
 import React from 'react/addons';
 import test from 'tape';
 
-import createStamp from '../src';
+import reactStamp from '../src';
 
 const TestUtils = React.addons.TestUtils;
 
-test('createStamp()', (t) => {
+test('reactStamp()', (t) => {
   t.plan(1);
 
   t.ok(
-    createStamp().compose,
+    reactStamp().compose,
     'should return a stamp'
   );
 });
 
-test('createStamp(React, props)', (t) => {
+test('reactStamp(React, props)', (t) => {
   t.plan(1);
 
-  const stamp = createStamp(React, {});
-
-  t.ok(
-    stamp.compose,
-    'should return a stamp'
-  );
-});
-
-test('createStamp(React)', (t) => {
-  t.plan(1);
-
-  const stamp = createStamp(React);
+  const stamp = reactStamp(React, {});
 
   t.ok(
     stamp.compose,
@@ -36,10 +25,10 @@ test('createStamp(React)', (t) => {
   );
 });
 
-test('createStamp(null, props)', (t) => {
+test('reactStamp(React)', (t) => {
   t.plan(1);
 
-  const stamp = createStamp(null, {});
+  const stamp = reactStamp(React);
 
   t.ok(
     stamp.compose,
@@ -47,10 +36,21 @@ test('createStamp(null, props)', (t) => {
   );
 });
 
-test('createStamp(React, { render() })()', (t) => {
+test('reactStamp(null, props)', (t) => {
   t.plan(1);
 
-  const stamp = createStamp(React, {
+  const stamp = reactStamp(null, {});
+
+  t.ok(
+    stamp.compose,
+    'should return a stamp'
+  );
+});
+
+test('reactStamp(React, { render() })()', (t) => {
+  t.plan(1);
+
+  const stamp = reactStamp(React, {
     render() {},
   });
 
@@ -60,11 +60,11 @@ test('createStamp(React, { render() })()', (t) => {
   );
 });
 
-test('createStamp(React, props).compose', (t) => {
+test('reactStamp(React, props).compose', (t) => {
   t.plan(1);
 
   t.equal(
-    typeof createStamp(React).compose, 'function',
+    typeof reactStamp(React).compose, 'function',
     'should be a function'
   );
 });

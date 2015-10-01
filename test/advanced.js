@@ -2,7 +2,7 @@ import keys from 'lodash/object/keys';
 import React from 'react';
 import test from 'tape';
 
-import createStamp from '../src';
+import reactStamp from '../src';
 import { cache, stamp } from '../src/utils';
 
 test('stamp decorator', (t) => {
@@ -59,7 +59,7 @@ test('stamp factory using `cacheStamp`', (t) => {
 
   const stampFactory1 = React => {
     return cache.find(id1) || cache.save(
-      createStamp(React, {
+      reactStamp(React, {
         displayName: 'Component',
       }), id1
     );
@@ -67,7 +67,7 @@ test('stamp factory using `cacheStamp`', (t) => {
 
   const stampFactory2 = React => {
     return cache.find(id2) || cache.save(
-      createStamp(React)
+      reactStamp(React)
     );
   };
 

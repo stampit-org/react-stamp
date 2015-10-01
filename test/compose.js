@@ -2,19 +2,19 @@ import keys from 'lodash/object/keys';
 import React from 'react';
 import test from 'tape';
 
-import createStamp from '../src';
+import reactStamp from '../src';
 import { compose } from '../src/utils';
 
-test('createStamp(React, props).compose(stamp2)', (t) => {
+test('reactStamp(React, props).compose(stamp2)', (t) => {
   t.plan(1);
 
-  const mixin = createStamp(null, {
+  const mixin = reactStamp(null, {
     method() {
       return 'mixin';
     },
   });
 
-  const stamp = createStamp(React).compose(mixin);
+  const stamp = reactStamp(React).compose(mixin);
 
   t.equal(
     stamp().method(), 'mixin',
@@ -22,7 +22,7 @@ test('createStamp(React, props).compose(stamp2)', (t) => {
   );
 });
 
-test('createStamp(React, props).compose(pojo)', (t) => {
+test('reactStamp(React, props).compose(pojo)', (t) => {
   t.plan(1);
 
   const mixin = {
@@ -31,7 +31,7 @@ test('createStamp(React, props).compose(pojo)', (t) => {
     },
   };
 
-  const stamp = createStamp(React).compose(mixin);
+  const stamp = reactStamp(React).compose(mixin);
 
   t.equal(
     stamp().method(), 'mixin',
@@ -39,16 +39,16 @@ test('createStamp(React, props).compose(pojo)', (t) => {
   );
 });
 
-test('createStamp(React, props).compose(stamp2, stamp3)', (t) => {
+test('reactStamp(React, props).compose(stamp2, stamp3)', (t) => {
   t.plan(2);
 
-  const mixin1 = createStamp(null, {
+  const mixin1 = reactStamp(null, {
     method() {
       return this.state;
     },
   });
 
-  const mixin2 = createStamp(null, {
+  const mixin2 = reactStamp(null, {
     statics: {
       util() {
         return 'static';
@@ -56,7 +56,7 @@ test('createStamp(React, props).compose(stamp2, stamp3)', (t) => {
     },
   });
 
-  const stamp = createStamp(React, {
+  const stamp = reactStamp(React, {
     state: {
       foo: '',
     },
@@ -76,13 +76,13 @@ test('createStamp(React, props).compose(stamp2, stamp3)', (t) => {
 test('compose(stamp2, stamp1)', (t) => {
   t.plan(1);
 
-  const mixin = createStamp(null, {
+  const mixin = reactStamp(null, {
     method() {
       return 'mixin';
     },
   });
 
-  const stamp = createStamp(React);
+  const stamp = reactStamp(React);
 
   t.equal(
     compose(mixin, stamp)().method(), 'mixin',
@@ -93,19 +93,19 @@ test('compose(stamp2, stamp1)', (t) => {
 test('stamps composed of stamps with state', (t) => {
   t.plan(2);
 
-  const mixin = createStamp(null, {
+  const mixin = reactStamp(null, {
     state: {
       foo: ' ',
     },
   });
 
-  const stamp = createStamp(React, {
+  const stamp = reactStamp(React, {
     state: {
       bar: ' ',
     },
   }).compose(mixin);
 
-  const failStamp = createStamp(React, {
+  const failStamp = reactStamp(React, {
     state: {
       foo: ' ',
     },
@@ -125,7 +125,7 @@ test('stamps composed of stamps with state', (t) => {
 test('stamps composed of stamps with React statics', (t) => {
   t.plan(8);
 
-  const mixin = createStamp(null, {
+  const mixin = reactStamp(null, {
     contextTypes: {
       foo: React.PropTypes.string,
     },
@@ -140,7 +140,7 @@ test('stamps composed of stamps with React statics', (t) => {
     },
   });
 
-  const stamp = createStamp(React, {
+  const stamp = reactStamp(React, {
     contextTypes: {
       bar: React.PropTypes.string,
     },
@@ -155,25 +155,25 @@ test('stamps composed of stamps with React statics', (t) => {
     },
   }).compose(mixin);
 
-  const failStamp1 = createStamp(React, {
+  const failStamp1 = reactStamp(React, {
     propTypes: {
       foo: React.PropTypes.string,
     },
   });
 
-  const failStamp2 = createStamp(React, {
+  const failStamp2 = reactStamp(React, {
     defaultProps: {
       foo: 'foo',
     },
   });
 
-  const okStamp1 = createStamp(React, {
+  const okStamp1 = reactStamp(React, {
     contextTypes: {
       foo: React.PropTypes.string,
     },
   });
 
-  const okStamp2 = createStamp(React, {
+  const okStamp2 = reactStamp(React, {
     childContextTypes: {
       foo: React.PropTypes.string,
     },
@@ -223,7 +223,7 @@ test('stamps composed of stamps with React statics', (t) => {
 test('stamps composed of stamps with non-React statics', (t) => {
   t.plan(2);
 
-  const mixin = createStamp(null, {
+  const mixin = reactStamp(null, {
     statics: {
       obj: {
         foo: 'foo',
@@ -235,7 +235,7 @@ test('stamps composed of stamps with non-React statics', (t) => {
     },
   });
 
-  const stamp = createStamp(React, {
+  const stamp = reactStamp(React, {
     statics: {
       obj: {
         bar: '',
@@ -260,7 +260,7 @@ test('stamps composed of stamps with non-React statics', (t) => {
 test('stamps composed of stamps with mixable methods', (t) => {
   t.plan(2);
 
-  const mixin1 = createStamp(null, {
+  const mixin1 = reactStamp(null, {
     getChildContext() {
       return {
         bar: '',
@@ -272,13 +272,13 @@ test('stamps composed of stamps with mixable methods', (t) => {
     },
   });
 
-  const mixin2 = createStamp(null, {
+  const mixin2 = reactStamp(null, {
     componentDidMount() {
       this.state.mixin2 = true;
     },
   });
 
-  const stamp = createStamp(React, {
+  const stamp = reactStamp(React, {
     state: {
       stamp: false,
       mixin1: false,
@@ -313,11 +313,11 @@ test('stamps composed of stamps with mixable methods', (t) => {
 test('stamps composed of stamps with non-mixable methods', (t) => {
   t.plan(1);
 
-  const mixin = createStamp(null, {
+  const mixin = reactStamp(null, {
     render() {},
   });
 
-  const stamp = createStamp(React, {
+  const stamp = reactStamp(React, {
     render() {},
   });
 

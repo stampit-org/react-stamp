@@ -2,12 +2,12 @@ import has from 'lodash/object/has';
 import React from 'react';
 import test from 'tape';
 
-import createStamp from '../src';
+import reactStamp from '../src';
 
-test('createStamp(React, { state: obj })()', (t) => {
+test('reactStamp(React, { state: obj })()', (t) => {
   t.plan(1);
 
-  const stamp = createStamp(React, {
+  const stamp = reactStamp(React, {
     state: {
       foo: '',
     },
@@ -19,10 +19,10 @@ test('createStamp(React, { state: obj })()', (t) => {
   );
 });
 
-test('createStamp(React, { init() { ... } })()', (t) => {
+test('reactStamp(React, { init() { ... } })()', (t) => {
   t.plan(1);
 
-  const stamp = createStamp(React, {
+  const stamp = reactStamp(React, {
     init() {
       this.state = { foo: '' };
     },
