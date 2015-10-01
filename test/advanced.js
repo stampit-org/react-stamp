@@ -41,8 +41,8 @@ test('stamp decorator', (t) => {
   /* eslint-disable new-cap */
   t.ok(Component().render, 'maps methods');
   t.deepEqual(
-    keys(Component.compose(mixin)().state), ['foo', 'bar'],
-    'merges state'
+    keys(Component.compose(mixin)().state), ['foo'],
+    'assigns state, initializers take priority'
   );
   t.deepEqual(
     keys(Component.compose(mixin).defaultProps), ['foo', 'bar'],

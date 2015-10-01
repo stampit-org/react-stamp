@@ -27,11 +27,6 @@ export default function reactStamp(React, desc = {}) {
   const stamp = (options, ...args) => {
     const instance = Object.create(specDesc.methods);
 
-    // Stamp spec
-    specDesc.initializers.forEach(initializer => {
-      initializer.call(instance, options, { instance, stamp, args });
-    });
-
     // React spec
     const { state, ...deepProperties } = specDesc.deepProperties || {};
     state && (instance.state = assign(instance.state || {}, state));
@@ -40,6 +35,11 @@ export default function reactStamp(React, desc = {}) {
     assign(instance, deepProperties, specDesc.properties);
     Object.defineProperties(instance, specDesc.propertyDescriptors || {});
     assign(instance, specDesc.configuration);
+
+    // Stamp spec
+    specDesc.initializers.forEach(initializer => {
+      initializer.call(instance, options, { instance, stamp, args });
+    });
 
     return instance;
   }
