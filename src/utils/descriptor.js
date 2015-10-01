@@ -23,9 +23,9 @@ export function initDescriptor() {
 };
 
 /**
- * Convert React component class to descriptor.
+ * Convert the React component constructor function to a descriptor.
  *
- * @param  {Object} Component The React component class.
+ * @param  {Object} Component The React component constructor function.
  *
  * @return {Object} The React component descriptor.
  */
@@ -35,7 +35,8 @@ export function getReactDescriptor(Component) {
   if (Component) {
     desc.methods = { ...Component.prototype };
     desc.initializers = [
-      (args, { instance, stamp }) => Component.apply(instance, args),
+      (options, { instance, stamp, args }) =>
+        Component.call(instance, options, ...args),
     ];
   }
 

@@ -29,7 +29,7 @@ export default function compose(...args) {
   if (this && this.compose) {
     /**
      * Speical handling is required for statics when using
-     * the ES7 stamp decorator... worth it?
+     * the ES7 stamp decorator... should we support this?
      */
     const { compose, ...statics } = this;
     compose.staticProperties = assign(compose.staticProperties || {}, statics);
@@ -37,15 +37,13 @@ export default function compose(...args) {
   }
 
   forEach(descs, desc => {
-    /**
-     * State is handled special for React
-     */
+    // React spec
     const { state, ...deepProperties } = desc.deepProperties || {};
-
     state && (compDesc.deepProperties.state = assign(compDesc.deepProperties.state || {}, state, dupeFilter));
     compDesc.methods = wrapMethods(compDesc.methods, desc.methods);
     compDesc.staticProperties = extractStatics(compDesc.staticProperties, desc.staticProperties);
 
+    // Stamp spec
     compDesc.initializers = compDesc.initializers.concat(desc.initializers)
       .filter(initializer => initializer !== undefined);
     merge(compDesc.deepProperties, deepProperties);

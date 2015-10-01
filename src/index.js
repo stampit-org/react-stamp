@@ -20,25 +20,23 @@ export default function createStamp(React, desc = {}) {
   const specDesc = parseDesc(desc);
   const { methods, initializers } = getReactDescriptor(React && React.Component);
 
-  /**
-   * Make sure the descriptor is not overriding React's
-   * `setState` and `forceUpdate` methods.
-   */
+  // Do not override React's `setState` and `forceUpdate` methods.
   specDesc.methods = assign({}, methods, specDesc.methods, dupeFilter);
   specDesc.initializers = (initializers || []).concat(specDesc.initializers);
 
-  const stamp = (...args) => {
+  const stamp = (options, ...args) => {
     const instance = Object.create(specDesc.methods);
-    /**
-     * State is handled special for React
-     */
-    const { state, ...deepProperties } = specDesc.deepProperties || {};
 
+    // Stamp spec
     specDesc.initializers.forEach(initializer => {
-      initializer.apply(instance, [ args, { instance, stamp } ]);
+      initializer.call(instance, options, { instance, stamp, args });
     });
 
+    // React spec
+    const { state, ...deepProperties } = specDesc.deepProperties || {};
     state && (instance.state = assign(instance.state || {}, state));
+
+    // Stamp spec
     assign(instance, deepProperties, specDesc.properties);
     Object.defineProperties(instance, specDesc.propertyDescriptors || {});
     assign(instance, specDesc.configuration);
