@@ -12,7 +12,7 @@ This library is the result of wondering about what other ways a React component 
 react-stamp has an API similar to `React.createClass`. The factory accepts two parameters, the React library and a description object.
 
 ```js
-createStamp(React, {
+reactStamp(React, {
   init() {},
   state: {},
   statics: {},
@@ -52,14 +52,14 @@ export default {
 __component.jsx__
 
 ```js
-import createClass from 'react-stamp';
+import reactStamp from 'react-stamp';
 import { cache } from 'react-stamp/utils';
 
 const id = cache.uniqueId();
 
 export default React => {
   return cache.find(id) || cache.save(
-    createStamp(React, {
+    reactStamp(React, {
       state: {
         comp: false,
         mixin1: false,
@@ -129,7 +129,7 @@ You may have noticed several interesting behaviors.
 
  This is shorthand syntax for:
  ```js
- createStamp(null, {
+ reactStamp(null, {
    // stuff
  });
  ```

@@ -2,12 +2,12 @@ import has from 'lodash/object/has';
 import React from 'react';
 import test from 'tape';
 
-import createStamp from '../src';
+import reactStamp from '../src';
 
-test('createStamp(React, { statics: obj })', (t) => {
+test('reactStamp(React, { statics: obj })', (t) => {
   t.plan(1);
 
-  const stamp = createStamp(React, {
+  const stamp = reactStamp(React, {
     statics: {
       foo: '',
     },
@@ -19,10 +19,10 @@ test('createStamp(React, { statics: obj })', (t) => {
   );
 });
 
-test('createStamp(React, { displayName: str })', (t) => {
+test('reactStamp(React, { displayName: str })', (t) => {
   t.plan(1);
 
-  const stamp = createStamp(React, {
+  const stamp = reactStamp(React, {
     displayName: 'stamp',
   });
 
@@ -32,10 +32,10 @@ test('createStamp(React, { displayName: str })', (t) => {
   );
 });
 
-test('createStamp(React, { contextTypes: obj })', (t) => {
+test('reactStamp(React, { contextTypes: obj })', (t) => {
   t.plan(1);
 
-  const stamp = createStamp(React, {
+  const stamp = reactStamp(React, {
     contextTypes: {},
   });
 
@@ -45,10 +45,10 @@ test('createStamp(React, { contextTypes: obj })', (t) => {
   );
 });
 
-test('createStamp(React, { childContextTypes: obj })', (t) => {
+test('reactStamp(React, { childContextTypes: obj })', (t) => {
   t.plan(1);
 
-  const stamp = createStamp(React, {
+  const stamp = reactStamp(React, {
     childContextTypes: {},
   });
 
@@ -58,10 +58,10 @@ test('createStamp(React, { childContextTypes: obj })', (t) => {
   );
 });
 
-test('createStamp(React, { propTypes: obj })', (t) => {
+test('reactStamp(React, { propTypes: obj })', (t) => {
   t.plan(1);
 
-  const stamp = createStamp(React, {
+  const stamp = reactStamp(React, {
     propTypes: {},
   });
 
@@ -71,10 +71,10 @@ test('createStamp(React, { propTypes: obj })', (t) => {
   );
 });
 
-test('createStamp(React, { defaultProps: obj })', (t) => {
+test('reactStamp(React, { defaultProps: obj })', (t) => {
   t.plan(1);
 
-  const stamp = createStamp(React, {
+  const stamp = reactStamp(React, {
     defaultProps: {},
   });
 

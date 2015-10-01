@@ -1,12 +1,12 @@
 import React from 'react';
 import test from 'tape';
 
-import createStamp from '../src';
+import reactStamp from '../src';
 
-test('createStamp(React, { method() {} })()', (t) => {
+test('reactStamp(React, { method() {} })()', (t) => {
   t.plan(1);
 
-  const stamp = createStamp(React, {
+  const stamp = reactStamp(React, {
     render() {},
   });
 
