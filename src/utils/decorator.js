@@ -52,11 +52,12 @@ function getEnum(src) {
  */
 export default function stamp(Class) {
   const desc = {};
-  const init = function() {
-    merge(this, new Class());
-  }
 
-  desc.initializers = [ init ];
+  desc.initializers = [
+    (options, { instance, args }) =>
+      assign(instance, new Class(options, ...args)),
+  ];
+
   desc.methods = assign({},
     Object.getPrototypeOf(Class).prototype,
     getNonEnum(Class.prototype)
