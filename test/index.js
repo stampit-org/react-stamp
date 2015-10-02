@@ -5,3 +5,5 @@ import './methods';
 import './compose';
 import './wrapMethods';
 import './advanced';
+import './readmeExample';
+import './factoryExample';
