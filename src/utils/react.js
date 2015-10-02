@@ -55,8 +55,9 @@ export function wrapMethods(targ, src) {
           return res1 ? assign(res1, res2, dupeFilter) : res2;
         };
       case 'once':
-      default:
         return dupeFilter(null, val, key, targ);
+      default:
+        return val;
     }
   });
 

@@ -1,75 +1,61 @@
+import forEach from 'lodash/collection/forEach';
+import isEqual from 'lodash/lang/isEqual';
 import test from 'tape';
 
 import { wrapMethods } from '../src/utils';
 
+const methods = {
+  render: 'once',
+  shouldComponentUpdate: 'once',
+  componentWillMount: 'many',
+  componentDidMount: 'many',
+  componentWillReceiveProps: 'many',
+  componentWillUpdate: 'many',
+  componentDidUpdate: 'many',
+  componentWillUnmount: 'many',
+  nonReactMethod: 'override',
+};
+
+
+let targ = {}, src = {}, fail = {};
+forEach(methods, (type, method) => {
+  targ[method] = function() {
+    this.result = [ 'foo' ];
+  };
+
+  if (type !== 'once') {
+    src[method] = function() {
+      this.result.push('bar');
+    };
+  } else {
+    fail[method] = { [method]() {} };
+  }
+});
+
 test('wrapMethods(targ, src)', (t) => {
-  t.plan(7);
-
-  /* eslint-disable brace-style */
-  const targ = {
-    componentWillMount() { this.wrapped = false; },
-    componentDidMount() { this.wrapped = false; },
-    componentWillReceiveProps() { this.wrapped = false; },
-    componentWillUpdate() { this.wrapped = false; },
-    componentDidUpdate() { this.wrapped = false; },
-    componentWillUnmount() { this.wrapped = false; },
-    method() {},
-  };
-
-  const src = {
-    componentWillMount() { this.wrapped = 'WillMount'; },
-    componentDidMount() { this.wrapped = 'DidMount'; },
-    componentWillReceiveProps() { this.wrapped = 'WillReceiveProps'; },
-    componentWillUpdate() { this.wrapped = 'WillUpdate'; },
-    componentDidUpdate() { this.wrapped = 'DidUpdate'; },
-    componentWillUnmount() { this.wrapped = 'WillUnmount'; },
-  };
-
-  const failObj = {
-    method() {},
-  };
-  /* eslint-enable brace-style */
+  t.plan(9);
 
   const obj = wrapMethods(targ, src);
 
-  obj.componentWillMount();
-  t.equal(
-    obj.wrapped, 'WillMount',
-    'should wrap `componentWillMount`'
-  );
+  forEach(methods, (type, method) => {
+    obj.result = [];
+    obj[method]();
 
-  obj.componentDidMount();
-  t.equal(
-    obj.wrapped, 'DidMount',
-    'should wrap `componentDidMount`'
-  );
-
-  obj.componentWillReceiveProps();
-  t.equal(
-    obj.wrapped, 'WillReceiveProps',
-    'should wrap `componentWillReceiveProps`'
-  );
-
-  obj.componentWillUpdate();
-  t.equal(
-    obj.wrapped, 'WillUpdate',
-    'should wrap `componentWillUpdate`'
-  );
-
-  obj.componentDidUpdate();
-  t.equal(
-    obj.wrapped, 'DidUpdate',
-    'should wrap `componentDidUpdate`'
-  );
-
-  obj.componentWillUnmount();
-  t.ok(
-    obj.wrapped, 'WillUnmount',
-    'should wrap `componentWillUnmount`'
-  );
-
-  t.throws(
-    () => wrapMethods(targ, failObj), TypeError,
-    'should throw on dupe non-React method'
-  );
+    if (type === 'many') {
+      t.ok(
+        isEqual(obj.result, [ 'foo', 'bar' ]),
+        `should wrap dupe '${method}'`
+      );
+    } else if (type === 'override') {
+      t.ok(
+        isEqual(obj.result, [ 'bar' ]),
+        `should override dupe '${method}'`
+      );
+    } else {
+      t.throws(
+        () => wrapMethods(targ, fail[method]), TypeError,
+        `should throw on dupe '${method}'`
+      );
+    }
+  });
 });
