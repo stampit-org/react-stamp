@@ -4,7 +4,6 @@ import merge from 'lodash/object/merge';
 
 import reactStamp from '..';
 import {
-  initDescriptor,
   parseDesc,
   wrapMethods,
 } from '.';
@@ -19,8 +18,8 @@ import {
  * @return {Object} A new stamp composed from arguments.
  */
 export default function compose(...args) {
-  const compDesc = initDescriptor();
   const descs = args.map(arg => arg.compose || parseDesc(arg));
+  const compDesc = {};
 
   if (this && this.compose) {
     /**
@@ -28,13 +27,14 @@ export default function compose(...args) {
      * the ES7 stamp decorator... should we support this?
      */
     const { compose, ...statics } = this;
-    compose.deepStaticProperties = assign(compose.deepStaticProperties || {}, statics);
+    statics && (compose.deepStaticProperties =
+                assign({}, compose.deepStaticProperties, statics));
     descs.unshift(compose);
   }
 
   forEach(descs, desc => {
     const {
-      methods, properties, staticProperties, propertyDescriptors,
+      initializers, methods, properties, staticProperties, propertyDescriptors,
       staticPropertyDescriptors, deepProperties, deepStaticProperties, configuration,
     } = desc;
 
@@ -42,15 +42,15 @@ export default function compose(...args) {
     compDesc.methods = wrapMethods(compDesc.methods, methods);
 
     // Stamp spec
-    compDesc.initializers = compDesc.initializers.concat(desc.initializers)
+    compDesc.initializers = (compDesc.initializers || []).concat(initializers)
       .filter(initializer => initializer !== undefined);
 
     forEach({ properties, staticProperties, propertyDescriptors, staticPropertyDescriptors },
-      (val, key) => assign(compDesc[key], val)
+      (val, key) => val && (compDesc[key] = assign(compDesc[key] || {}, val))
     );
 
     forEach({ deepProperties, deepStaticProperties, configuration },
-      (val, key) => merge(compDesc[key], val)
+      (val, key) => val && (compDesc[key] = merge(compDesc[key] || {}, val))
     );
   });
 

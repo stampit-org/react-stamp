@@ -5,25 +5,6 @@ import isEmpty from 'lodash/lang/isEmpty';
 import { isSpecDescriptor } from '.';
 
 /**
- * Initialize descriptor with property defaults.
- *
- * @return {Object} Default descriptor.
- */
-export function initDescriptor() {
-  return {
-    methods: {},
-    properties: {},
-    deepProperties: {},
-    initializers: [],
-    staticProperties: {},
-    deepStaticProperties: {},
-    propertyDescriptors: {},
-    staticPropertyDescriptors: {},
-    configuration: {},
-  };
-};
-
-/**
  * Convert the React component constructor function to a descriptor.
  *
  * @param  {Object} Component The React component constructor function.
@@ -60,17 +41,12 @@ export function parseDesc(desc = {}) {
     contextTypes, childContextTypes, propTypes, defaultProps,
     ...methods,
   } = desc;
-  const parsedDesc = {
-    initializers: [],
-    deepProperties: {},
-    methods: {},
-    deepStaticProperties: {},
-  };
+  const parsedDesc = {};
 
   !displayName && (displayName = 'ReactStamp');
-  init && parsedDesc.initializers.push(init);
-  state && (parsedDesc.deepProperties.state = state);
-  methods && assign(parsedDesc.methods, methods);
+  init && (parsedDesc.initializers = [ init ]);
+  state && (parsedDesc.deepProperties = { state });
+  methods && (parsedDesc.methods = methods);
   parsedDesc.deepStaticProperties = { ...statics, displayName };
 
   forEach({ contextTypes, childContextTypes, propTypes, defaultProps },

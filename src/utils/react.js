@@ -34,7 +34,7 @@ export function dupeFilter(prev, next, key, targ) {
  *
  * @return {Object} The new object.
  */
-export function wrapMethods(targ, src) {
+export function wrapMethods(targ = {}, src = {}) {
   const methods = mapValues(src, (val, key) => {
     switch (reactSpec[key]) {
       case 'many':
