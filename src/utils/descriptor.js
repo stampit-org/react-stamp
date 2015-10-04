@@ -1,4 +1,5 @@
 import assign from 'lodash/object/assign';
+import forEach from 'lodash/collection/forEach';
 import isEmpty from 'lodash/lang/isEmpty';
 
 import { isSpecDescriptor } from '.';
@@ -35,7 +36,7 @@ export function getReactDescriptor(Component) {
   if (Component) {
     desc.methods = { ...Component.prototype };
     desc.initializers = [
-      (options, { instance, stamp, args }) =>
+      (options, { instance, args }) =>
         Component.call(instance, options, ...args),
     ];
   }
@@ -63,19 +64,18 @@ export function parseDesc(desc = {}) {
     initializers: [],
     deepProperties: {},
     methods: {},
-    staticProperties: {},
+    deepStaticProperties: {},
   };
 
   !displayName && (displayName = 'ReactStamp');
   init && parsedDesc.initializers.push(init);
   state && (parsedDesc.deepProperties.state = state);
   methods && assign(parsedDesc.methods, methods);
+  parsedDesc.deepStaticProperties = { ...statics, displayName };
 
-  parsedDesc.staticProperties = { ...statics, displayName };
-  contextTypes && (parsedDesc.staticProperties.contextTypes = contextTypes);
-  childContextTypes && (parsedDesc.staticProperties.childContextTypes = childContextTypes);
-  propTypes && (parsedDesc.staticProperties.propTypes = propTypes);
-  defaultProps && (parsedDesc.staticProperties.defaultProps = defaultProps);
+  forEach({ contextTypes, childContextTypes, propTypes, defaultProps },
+    (val, key) => val && (parsedDesc.deepStaticProperties[key] = val)
+  );
 
   return parsedDesc;
 }

@@ -1,40 +1,40 @@
 ## Composition logic
 
-Stamp composition might be compared to `React.createClass`'s mixin feature. A significant difference is that you compose a stamp without referencing the stamps being inherited from inside the stamp's declaration.
+Component composition might be compared to `React.createClass`'s mixin feature. A significant difference is that you compose a component without referencing the mixins being inherited from inside the component's declaration.
 
 
 ### State
-Composed stamps inherit other stamps' state. State is merged, throwing on duplicate keys.
+Composed components inherit other components' state.
 
 ```js
 const mixin = {
   state: {
-    foo: 'foo',
-    bar: 'bar',
+    foo: true,
+    bar: true,
   },
 };
 
-const component = createStamp(React).compose(mixin);
+const component = reactStamp(React).compose(mixin);
 ```
 
 ```js
 assert.deepEqual(
-  component().state, { foo: 'foo', bar: 'bar },
+  component().state, { foo: true, bar: true },
   'should inherit state'
 );
   >> ok
 ```
 
-__*`React.createClass` throws an Invariant Violation when duplicate keys are found within mixins. `react-stamp` will throw a TypeError.*__
+__*`React.createClass` throws an Invariant Violation when duplicate keys are found within mixins. `react-stamp` will merge duplicate keys.
 
 ### Statics
-Composed stamps inherit other stamps' statics. React statics are merged, throwing on duplicate keys for `propTypes` and `defaultProps`. Non-React statics override with last-in priority.
+Composed components inherit other components' statics.
 
 ```js
 const mixin = {
   statics: {
     someStatic: {
-      bar: 'bar',
+      bar: true,
     },
   },
 
@@ -43,10 +43,10 @@ const mixin = {
   },
 };
 
-const component = createStamp(React, {
+const component = reactStamp(React, {
   statics: {
     someStatic: {
-      foo: 'foo',
+      foo: true,
     },
   },
 
@@ -68,16 +68,16 @@ assert.ok(
 );
   >> ok
 assert.deepEqual(
-  component.someStatic, { foo: 'foo' },
-  'should override non-React statics'
+  component.someStatic, { foo: true, bar: true },
+  'should merge non-React statics'
 );
   >> ok
 ```
 
-__*`React.createClass` throws an Invariant Violation when duplicate keys are found in `getDefaultProps` and `getInitialState`. `react-stamp` will throw a TypeError.*__
+__*`React.createClass` throws an Invariant Violation when duplicate keys are found in `getDefaultProps` and `getInitialState`. `react-stamp` will merge duplicate keys.*__
 
 ### Methods
-Composed stamps inherit other stamps' methods. A handful of React methods will be 'wrapped' executing with first-in priority. Any non-React methods or React methods with a unique constraint will throw on duplicates.
+Composed components inherit other components' methods. A handful of React methods will be 'wrapped' executing with first-in priority. React methods with a unique constraint will throw on duplicates. Non-React methods will override with last-in priority.
 
 __Wrapped__
 
@@ -101,7 +101,7 @@ const mixin = {
   },
 };
 
-const component = createStamp(React, {
+const component = reactStamp(React, {
   state: {
     component: false,
     mixin: false,

@@ -6,9 +6,7 @@ import reactStamp from '..';
 import {
   initDescriptor,
   parseDesc,
-  dupeFilter,
   wrapMethods,
-  extractStatics,
 } from '.';
 
 /**
@@ -22,9 +20,7 @@ import {
  */
 export default function compose(...args) {
   const compDesc = initDescriptor();
-  const descs = args.map(arg => {
-    return arg.compose || parseDesc(arg);
-  });
+  const descs = args.map(arg => arg.compose || parseDesc(arg));
 
   if (this && this.compose) {
     /**
@@ -32,26 +28,30 @@ export default function compose(...args) {
      * the ES7 stamp decorator... should we support this?
      */
     const { compose, ...statics } = this;
-    compose.staticProperties = assign(compose.staticProperties || {}, statics);
+    compose.deepStaticProperties = assign(compose.deepStaticProperties || {}, statics);
     descs.unshift(compose);
   }
 
   forEach(descs, desc => {
+    const {
+      methods, properties, staticProperties, propertyDescriptors,
+      staticPropertyDescriptors, deepProperties, deepStaticProperties, configuration,
+    } = desc;
+
     // React spec
-    const { state, ...deepProperties } = desc.deepProperties || {};
-    state && (compDesc.deepProperties.state = assign(compDesc.deepProperties.state || {}, state, dupeFilter));
-    compDesc.methods = wrapMethods(compDesc.methods, desc.methods);
-    compDesc.staticProperties = extractStatics(compDesc.staticProperties, desc.staticProperties);
+    compDesc.methods = wrapMethods(compDesc.methods, methods);
 
     // Stamp spec
     compDesc.initializers = compDesc.initializers.concat(desc.initializers)
       .filter(initializer => initializer !== undefined);
-    merge(compDesc.deepProperties, deepProperties);
-    assign(compDesc.properties, desc.properties);
-    merge(compDesc.deepStaticProperties, desc.deepStaticProperties);
-    assign(compDesc.propertyDescriptors, desc.propertyDescriptors);
-    assign(compDesc.staticPropertyDescriptors, desc.staticPropertyDescriptors);
-    merge(compDesc.configuration, desc.configuration);
+
+    forEach({ properties, staticProperties, propertyDescriptors, staticPropertyDescriptors },
+      (val, key) => assign(compDesc[key], val)
+    );
+
+    forEach({ deepProperties, deepStaticProperties, configuration },
+      (val, key) => merge(compDesc[key], val)
+    );
   });
 
   return reactStamp(null, compDesc);

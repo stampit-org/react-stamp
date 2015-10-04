@@ -24,7 +24,8 @@ test('stamp decorator', (t) => {
   }
 
   Component.defaultProps = {
-    foo: 'foo',
+    foo: true,
+    bar: false,
   };
 
   const mixin = {
@@ -33,7 +34,7 @@ test('stamp decorator', (t) => {
     },
 
     defaultProps: {
-      bar: 'bar',
+      bar: true,
     },
   };
 
@@ -45,7 +46,7 @@ test('stamp decorator', (t) => {
     'assigns state, initializers take priority'
   );
   t.deepEqual(
-    keys(Component.compose(mixin).defaultProps), ['foo', 'bar'],
+    Component.compose(mixin).defaultProps, { foo: true, bar: true },
     'merges statics'
   );
   /* eslint-enable new-cap */

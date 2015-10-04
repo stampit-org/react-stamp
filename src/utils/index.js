@@ -2,7 +2,7 @@ import * as cache from './cache';
 import compose from './compose';
 import stamp from './decorator';
 import { initDescriptor, getReactDescriptor, parseDesc } from './descriptor';
-import { dupeFilter, wrapMethods, extractStatics } from './react';
+import { dupeFilter, wrapMethods } from './react';
 import { isSpecDescriptor } from './type';
 
 export {
@@ -14,6 +14,5 @@ export {
   parseDesc,
   dupeFilter,
   wrapMethods,
-  extractStatics,
   isSpecDescriptor,
 };
