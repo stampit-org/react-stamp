@@ -13,7 +13,7 @@ const reactSpec = {
   componentWillUpdate: 'many',
   componentDidUpdate: 'many',
   componentWillUnmount: 'many',
-  getChildContext: 'many_merged_dupe',
+  getChildContext: 'many_merged',
 };
 
 export function dupeFilter(prev, next, key, targ) {
@@ -42,12 +42,12 @@ export function wrapMethods(targ, src) {
           targ[key] && targ[key].apply(this, arguments);
           val.apply(this, arguments);
         };
-      case 'many_merged_dupe':
+      case 'many_merged':
         return function () {
           const res1 = targ[key] && targ[key].apply(this, arguments);
           const res2 = val.apply(this, arguments);
 
-          return res1 ? assign(res1, res2, dupeFilter) : res2;
+          return res1 ? assign(res1, res2) : res2;
         };
       case 'once':
         return dupeFilter(null, val, key, targ);
