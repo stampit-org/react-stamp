@@ -25,20 +25,17 @@ export default function reactStamp(React, desc = {}) {
   specDesc.initializers = (initializers || []).concat(specDesc.initializers);
 
   const stamp = (options, ...args) => {
-    const instance = Object.create(specDesc.methods);
+    let instance = Object.create(specDesc.methods);
 
-    // React spec
-    const { state, ...deepProperties } = specDesc.deepProperties || {};
-    state && (instance.state = assign(instance.state || {}, state));
-
-    // Stamp spec
-    assign(instance, deepProperties, specDesc.properties);
+    assign(instance,
+      specDesc.deepProperties, specDesc.properties,
+      specDesc.configuration
+    );
     Object.defineProperties(instance, specDesc.propertyDescriptors || {});
-    assign(instance, specDesc.configuration);
 
-    // Stamp spec
     specDesc.initializers.forEach(initializer => {
-      initializer.call(instance, options, { instance, stamp, args });
+      const result = initializer.call(instance, options, { instance, stamp, args });
+      if (result) instance = result;
     });
 
     return instance;

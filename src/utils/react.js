@@ -1,16 +1,10 @@
 import assign from 'lodash/object/assign';
-import forEach from 'lodash/collection/forEach';
 import mapValues from 'lodash/object/mapValues';
 
 /**
  * React specification for creating new components
  */
 const reactSpec = {
-  propTypes: 'many_merged_dupe',
-  defaultProps: 'many_merged_dupe',
-  contextTypes: 'many_merged',
-  childContextTypes: 'many_merged',
-  getChildContext: 'many_merged_dupe',
   render: 'once',
   componentWillMount: 'many',
   componentDidMount: 'many',
@@ -19,6 +13,7 @@ const reactSpec = {
   componentWillUpdate: 'many',
   componentDidUpdate: 'many',
   componentWillUnmount: 'many',
+  getChildContext: 'many_merged_dupe',
 };
 
 export function dupeFilter(prev, next, key, targ) {
@@ -62,29 +57,4 @@ export function wrapMethods(targ, src) {
   });
 
   return assign({ ...targ }, methods);
-}
-
-/**
- * Process the properties of an object and
- * combine the result with the passed in target object.
- *
- * @param  {Object} targ The target object.
- * @param  {Object} src The src object.
- *
- * @return {Object} The processed/combined object.
- */
-export function extractStatics(targ, src) {
-  let statics = { ...targ };
-
-  forEach(src, (val, key) => {
-    if (reactSpec[key] === 'many_merged_dupe') {
-      statics[key] = assign(statics[key] || {}, val, dupeFilter);
-    } else if (reactSpec[key] === 'many_merged') {
-      statics[key] = assign(statics[key] || {}, val);
-    } else {
-      statics[key] = val;
-    }
-  });
-
-  return statics;
 }

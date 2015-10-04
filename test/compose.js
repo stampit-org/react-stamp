@@ -91,132 +91,82 @@ test('compose(stamp2, stamp1)', (t) => {
 });
 
 test('stamps composed of stamps with state', (t) => {
-  t.plan(2);
+  t.plan(1);
 
   const mixin = reactStamp(null, {
     state: {
-      foo: ' ',
+      bar: true,
     },
   });
 
   const stamp = reactStamp(React, {
     state: {
-      bar: ' ',
+      foo: true,
+      bar: false,
     },
   }).compose(mixin);
 
-  const failStamp = reactStamp(React, {
-    state: {
-      foo: ' ',
-    },
-  });
-
   t.deepEqual(
-     stamp().state, { foo: ' ', bar: ' ' },
-    'should inherit state'
-  );
-
-  t.throws(
-    () => failStamp.compose(mixin), TypeError,
-    'should throw on duplicate keys'
+     stamp().state, { foo: true, bar: true },
+    'should merge state'
   );
 });
 
 test('stamps composed of stamps with React statics', (t) => {
-  t.plan(8);
+  t.plan(4);
 
   const mixin = reactStamp(null, {
     contextTypes: {
-      foo: React.PropTypes.string,
+      bar: true,
     },
     childContextTypes: {
-      foo: React.PropTypes.string,
+      bar: true,
     },
     propTypes: {
-      foo: React.PropTypes.string,
+      bar: true,
     },
     defaultProps: {
-      foo: 'foo',
+      bar: true,
     },
   });
 
   const stamp = reactStamp(React, {
     contextTypes: {
-      bar: React.PropTypes.string,
+      foo: true,
+      bar: false,
     },
     childContextTypes: {
-      bar: React.PropTypes.string,
+      foo: true,
+      bar: false,
     },
     propTypes: {
-      bar: React.PropTypes.string,
+      foo: true,
+      bar: false,
     },
     defaultProps: {
-      bar: 'bar',
+      foo: true,
+      bar: false,
     },
   }).compose(mixin);
 
-  const failStamp1 = reactStamp(React, {
-    propTypes: {
-      foo: React.PropTypes.string,
-    },
-  });
-
-  const failStamp2 = reactStamp(React, {
-    defaultProps: {
-      foo: 'foo',
-    },
-  });
-
-  const okStamp1 = reactStamp(React, {
-    contextTypes: {
-      foo: React.PropTypes.string,
-    },
-  });
-
-  const okStamp2 = reactStamp(React, {
-    childContextTypes: {
-      foo: React.PropTypes.string,
-    },
-  });
-
   t.deepEqual(
-    keys(stamp.contextTypes), ['bar', 'foo'],
-    'should inherit `contextTypes` props'
+    stamp.contextTypes, { foo: true, bar: true },
+    'should merge `contextTypes` props'
   );
 
   t.deepEqual(
-    keys(stamp.childContextTypes), ['bar', 'foo'],
-    'should inherit `childContextTypes` props'
+    stamp.childContextTypes, { foo: true, bar: true },
+    'should merge `childContextTypes` props'
   );
 
   t.deepEqual(
-    keys(stamp.propTypes), ['bar', 'foo'],
-    'should inherit `propTypes` props'
+    stamp.propTypes, { foo: true, bar: true },
+    'should merge `propTypes` props'
   );
 
   t.deepEqual(
-    keys(stamp.defaultProps), ['bar', 'foo'],
-    'should inherit `defaultProps` props'
-  );
-
-  t.throws(
-    () => failStamp1.compose(mixin), TypeError,
-    'should throw on duplicate keys in `propTypes`'
-  );
-
-  t.throws(
-    () => failStamp2.compose(mixin), TypeError,
-    'should throw on duplicate keys in `defaultProps`'
-  );
-
-  t.doesNotThrow(
-    () => okStamp1.compose(mixin),
-    'should not throw on duplicate keys in `contextTypes`'
-  );
-
-  t.doesNotThrow(
-    () => okStamp2.compose(mixin),
-    'should not throw on duplicate keys in `childContextTypes`'
+    stamp.defaultProps, { foo: true, bar: true },
+    'should merge `defaultProps` props'
   );
 });
 
