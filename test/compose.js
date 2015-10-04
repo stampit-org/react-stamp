@@ -237,19 +237,23 @@ test('stamps composed of stamps with wrapable methods', (t) => {
   );
 });
 
-test('stamps composed of stamps with non-mixable methods', (t) => {
+test('stamps composed of stamps with non-wrapable methods', (t) => {
   t.plan(1);
 
   const mixin = reactStamp(null, {
-    render() {},
+    render() {
+      return true
+    },
   });
 
   const stamp = reactStamp(React, {
-    render() {},
+    render() {
+      return false
+    },
   });
 
-  t.throws(
-    () => stamp.compose(mixin), TypeError,
-    'should throw on duplicate methods'
+  t.ok(
+    stamp.compose(mixin)().render(),
+    'should override with last-in priority'
   );
 });

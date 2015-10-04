@@ -25,7 +25,7 @@ assert.deepEqual(
   >> ok
 ```
 
-__*`React.createClass` throws an Invariant Violation when duplicate keys are found within mixins. `react-stamp` will merge duplicate keys.
+__*`React.createClass` throws an Invariant Violation when duplicate keys are found in `getInitialState`. `react-stamp` merges duplicate keys.*__
 
 ### Statics
 Composed components inherit other components' statics.
@@ -74,10 +74,10 @@ assert.deepEqual(
   >> ok
 ```
 
-__*`React.createClass` throws an Invariant Violation when duplicate keys are found in `getDefaultProps` and `getInitialState`. `react-stamp` will merge duplicate keys.*__
+__*`React.createClass` throws an Invariant Violation when duplicate keys are found in `propTypes` and `getDefaultProps`. `react-stamp` merges duplicate keys.*__
 
 ### Methods
-Composed components inherit other components' methods. A handful of React methods will be 'wrapped' executing with first-in priority. React methods with a unique constraint will throw on duplicates. Non-React methods will override with last-in priority.
+Composed components inherit other components' methods. A handful of React lifecycle methods get 'wrapped' executing with first-in priority. All other methods override with last-in priority.
 
 __Wrapped__
 
@@ -88,11 +88,6 @@ __Wrapped__
 * componentDidUpdate
 * componentWillUnmount
 * getChildContext
-
-__Unique__
-
-* shouldComponentUpdate
-* render
 
 ```js
 const mixin = {
@@ -123,4 +118,4 @@ assert.deepEqual(
 );
   >> ok
 ```
-__*`React.createClass` throws an Invariant Violation when duplicate `shouldComponentUpdate` or `render` methods exist, `react-stamp` will throw a TypeError.*__
+__*`React.createClass` throws an Invariant Violation when duplicate `shouldComponentUpdate` or `render` methods exist, `react-stamp` overrides with last-in priority.*__

@@ -5,23 +5,15 @@ import mapValues from 'lodash/object/mapValues';
  * React specification for creating new components
  */
 const reactSpec = {
-  render: 'once',
-  componentWillMount: 'many',
-  componentDidMount: 'many',
-  componentWillReceiveProps: 'many',
-  shouldComponentUpdate: 'once',
-  componentWillUpdate: 'many',
-  componentDidUpdate: 'many',
-  componentWillUnmount: 'many',
-  getChildContext: 'many_merged',
-};
-
-export function dupeFilter(prev, next, key, targ) {
-  if (targ[key]) {
-    throw new TypeError('Cannot mixin key `' + key + '` because it has a unique constraint.');
-  }
-
-  return next;
+  componentDidMount: 'wrap',
+  componentDidUpdate: 'wrap',
+  componentWillMount: 'wrap',
+  componentWillReceiveProps: 'wrap',
+  componentWillUnmount: 'wrap',
+  componentWillUpdate: 'wrap',
+  getChildContext: 'wrap_merge',
+  render: 'override',
+  shouldComponentUpdate: 'override',
 };
 
 /**
@@ -34,23 +26,22 @@ export function dupeFilter(prev, next, key, targ) {
  *
  * @return {Object} The new object.
  */
-export function wrapMethods(targ = {}, src = {}) {
+export default function wrapMethods(targ = {}, src = {}) {
   const methods = mapValues(src, (val, key) => {
     switch (reactSpec[key]) {
-      case 'many':
+      case 'wrap':
         return function () {
           targ[key] && targ[key].apply(this, arguments);
           val.apply(this, arguments);
         };
-      case 'many_merged':
+      case 'wrap_merge':
         return function () {
           const res1 = targ[key] && targ[key].apply(this, arguments);
           const res2 = val.apply(this, arguments);
 
           return res1 ? assign(res1, res2) : res2;
         };
-      case 'once':
-        return dupeFilter(null, val, key, targ);
+      case 'override':
       default:
         return val;
     }
