@@ -38,7 +38,7 @@ export default function compose(...args) {
       staticPropertyDescriptors, deepProperties, deepStaticProperties, configuration,
     } = desc;
 
-    // React spec
+    // Wrap React lifecycle methods
     compDesc.methods = wrapMethods(compDesc.methods, methods);
 
     // Stamp spec

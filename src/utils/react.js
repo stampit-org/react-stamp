@@ -2,9 +2,9 @@ import assign from 'lodash/object/assign';
 import mapValues from 'lodash/object/mapValues';
 
 /**
- * React specification for creating new components
+ * React lifecycle methods
  */
-const reactSpec = {
+const lifecycle = {
   componentDidMount: 'wrap',
   componentDidUpdate: 'wrap',
   componentWillMount: 'wrap',
@@ -13,12 +13,12 @@ const reactSpec = {
   componentWillUpdate: 'wrap',
   getChildContext: 'wrap_merge',
   render: 'override',
-  shouldComponentUpdate: 'override',
+  shouldComponentUpdate: 'wrap_or',
 };
 
 /**
  * Iterate through object methods, creating wrapper
- * functions for mixable React methods, starting
+ * functions for React lifecycle methods, starting
  * execution with first-in.
  *
  * @param  {Object} targ The target object.
@@ -28,7 +28,7 @@ const reactSpec = {
  */
 export default function wrapMethods(targ = {}, src = {}) {
   const methods = mapValues(src, (val, key) => {
-    switch (reactSpec[key]) {
+    switch (lifecycle[key]) {
       case 'wrap':
         return function () {
           targ[key] && targ[key].apply(this, arguments);
@@ -41,6 +41,13 @@ export default function wrapMethods(targ = {}, src = {}) {
 
           return res1 ? assign(res1, res2) : res2;
         };
+      case 'wrap_or':
+        return function () {
+          const res1 = targ[key] && targ[key].apply(this, arguments);
+          const res2 = val.apply(this, arguments);
+
+          return res1 || res2;
+        }
       case 'override':
       default:
         return val;

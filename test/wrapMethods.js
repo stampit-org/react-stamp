@@ -11,8 +11,8 @@ const methods = {
   componentWillUnmount: 'wrap',
   componentWillUpdate: 'wrap',
   getChildContext: 'wrap_merge',
+  shouldComponentUpdate: 'wrap_or',
   render: 'override',
-  shouldComponentUpdate: 'override',
   nonReactMethod: 'override',
 };
 
@@ -22,6 +22,9 @@ forEach(methods, (type, method) => {
   if (type === 'wrap_merge') {
     targ[method] = () => ({ foo: true, bar: false });
     src[method] = () => ({ bar: true });
+  } else if (type == 'wrap_or') {
+    targ[method] = () => false;
+    src[method] = () => true;
   } else {
     targ[method] = function() {
       this.result = [ 'foo' ];
@@ -47,17 +50,22 @@ test('wrapMethods(targ, src)', (t) => {
         obj.result, [ 'foo', 'bar' ],
         `should wrap '${method}'`
       );
+    } else if (type === 'wrap_merge') {
+      t.deepEqual(
+        obj[method](), { foo: true, bar: true },
+        `should wrap and merge '${method}'`
+      );
+    } else if (type === 'wrap_or') {
+      t.ok(
+        obj[method](),
+        `should wrap and OR '${method}'`
+      );
     } else if (type === 'override') {
       obj[method]();
 
       t.deepEqual(
         obj.result, [ 'bar' ],
         `should override '${method}'`
-      );
-    } else if (type === 'wrap_merge') {
-      t.deepEqual(
-        obj[method](), { foo: true, bar: true },
-        `should wrap and merge '${method}'`
       );
     }
   });
