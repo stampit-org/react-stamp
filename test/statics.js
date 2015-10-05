@@ -1,4 +1,3 @@
-import has from 'lodash/object/has';
 import React from 'react';
 import test from 'tape';
 
@@ -9,12 +8,12 @@ test('reactStamp(React, { statics: obj })', (t) => {
 
   const stamp = reactStamp(React, {
     statics: {
-      foo: '',
+      foo: true,
     },
   });
 
   t.ok(
-    has(stamp, 'foo'),
+    stamp.foo,
     'should return a stamp with `statics` props as props'
   );
 });
@@ -27,7 +26,7 @@ test('reactStamp(React, { displayName: str })', (t) => {
   });
 
   t.ok(
-    has(stamp, 'displayName'),
+    stamp.displayName,
     'should return a stamp with `displayName` prop'
   );
 });
@@ -40,7 +39,7 @@ test('reactStamp(React, { contextTypes: obj })', (t) => {
   });
 
   t.ok(
-    has(stamp, 'contextTypes'),
+    stamp.contextTypes,
     'should return a stamp with `contextTypes` prop'
   );
 });
@@ -53,7 +52,7 @@ test('reactStamp(React, { childContextTypes: obj })', (t) => {
   });
 
   t.ok(
-    has(stamp, 'childContextTypes'),
+    stamp.childContextTypes,
     'should return a stamp with `childContextTypes` prop'
   );
 });
@@ -66,7 +65,7 @@ test('reactStamp(React, { propTypes: obj })', (t) => {
   });
 
   t.ok(
-    has(stamp, 'propTypes'),
+    stamp.propTypes,
     'should return a stamp with `propTypes` prop'
   );
 });
@@ -79,7 +78,7 @@ test('reactStamp(React, { defaultProps: obj })', (t) => {
   });
 
   t.ok(
-    has(stamp, 'defaultProps'),
+    stamp.defaultProps,
     'should return a stamp with `defaultProps` prop'
   );
 });

@@ -15,7 +15,7 @@ import {
  *
  * @param  {...Object} args Stamps and/or descriptors.
  *
- * @return {Object} A new stamp composed from arguments.
+ * @return {Function} A new stamp composed from arguments.
  */
 export default function compose(...args) {
   const descs = args.map(arg => arg.compose || parseDesc(arg));

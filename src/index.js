@@ -14,7 +14,7 @@ import {
  * @param  {Object} React The React library.
  * @param  {Object} desc A description object.
  *
- * @return {Object} A stamp.
+ * @return {Function} A stamp.
  */
 export default function reactStamp(React, desc = {}) {
   const specDesc = parseDesc(desc);

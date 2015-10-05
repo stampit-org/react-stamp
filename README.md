@@ -27,7 +27,7 @@ reactStamp(React, {
 });
 ```
 
-The best part about [stamps](https://github.com/stampit-org/stamp-specification) is their composability. What this means is that `n` number of stamps can be combined into a new stamp which inherits each passed stamp's behavior. This is perfect for React, since `class` is being pushed as the new norm and does not provide an idiomatic way to use mixins. (classical inheritance :disappointed:). While stamps and their composability are a new concept, the conventions used underneath are idiomatic to JavaScript; it is these conventions that provide a multitude of ways to extend React components.
+The most powerful feature of [stamps](https://github.com/stampit-org/stamp-specification) is their composability. What this means is that `n` number of stamps can be combined into a new stamp which inherits each passed stamp's behavior. This is perfect for React, since `class` is being pushed as the new norm and does not provide an idiomatic way to use mixins. (classical inheritance :disappointed:). Stamps embrace prototypal inheritance and as a result provide great flexibility when extending React components.
 
 __mixin1.jsx__
 
@@ -99,7 +99,7 @@ onClick() => { comp: true, mixin1: true, mixin2: true }
  Event handlers require explicit binding. No magic. This can be done using `.bind` or through lexical binding with ES2015 [arrow functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions) as shown in the example.
 * no `call super`
 
- React methods are wrapped during composition, providing functional inheritance. Sweet.
+ [Many](https://github.com/troutowicz/react-stamp/blob/master/docs/composition.md#methods) of the React lifecycle methods are wrapped during composition, providing functional inheritance.
 * mixins are POJOs
 
  This is shorthand syntax for:

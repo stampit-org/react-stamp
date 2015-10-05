@@ -7,7 +7,7 @@ import { isSpecDescriptor } from '.';
 /**
  * Convert the React component constructor function to a descriptor.
  *
- * @param  {Object} Component The React component constructor function.
+ * @param  {Function} Component The React component constructor function.
  *
  * @return {Object} The React component descriptor.
  */

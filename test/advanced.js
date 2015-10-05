@@ -1,4 +1,3 @@
-import keys from 'lodash/object/keys';
 import React from 'react';
 import test from 'tape';
 
@@ -14,7 +13,7 @@ test('stamp decorator', (t) => {
       super(props);
 
       this.state = {
-        foo: 'foo',
+        foo: true,
       };
     }
 
@@ -25,12 +24,13 @@ test('stamp decorator', (t) => {
 
   Component.defaultProps = {
     foo: true,
-    bar: false,
+    bar: true,
   };
 
   const mixin = {
     state: {
-      bar: 'bar',
+      foo: true,
+      bar: true,
     },
 
     defaultProps: {
@@ -42,8 +42,8 @@ test('stamp decorator', (t) => {
   /* eslint-disable new-cap */
   t.ok(Component().render, 'maps methods');
   t.deepEqual(
-    keys(Component.compose(mixin)().state), ['foo'],
-    'assigns state, initializers take priority'
+    Component.compose(mixin)().state, { foo: true },
+    'merges state, initializers take priority'
   );
   t.deepEqual(
     Component.compose(mixin).defaultProps, { foo: true, bar: true },

@@ -14,13 +14,11 @@ test('reactStamp()', (t) => {
   );
 });
 
-test('reactStamp(React, props)', (t) => {
+test('reactStamp(React, desc)', (t) => {
   t.plan(1);
 
-  const stamp = reactStamp(React, {});
-
   t.ok(
-    stamp.compose,
+    reactStamp(React, {}).compose,
     'should return a stamp'
   );
 });
@@ -28,21 +26,17 @@ test('reactStamp(React, props)', (t) => {
 test('reactStamp(React)', (t) => {
   t.plan(1);
 
-  const stamp = reactStamp(React);
-
   t.ok(
-    stamp.compose,
+    reactStamp(React).compose,
     'should return a stamp'
   );
 });
 
-test('reactStamp(null, props)', (t) => {
+test('reactStamp(null, desc)', (t) => {
   t.plan(1);
 
-  const stamp = reactStamp(null, {});
-
   t.ok(
-    stamp.compose,
+    reactStamp(null, {}).compose,
     'should return a stamp'
   );
 });
@@ -60,7 +54,7 @@ test('reactStamp(React, { render() })()', (t) => {
   );
 });
 
-test('reactStamp(React, props).compose', (t) => {
+test('reactStamp(React, desc).compose', (t) => {
   t.plan(1);
 
   t.equal(

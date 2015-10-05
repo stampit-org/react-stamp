@@ -46,9 +46,9 @@ function getEnum(src) {
 /**
  * ES7 decorator for converting an ES6 class to a stamp.
  *
- * @param  {Object} Class An ES6 class.
+ * @param  {Function} Class An ES6 class.
  *
- * @return {Object} A stamp.
+ * @return {Function} A stamp.
  */
 export default function stamp(Class) {
   const desc = {};

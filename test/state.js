@@ -1,4 +1,3 @@
-import has from 'lodash/object/has';
 import React from 'react';
 import test from 'tape';
 
@@ -9,12 +8,12 @@ test('reactStamp(React, { state: obj })()', (t) => {
 
   const stamp = reactStamp(React, {
     state: {
-      foo: '',
+      foo: true,
     },
   });
 
   t.ok(
-    has(stamp().state, 'foo'),
+    stamp().state.foo,
     'should return an instance with `state` prop'
   );
 });
@@ -24,12 +23,12 @@ test('reactStamp(React, { init() { ... } })()', (t) => {
 
   const stamp = reactStamp(React, {
     init() {
-      this.state = { foo: '' };
+      this.state = { foo: true };
     },
   });
 
   t.ok(
-    has(stamp().state, 'foo'),
+    stamp().state.foo,
     'should return an instance with `state` prop'
   );
 });

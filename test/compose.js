@@ -1,4 +1,3 @@
-import keys from 'lodash/object/keys';
 import React from 'react';
 import test from 'tape';
 
@@ -9,15 +8,13 @@ test('reactStamp(React, props).compose(stamp2)', (t) => {
   t.plan(1);
 
   const mixin = reactStamp(null, {
-    method() {
-      return 'mixin';
-    },
+    method() {},
   });
 
   const stamp = reactStamp(React).compose(mixin);
 
-  t.equal(
-    stamp().method(), 'mixin',
+  t.ok(
+    stamp().method,
     'should return a stamp composed of `this` and passed stamp'
   );
 });
@@ -26,15 +23,13 @@ test('reactStamp(React, props).compose(pojo)', (t) => {
   t.plan(1);
 
   const mixin = {
-    method() {
-      return 'mixin';
-    },
+    method() {},
   };
 
   const stamp = reactStamp(React).compose(mixin);
 
-  t.equal(
-    stamp().method(), 'mixin',
+  t.ok(
+    stamp().method,
     'should return a stamp composed of `this` and passed pojo'
   );
 });
@@ -50,43 +45,24 @@ test('reactStamp(React, props).compose(stamp2, stamp3)', (t) => {
 
   const mixin2 = reactStamp(null, {
     statics: {
-      util() {
-        return 'static';
-      },
+      util() {},
     },
   });
 
   const stamp = reactStamp(React, {
     state: {
-      foo: '',
+      foo: true,
     },
   }).compose(mixin1, mixin2);
 
-  t.deepEqual(
-    keys(stamp().method()), ['foo'],
+  t.ok(
+    stamp().method().foo,
     'should expose `this` to inherited methods'
   );
 
-  t.equal(
-    stamp.util(), 'static',
+  t.ok(
+    stamp.util,
     'should inherit static methods'
-  );
-});
-
-test('compose(stamp2, stamp1)', (t) => {
-  t.plan(1);
-
-  const mixin = reactStamp(null, {
-    method() {
-      return 'mixin';
-    },
-  });
-
-  const stamp = reactStamp(React);
-
-  t.equal(
-    compose(mixin, stamp)().method(), 'mixin',
-    'should return a stamp composed of passed stamps'
   );
 });
 
@@ -176,11 +152,10 @@ test('stamps composed of stamps with non-React statics', (t) => {
   const mixin = reactStamp(null, {
     statics: {
       obj: {
-        foo: 'foo',
-        bar: 'bar',
+        bar: true,
       },
       method() {
-        return 'foo';
+        return true;
       },
     },
   });
@@ -188,32 +163,33 @@ test('stamps composed of stamps with non-React statics', (t) => {
   const stamp = reactStamp(React, {
     statics: {
       obj: {
-        bar: '',
+        foo: true,
+        bar: false,
       },
       method() {
-        return 'bar';
+        return false;
       },
     },
   }).compose(mixin);
 
   t.deepEqual(
-    stamp.obj, { bar: 'bar', foo: 'foo' },
-    'should inherit static objects overriding with last-in priority'
+    stamp.obj, { foo: true, bar: true },
+    'should merge static objects'
   );
 
-  t.equal(
-    stamp.method(), 'foo',
+  t.ok(
+    stamp.method(),
     'should inherit static methods overriding with last-in priority'
   );
 });
 
-test('stamps composed of stamps with mixable methods', (t) => {
+test('stamps composed of stamps with wrapable methods', (t) => {
   t.plan(2);
 
   const mixin1 = reactStamp(null, {
     getChildContext() {
       return {
-        bar: '',
+        bar: true,
       };
     },
 
@@ -237,7 +213,8 @@ test('stamps composed of stamps with mixable methods', (t) => {
 
     getChildContext() {
       return {
-        foo: '',
+        foo: true,
+        bar: false,
       };
     },
 
@@ -255,8 +232,8 @@ test('stamps composed of stamps with mixable methods', (t) => {
   );
 
   t.deepEqual(
-    keys(instance.getChildContext()), ['foo', 'bar'],
-    'should inherit functionality of getChildContext'
+    instance.getChildContext(), { foo: true, bar: true },
+    'should merge results of getChildContext'
   );
 });
 
