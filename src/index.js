@@ -3,9 +3,7 @@ import { compose } from './utils';
 /**
  * Convert the React component constructor function to a stamp.
  *
- * @param  {Function} React The React library.
- *
- * @return {Object} The React component descriptor.
+ * (React?: object): stamp
  */
 export default function reactStamp(React) {
   const desc = {};

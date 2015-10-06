@@ -2,14 +2,11 @@ import forEach from 'lodash/collection/forEach';
 import isEmpty from 'lodash/lang/isEmpty';
 
 /**
- * Check if descriptor object is stamp
- * spec compliant.
+ * Check if object is stamp spec compliant.
  *
- * @param  {Object} desc A decriptor object.
- *
- * @return {Boolean}
+ * (desc?: reactDesc || specDesc): isSpec: boolean
  */
-function isSpecDescriptor(desc) {
+function isSpecDescriptor(desc = {}) {
   return (
     desc.methods ||
     desc.properties ||
@@ -24,12 +21,9 @@ function isSpecDescriptor(desc) {
 }
 
 /**
- * Verify a description object is compliant
- * to the stamp specification.
+ * Create a stamp spec compliant desc object.
  *
- * @param  {Object} desc A description object.
- *
- * @return {Object} A stamp spec compliant description object.
+ * (desc?: reactDesc || specDesc): specDesc
  */
 export default function parseDesc(desc = {}) {
   if (isSpecDescriptor(desc) || isEmpty(desc)) return desc;
