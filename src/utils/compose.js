@@ -33,7 +33,7 @@ function createStamp(desc = {}) {
   }
 
   merge(stamp, specDesc.deepStaticProperties);
-  assign(stamp, specDesc.deepStaticProperties, specDesc.staticProperties);
+  assign(stamp, specDesc.staticProperties);
   Object.defineProperties(stamp, specDesc.staticPropertyDescriptors || {});
 
   return stamp;
