@@ -3,16 +3,22 @@
 # react-stamp
 > Composables for React.
 
-**This library is replacing [react-stampit](https://github.com/stampit-org/react-stampit) and is compliant with the [stamp specification](https://github.com/stampit-org/stamp-specification). It is a WIP.**
+**This library has replaced [react-stampit](https://github.com/stampit-org/react-stampit) and is compliant with the [stamp specification](https://github.com/stampit-org/stamp-specification).**
 
 ## What is this
 
 This library is the result of wondering about what other ways a React component could be represented. [Stamps](https://github.com/stampit-org/stamp-specification) are a cool concept, and more importantly have proven to be a great alternative to `React.createClass` and the ES2015 `class` due to their composability.
 
-react-stamp provides an API similar to `React.createClass` while being stamp-compatible. The factory accepts two parameters, the React library and a description object.
+`reactStamp` accepts one parameter. The React library.
 
 ```js
-reactStamp(React, {
+const react = reactStamp(React)
+```
+
+This method converts React's `Component` constructor function into a [stamp](https://github.com/stampit-org/stamp-specification). To create a React component, we pass a descriptor object to the stamp's `compose` method.
+
+```js
+react.compose({
   init() {},
   state: {},
   statics: {},
@@ -29,69 +35,68 @@ reactStamp(React, {
 
 The most powerful feature of [stamps](https://github.com/stampit-org/stamp-specification) is their composability. What this means is that `n` number of stamps can be combined into a new stamp which inherits each passed stamp's behavior. This is perfect for React, since `class` is being pushed as the new norm and does not provide an idiomatic way to use mixins. (classical inheritance :disappointed:). Stamps embrace prototypal inheritance and as a result provide great flexibility when extending React components.
 
-__mixin1.jsx__
-
-```js
-export default {
-  componentWillMount() {
-    this.state.mixin1 = true;
-  },
-};
-```
-
-__mixin2.jsx__
-
-```js
-export default {
-  componentWillMount() {
-    this.state.mixin2 = true;
-  },
-};
-```
-
-__component.jsx__
-
+__reactStamp.js__
 ```js
 import React from 'react';
 import reactStamp from 'react-stamp';
 
-export default reactStamp(React, {
+export default reactStamp(React);
+```
+
+__component.js__
+
+```js
+import reactStamp from './reactStamp';
+
+export default reactStamp.compose({
   state: {
-    comp: false,
-    mixin1: false,
-    mixin2: false,
+    obj1: false,
+    obj2: false,
+  },
+
+  componentWillMount() {
+    this.setState({ obj1: true });
   },
 
   _onClick() {
     return this.state;
   },
 
-  componentWillMount() {
-    this.state.comp = true;
-  },
-
   render() {
-    return <input type='button' onClick={() => this._onClick()} />;
+    return (
+      <input
+        type='button'
+        onClick={() => this._onClick()}
+        value='Click Me'
+       />
+    );
   },
 });
 ```
 
-__app.jsx__
+__mixin.js__
+
+```js
+export default {
+  componentWillMount() {
+    this.setState({ obj2: true });;
+  },
+};
+```
+
+__app.js__
 
 ```js
 import Component from './component';
-import mixin1 from './mixin1';
-import mixin2 from './mixin2';
+import mixin from './mixin';
 
-const ComposedComp = Component.compose(mixin1, mixin2);
+const Button = Component.compose(mixin);
 
-/**
- * Do things
- */
+React.render(<Button/>, document.body);
 ```
 
 ```js
-onClick() => { comp: true, mixin1: true, mixin2: true }
+onClick() => { obj1: true, obj2: true }
 ```
 
 * no autobinding
@@ -100,16 +105,9 @@ onClick() => { comp: true, mixin1: true, mixin2: true }
 * no `call super`
 
  [Many](https://github.com/troutowicz/react-stamp/blob/master/docs/composition.md#methods) of the React lifecycle methods are wrapped during composition, providing functional inheritance.
-* mixins are POJOs
+* components and mixins are POJOs
 
- This is shorthand syntax for:
- ```js
- reactStamp(null, {
-   // stuff
- });
- ```
-
-If you feel limited by `class`, or want a fresh take on `React.createClass`, maybe give react-stamp a try and learn more about what [stamps](https://github.com/stampit-org/stamp-specification) are all about.
+If you feel limited by `class`, or want a fresh take on `React.createClass`'s mixability, maybe give react-stamp a try and learn more about what [stamps](https://github.com/stampit-org/stamp-specification) are all about.
 
 ## Docs
 * [API](docs/api.md)

@@ -1,12 +1,12 @@
 import React from 'react';
 import test from 'tape';
 
-import reactStamp from '../src';
+import { compose } from '../src/utils';
 
-test('reactStamp(React, { method() {} })()', (t) => {
+test('compose({ method() {} })()', (t) => {
   t.plan(1);
 
-  const stamp = reactStamp(React, {
+  const stamp = compose({
     render() {},
   });
 

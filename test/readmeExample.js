@@ -1,52 +1,52 @@
 import React from 'react/addons';
-import reactStamp from '../src';
 import test from 'tape';
+
+import reactStamp from '../src';
 
 const TestUtils = React.addons.TestUtils;
 const shallowRenderer = TestUtils.createRenderer();
 
-const mixin1 = {
-  componentWillMount() {
-    this.state.mixin1 = true;
-  },
-};
-
-const mixin2 = {
-  componentWillMount() {
-    this.state.mixin2 = true;
-  },
-};
-
-const Component = reactStamp(React, {
+const obj1 = {
   state: {
-    comp: false,
-    mixin1: false,
-    mixin2: false,
+    obj1: false,
+    obj2: false,
+  },
+
+  componentWillMount() {
+    this.setState({ obj1: true });
   },
 
   _onClick() {
     return this.state;
   },
 
-  componentWillMount() {
-    this.state.comp = true;
-  },
-
   render() {
-    return <input type='button' onClick={() => this._onClick()} />;
+    return (
+      <input
+        type='button'
+        onClick={() => this._onClick()}
+        value='Click Me'
+       />
+    );
   },
-});
+};
 
-const ComposedComp = Component.compose(mixin1, mixin2);
+const obj2 = {
+  componentWillMount() {
+    this.setState({ obj2: true });;
+  },
+};
 
-shallowRenderer.render(<ComposedComp />);
+const Button = reactStamp(React).compose(obj1, obj2);
+
+shallowRenderer.render(<Button />);
 const button = shallowRenderer.getRenderOutput();
 
 test('readme example', (t) => {
   t.plan(1);
 
   t.deepEqual(
-    button.props.onClick(), { comp: true, mixin1: true, mixin2: true },
+    button.props.onClick(), { obj1: true, obj2: true },
     'should return component state with all truthy props'
   );
 });
