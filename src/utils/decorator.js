@@ -5,9 +5,7 @@ import { compose } from '.';
 /**
  * Get the non-enum properties of an object.
  *
- * @param  {Object} src An object.
- *
- * @return {Object} An object of enum properties.
+ * (src: object): enums: object
  */
 function getNonEnum(src) {
   let obj = {};
@@ -27,9 +25,7 @@ function getNonEnum(src) {
 /**
  * ES7 decorator for converting an ES6 class to a stamp.
  *
- * @param  {Function} Class An ES6 class.
- *
- * @return {Function} A stamp.
+ * (Class?: func): stamp
  */
 export default function stamp(Class) {
   const desc = {};

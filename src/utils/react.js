@@ -21,10 +21,7 @@ const lifecycle = {
  * functions for React lifecycle methods, starting
  * execution with first-in.
  *
- * @param  {Object} targ The target object.
- * @param  {Object} src The src object.
- *
- * @return {Object} The new object.
+ * (targ?: object, src?: object): new: object
  */
 export default function wrapMethods(targ = {}, src = {}) {
   const methods = mapValues(src, (val, key) => {

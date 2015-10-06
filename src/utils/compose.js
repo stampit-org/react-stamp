@@ -10,10 +10,7 @@ import {
 /**
  * Given a description object, return a stamp aka composable.
  *
- * @param  {Object} React The React library.
- * @param  {Object} desc A description object.
- *
- * @return {Function} A stamp.
+ * (desc?: reactDesc || specDesc): stamp
  */
 function createStamp(desc = {}) {
   const specDesc = parseDesc(desc);
@@ -47,9 +44,7 @@ function createStamp(desc = {}) {
  * that encapsulates combined behavior. If nothing is passed in,
  * an empty stamp is returned.
  *
- * @param  {...Object} args Stamps and/or descriptors.
- *
- * @return {Function} A new stamp composed from arguments.
+ * (...args?: stamp || reactDesc || specDesc): stamp
  */
 export default function compose(...args) {
   const descs = args.map(arg => arg.compose || parseDesc(arg));
