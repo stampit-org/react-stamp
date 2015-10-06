@@ -9,7 +9,7 @@ module.exports = {
   output: {
     path: path.resolve('./dist'),
     filename: minify ? '[name].min.js' : '[name].js',
-    library: 'react-stamp',
+    library: 'reactStamp',
     libraryTarget: 'umd',
   },
 
