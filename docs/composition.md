@@ -1,126 +1,34 @@
 ## Composition logic
 
-Component composition might be compared to `React.createClass`'s mixin feature. A significant difference is that you compose a component without referencing the mixins being inherited from inside the component's declaration.
+Component composition might be compared to `React.createClass`'s mixin feature. A significant difference is that react-stamp decouples the relationship between component and mixin.
 
 
 ### State
-Composed components inherit other components' state.
+Component state is deep merged.
 
-```js
-const mixin = {
-  state: {
-    foo: true,
-    bar: true,
-  },
-};
+**TODO: Example**
 
-const component = reactStamp(React).compose(mixin);
-```
-
-```js
-assert.deepEqual(
-  component().state, { foo: true, bar: true },
-  'should inherit state'
-);
-  >> ok
-```
-
-__*`React.createClass` throws an Invariant Violation when duplicate keys are found within mixins. `react-stamp` will merge duplicate keys.
+__*`React.createClass` throws an Invariant Violation when duplicate keys are found in `getInitialState`. `react-stamp` merges duplicate keys.*__
 
 ### Statics
-Composed components inherit other components' statics.
+Component statics are deep merged.
 
-```js
-const mixin = {
-  statics: {
-    someStatic: {
-      bar: true,
-    },
-  },
+**TODO: Example**
 
-  propTypes: {
-    bar: React.PropTypes.string,
-  },
-};
-
-const component = reactStamp(React, {
-  statics: {
-    someStatic: {
-      foo: true,
-    },
-  },
-
-  propTypes: {
-    foo: React.PropTypes.string,
-  },
-}).compose(mixin);
-```
-
-```js
-assert.ok(
-  component.propTypes.bar,
-  'should inherit bar propType'
-);
-  >> ok
-assert.ok(
-  component.propTypes.foo,
-  'should inherit foo propType'
-);
-  >> ok
-assert.deepEqual(
-  component.someStatic, { foo: true, bar: true },
-  'should merge non-React statics'
-);
-  >> ok
-```
-
-__*`React.createClass` throws an Invariant Violation when duplicate keys are found in `getDefaultProps` and `getInitialState`. `react-stamp` will merge duplicate keys.*__
+__*`React.createClass` throws an Invariant Violation when duplicate keys are found in `propTypes` and `getDefaultProps`. `react-stamp` merges duplicate keys.*__
 
 ### Methods
-Composed components inherit other components' methods. A handful of React methods will be 'wrapped' executing with first-in priority. React methods with a unique constraint will throw on duplicates. Non-React methods will override with last-in priority.
+Component methods are either wrapped or overridden. React lifecycle methods, with the exception of `render`, get wrapped executing with first-in priority. All other methods override with last-in priority.
 
-__Wrapped__
+* `componentDidMount` - wrapped and ran sequentially
+* `componentDidUpdate` - wrapped and ran sequentially
+* `componentWillMount` - wrapped and ran sequentially
+* `componentWillReceiveProps` - wrapped and ran sequentially
+* `componentWillUnmount` - wrapped and ran sequentially
+* `componentWillUpdate` - wrapped and ran sequentially
+* `getChildContext` - wrapped and ran sequentially with results merged
+* `shouldComponentUpdate` - wrapped and ran sequentially with results OR'd
 
-* componentWillMount
-* componentDidMount
-* componentWillReceiveProps
-* componentWillUpdate
-* componentDidUpdate
-* componentWillUnmount
-* getChildContext
+**TODO: Example**
 
-__Unique__
-
-* shouldComponentUpdate
-* render
-
-```js
-const mixin = {
-  componentDidMount() {
-    this.state.mixin = true;
-  },
-};
-
-const component = reactStamp(React, {
-  state: {
-    component: false,
-    mixin: false,
-  },
-
-  componentDidMount() {
-    this.state.component = true;
-  }
-}).compose(mixin);
-
-const instance = component();
-instance.componentDidMount();
-```
-
-```js
-assert.deepEqual(
-  instance.state, { component: true, mixin: true },
-  'should inherit functionality of mixable methods'
-);
-  >> ok
-```
-__*`React.createClass` throws an Invariant Violation when duplicate `shouldComponentUpdate` or `render` methods exist, `react-stamp` will throw a TypeError.*__
+__*`React.createClass` throws an Invariant Violation when duplicate `shouldComponentUpdate` or `render` methods exist. `react-stamp` ORs the results of `shouldComponentUpdate` and overrides `render` with last-in priority.*__

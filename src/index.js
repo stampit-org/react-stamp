@@ -4,7 +4,6 @@ import {
   compose,
   getReactDescriptor,
   parseDesc,
-  dupeFilter,
 } from './utils';
 
 /**
@@ -20,14 +19,12 @@ export default function reactStamp(React, desc = {}) {
   const specDesc = parseDesc(desc);
   const { methods, initializers } = getReactDescriptor(React && React.Component);
 
-  // Do not override React's `setState` and `forceUpdate` methods.
-  methods && (specDesc.methods =
-              assign({}, methods, specDesc.methods, dupeFilter));
-  initializers && (specDesc.initializers =
-                   initializers.concat(specDesc.initializers || []));
+  if (initializers) {
+    specDesc.initializers = initializers.concat(specDesc.initializers || []);
+  }
 
   const stamp = (options, ...args) => {
-    let instance = Object.create(specDesc.methods || {});
+    let instance = Object.create(assign({}, methods, specDesc.methods));
 
     assign(instance,
       specDesc.deepProperties, specDesc.properties,
