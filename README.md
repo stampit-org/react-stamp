@@ -6,6 +6,16 @@
 * **This library has replaced [react-stampit](https://github.com/stampit-org/react-stampit) and is compliant with the [stamp specification](https://github.com/stampit-org/stamp-specification).**
 * **The [Rtype specification](https://github.com/ericelliott/rtype#rtype) is used for documenting function signatures and data structures.**
 
+### Install
+
+react-stamp can be [installed via npm](https://www.npmjs.com/package/react-stamp)
+
+```
+npm install react-stamp
+```
+
+or by [downloading the latest release](https://github.com/stampit-org/react-stamp/releases).
+
 ### What is this
 
 This library is the result of wondering about what other ways a React component could be represented. [Stamps](https://github.com/stampit-org/stamp-specification) are a cool concept, and more importantly have proven to be a great alternative to `React.createClass` and the ES2015 `class` due to their composability.
