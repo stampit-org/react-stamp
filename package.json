@@ -3,28 +3,35 @@
   "version": "0.1.0",
   "description": "Composables for React.",
   "main": "lib",
+  "files": [
+    "dist",
+    "lib"
+  ],
   "scripts": {
     "build": "npm run clean && npm run transpile && npm run build-browser",
     "build-browser": "webpack && MINIFY=1 webpack -p",
     "clean": "rimraf lib",
     "lint": "eslint src test",
+    "prepublish": "npm run test && npm run build",
     "test": "npm run lint && babel-node --stage 1 test",
     "transpile": "babel --stage 1 src --out-dir lib"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/troutowicz/react-stamp.git"
+    "url": "git+https://github.com/stampit-org/react-stamp.git"
   },
   "keywords": [
+    "composable",
     "stamp",
-    "React"
+    "react",
+    "mixins"
   ],
   "author": "Tim Routowicz",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/troutowicz/react-stamp/issues"
+    "url": "https://github.com/stampit-org/react-stamp/issues"
   },
-  "homepage": "https://github.com/troutowicz/react-stamp#readme",
+  "homepage": "https://github.com/stampit-org/react-stamp#readme",
   "dependencies": {
     "lodash": "^3.10.1"
   },
