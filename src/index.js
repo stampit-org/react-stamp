@@ -1,51 +1,22 @@
-import assign from 'lodash/object/assign';
-
-import {
-  compose,
-  getReactDescriptor,
-  parseDesc,
-} from './utils';
+import { compose } from './utils';
 
 /**
- * Given a description object, return a stamp
- * aka composable.
+ * Convert the React component constructor function to a stamp.
  *
- * @param  {Object} React The React library.
- * @param  {Object} desc A description object.
+ * @param  {Function} React The React library.
  *
- * @return {Function} A stamp.
+ * @return {Object} The React component descriptor.
  */
-export default function reactStamp(React, desc = {}) {
-  const specDesc = parseDesc(desc);
-  const { methods, initializers } = getReactDescriptor(React && React.Component);
+export default function reactStamp(React) {
+  const desc = {};
 
-  if (initializers) {
-    specDesc.initializers = initializers.concat(specDesc.initializers || []);
+  if (React && React.Component) {
+    desc.methods = { ...React.Component.prototype };
+    desc.initializers = [
+      (options, { instance, args }) =>
+        React.Component.call(instance, options, ...args),
+    ];
   }
 
-  const stamp = (options, ...args) => {
-    let instance = Object.create(assign({}, methods, specDesc.methods));
-
-    assign(instance,
-      specDesc.deepProperties, specDesc.properties,
-      specDesc.configuration
-    );
-    Object.defineProperties(instance, specDesc.propertyDescriptors || {});
-
-    if (specDesc.initializers) {
-      specDesc.initializers.forEach(initializer => {
-        const result = initializer.call(instance, options, { instance, stamp, args });
-        if (result) instance = result;
-      });
-    }
-
-    return instance;
-  }
-
-  assign(stamp, specDesc.deepStaticProperties, specDesc.staticProperties);
-  Object.defineProperties(stamp, specDesc.staticPropertyDescriptors || {});
-
-  stamp.compose = assign(compose.bind(stamp), specDesc);
-
-  return stamp;
+  return compose(desc);
 }

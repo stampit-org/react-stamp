@@ -1,29 +1,27 @@
-import assign from 'lodash/object/assign';
 import forEach from 'lodash/collection/forEach';
 import isEmpty from 'lodash/lang/isEmpty';
 
-import { isSpecDescriptor } from '.';
-
 /**
- * Convert the React component constructor function to a descriptor.
+ * Check if descriptor object is stamp
+ * spec compliant.
  *
- * @param  {Function} Component The React component constructor function.
+ * @param  {Object} desc A decriptor object.
  *
- * @return {Object} The React component descriptor.
+ * @return {Boolean}
  */
-export function getReactDescriptor(Component) {
-  const desc = {};
-
-  if (Component) {
-    desc.methods = { ...Component.prototype };
-    desc.initializers = [
-      (options, { instance, args }) =>
-        Component.call(instance, options, ...args),
-    ];
-  }
-
-  return desc;
-};
+function isSpecDescriptor(desc) {
+  return (
+    desc.methods ||
+    desc.properties ||
+    desc.deepProperties ||
+    desc.initializers ||
+    desc.staticProperties ||
+    desc.deepStaticProperties ||
+    desc.propertyDescriptors ||
+    desc.staticPropertyDescriptors ||
+    desc.configuration
+  );
+}
 
 /**
  * Verify a description object is compliant
@@ -33,7 +31,7 @@ export function getReactDescriptor(Component) {
  *
  * @return {Object} A stamp spec compliant description object.
  */
-export function parseDesc(desc = {}) {
+export default function parseDesc(desc = {}) {
   if (isSpecDescriptor(desc) || isEmpty(desc)) return desc;
 
   let {

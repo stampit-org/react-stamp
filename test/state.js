@@ -1,12 +1,12 @@
 import React from 'react';
 import test from 'tape';
 
-import reactStamp from '../src';
+import { compose } from '../src/utils';
 
-test('reactStamp(React, { state: obj })()', (t) => {
+test('compose({ state: obj })()', (t) => {
   t.plan(1);
 
-  const stamp = reactStamp(React, {
+  const stamp = compose({
     state: {
       foo: true,
     },
@@ -18,10 +18,10 @@ test('reactStamp(React, { state: obj })()', (t) => {
   );
 });
 
-test('reactStamp(React, { init() { ... } })()', (t) => {
+test('compose({ init() {} })()', (t) => {
   t.plan(1);
 
-  const stamp = reactStamp(React, {
+  const stamp = compose({
     init() {
       this.state = { foo: true };
     },

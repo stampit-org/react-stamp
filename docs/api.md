@@ -1,13 +1,20 @@
 ## API
 
-### reactStamp([React], [desc])
+### reactStamp([React])
 
 Returns a stamp.
 
 * @param  {Object} React The React library.
-* @param  {Object} desc A description object.
 * @return {Function} stamp A stamp.
-* @return {Function} stamp.compose Creates a new stamp using passed stamps/descriptors.
+* @return {Function} stamp.compose
+
+### stamp.compose([desc])
+
+Creates a new stamp using the current stamp as a base, composed with a list of stamps/descriptors passed as arguments.
+
+* @param  {Object} desc A description object.
+* @return {Function} stamp A new stamp.
+* @return {Function} stamp.compose
 
 ### The Descriptor Object
 

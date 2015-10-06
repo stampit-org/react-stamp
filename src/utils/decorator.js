@@ -1,7 +1,6 @@
 import assign from 'lodash/object/assign';
-import merge from 'lodash/object/merge';
 
-import reactStamp from '..';
+import { compose } from '.';
 
 /**
  * Get the non-enum properties of an object.
@@ -15,29 +14,11 @@ function getNonEnum(src) {
   const props = Object.getOwnPropertyNames(src),
       enumOnly = Object.keys(src);
 
-  props.forEach(function(key) {
-    var indexInEnum = enumOnly.indexOf(key);
+  props.forEach(key => {
+    const indexInEnum = enumOnly.indexOf(key);
     if (indexInEnum === -1 && key !== 'constructor') {
       obj[key] = src[key];
     }
-  });
-
-  return obj;
-}
-
-/**
- * Get the enum properties of an object.
- *
- * @param  {Object} src An object.
- *
- * @return {Object} An object of enum properties.
- */
-function getEnum(src) {
-  let obj = {};
-  const props = Object.keys(src);
-
-  props.forEach(function(key) {
-    obj[key] = src[key];
   });
 
   return obj;
@@ -63,5 +44,5 @@ export default function stamp(Class) {
     getNonEnum(Class.prototype)
   )
 
-  return reactStamp(null, desc);
+  return compose(desc);
 }

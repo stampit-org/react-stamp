@@ -1,12 +1,12 @@
 import React from 'react';
 import test from 'tape';
 
-import reactStamp from '../src';
+import { compose } from '../src/utils';
 
-test('reactStamp(React, { statics: obj })', (t) => {
+test('compose({ statics: obj })', (t) => {
   t.plan(1);
 
-  const stamp = reactStamp(React, {
+  const stamp = compose({
     statics: {
       foo: true,
     },
@@ -18,10 +18,10 @@ test('reactStamp(React, { statics: obj })', (t) => {
   );
 });
 
-test('reactStamp(React, { displayName: str })', (t) => {
+test('compose({ displayName: str })', (t) => {
   t.plan(1);
 
-  const stamp = reactStamp(React, {
+  const stamp = compose({
     displayName: 'stamp',
   });
 
@@ -31,10 +31,10 @@ test('reactStamp(React, { displayName: str })', (t) => {
   );
 });
 
-test('reactStamp(React, { contextTypes: obj })', (t) => {
+test('compose({ contextTypes: obj })', (t) => {
   t.plan(1);
 
-  const stamp = reactStamp(React, {
+  const stamp = compose({
     contextTypes: {},
   });
 
@@ -44,10 +44,10 @@ test('reactStamp(React, { contextTypes: obj })', (t) => {
   );
 });
 
-test('reactStamp(React, { childContextTypes: obj })', (t) => {
+test('compose({ childContextTypes: obj })', (t) => {
   t.plan(1);
 
-  const stamp = reactStamp(React, {
+  const stamp = compose({
     childContextTypes: {},
   });
 
@@ -57,10 +57,10 @@ test('reactStamp(React, { childContextTypes: obj })', (t) => {
   );
 });
 
-test('reactStamp(React, { propTypes: obj })', (t) => {
+test('compose({ propTypes: obj })', (t) => {
   t.plan(1);
 
-  const stamp = reactStamp(React, {
+  const stamp = compose({
     propTypes: {},
   });
 
@@ -70,10 +70,10 @@ test('reactStamp(React, { propTypes: obj })', (t) => {
   );
 });
 
-test('reactStamp(React, { defaultProps: obj })', (t) => {
+test('compose({ defaultProps: obj })', (t) => {
   t.plan(1);
 
-  const stamp = reactStamp(React, {
+  const stamp = compose({
     defaultProps: {},
   });
 

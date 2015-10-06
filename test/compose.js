@@ -1,86 +1,25 @@
 import React from 'react';
 import test from 'tape';
 
-import reactStamp from '../src';
 import { compose } from '../src/utils';
 
-test('reactStamp(React, props).compose(stamp2)', (t) => {
+test('stamp composed of objects with state', (t) => {
   t.plan(1);
 
-  const mixin = reactStamp(null, {
-    method() {},
-  });
-
-  const stamp = reactStamp(React).compose(mixin);
-
-  t.ok(
-    stamp().method,
-    'should return a stamp composed of `this` and passed stamp'
-  );
-});
-
-test('reactStamp(React, props).compose(pojo)', (t) => {
-  t.plan(1);
-
-  const mixin = {
-    method() {},
-  };
-
-  const stamp = reactStamp(React).compose(mixin);
-
-  t.ok(
-    stamp().method,
-    'should return a stamp composed of `this` and passed pojo'
-  );
-});
-
-test('reactStamp(React, props).compose(stamp2, stamp3)', (t) => {
-  t.plan(2);
-
-  const mixin1 = reactStamp(null, {
-    method() {
-      return this.state;
-    },
-  });
-
-  const mixin2 = reactStamp(null, {
-    statics: {
-      util() {},
-    },
-  });
-
-  const stamp = reactStamp(React, {
-    state: {
-      foo: true,
-    },
-  }).compose(mixin1, mixin2);
-
-  t.ok(
-    stamp().method().foo,
-    'should expose `this` to inherited methods'
-  );
-
-  t.ok(
-    stamp.util,
-    'should inherit static methods'
-  );
-});
-
-test('stamps composed of stamps with state', (t) => {
-  t.plan(1);
-
-  const mixin = reactStamp(null, {
-    state: {
-      bar: true,
-    },
-  });
-
-  const stamp = reactStamp(React, {
+  const obj1 = {
     state: {
       foo: true,
       bar: false,
     },
-  }).compose(mixin);
+  }
+
+  const obj2 = {
+    state: {
+      bar: true,
+    },
+  };
+
+  const stamp = compose(obj1, obj2);
 
   t.deepEqual(
      stamp().state, { foo: true, bar: true },
@@ -88,42 +27,44 @@ test('stamps composed of stamps with state', (t) => {
   );
 });
 
-test('stamps composed of stamps with React statics', (t) => {
+test('stamps composed of objects with React statics', (t) => {
   t.plan(4);
 
-  const mixin = reactStamp(null, {
+  const obj1 = {
     contextTypes: {
-      bar: true,
+      foo: true,
+      bar: false,
     },
     childContextTypes: {
-      bar: true,
+      foo: true,
+      bar: false,
     },
     propTypes: {
-      bar: true,
+      foo: true,
+      bar: false,
     },
     defaultProps: {
-      bar: true,
+      foo: true,
+      bar: false,
     },
-  });
+  }
 
-  const stamp = reactStamp(React, {
+  const obj2 = {
     contextTypes: {
-      foo: true,
-      bar: false,
+      bar: true,
     },
     childContextTypes: {
-      foo: true,
-      bar: false,
+      bar: true,
     },
     propTypes: {
-      foo: true,
-      bar: false,
+      bar: true,
     },
     defaultProps: {
-      foo: true,
-      bar: false,
+      bar: true,
     },
-  }).compose(mixin);
+  };
+
+  const stamp = compose(obj1, obj2);
 
   t.deepEqual(
     stamp.contextTypes, { foo: true, bar: true },
@@ -146,21 +87,10 @@ test('stamps composed of stamps with React statics', (t) => {
   );
 });
 
-test('stamps composed of stamps with non-React statics', (t) => {
+test('stamps composed of objects with non-React statics', (t) => {
   t.plan(2);
 
-  const mixin = reactStamp(null, {
-    statics: {
-      obj: {
-        bar: true,
-      },
-      method() {
-        return true;
-      },
-    },
-  });
-
-  const stamp = reactStamp(React, {
+  const obj1 = {
     statics: {
       obj: {
         foo: true,
@@ -170,7 +100,20 @@ test('stamps composed of stamps with non-React statics', (t) => {
         return false;
       },
     },
-  }).compose(mixin);
+  };
+
+  const obj2 = {
+    statics: {
+      obj: {
+        bar: true,
+      },
+      method() {
+        return true;
+      },
+    },
+  };
+
+  const stamp = compose(obj1, obj2);
 
   t.deepEqual(
     stamp.obj, { foo: true, bar: true },
@@ -186,27 +129,7 @@ test('stamps composed of stamps with non-React statics', (t) => {
 test('stamps composed of stamps with methods', (t) => {
   t.plan(4);
 
-  const mixin = reactStamp(null, {
-    getChildContext() {
-      return {
-        bar: true,
-      };
-    },
-
-    componentDidMount() {
-      this.state.mixin = true;
-    },
-
-    shouldComponentUpdate() {
-      return false;
-    },
-
-    render() {
-      return true;
-    },
-  });
-
-  const stamp = reactStamp(React, {
+  const obj1 = {
     state: {
       stamp: false,
       mixin: false,
@@ -230,7 +153,29 @@ test('stamps composed of stamps with methods', (t) => {
     render() {
       return false;
     },
-  }).compose(mixin);
+  };
+
+  const obj2 = {
+    getChildContext() {
+      return {
+        bar: true,
+      };
+    },
+
+    componentDidMount() {
+      this.state.mixin = true;
+    },
+
+    shouldComponentUpdate() {
+      return false;
+    },
+
+    render() {
+      return true;
+    },
+  };
+
+  const stamp = compose(obj1, obj2);
 
   const instance = stamp();
   instance.componentDidMount();
