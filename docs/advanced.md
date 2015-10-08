@@ -5,7 +5,7 @@
 For all those nice guys/gals that like `class` and just want some mixability. It is assumed that the component directly extends React.Component, anything else should be inherited via stamp composition.
 
 ```js
-import React from 'react/addons';
+import React from 'react';
 import { stamp } from 'react-stamp/utils';
 
 @stamp
