@@ -1,6 +1,7 @@
 import assign from 'lodash/object/assign';
 import forEach from 'lodash/collection/forEach';
 import merge from 'lodash/object/merge';
+import omit from 'lodash/object/omit';
 
 import {
   parseDesc,
@@ -12,7 +13,7 @@ import {
  *
  * (desc?: reactDesc | specDesc): stamp
  */
-function createStamp(desc = {}) {
+function createStamp (desc = {}) {
   const specDesc = parseDesc(desc);
 
   const stamp = (options, ...args) => {
@@ -30,7 +31,7 @@ function createStamp(desc = {}) {
     }
 
     return instance;
-  }
+  };
 
   merge(stamp, specDesc.deepStaticProperties);
   assign(stamp, specDesc.staticProperties);
@@ -46,7 +47,7 @@ function createStamp(desc = {}) {
  *
  * (...args?: stamp | reactDesc | specDesc): stamp
  */
-export default function compose(...args) {
+export default function compose (...args) {
   const descs = args.map(arg => arg.compose || parseDesc(arg));
   const compDesc = {};
 
@@ -55,10 +56,11 @@ export default function compose(...args) {
      * Speical handling is required for statics when using
      * the ES7 stamp decorator... should we support this?
      */
-    const { compose, ...statics } = this;
-    statics && (compose.deepStaticProperties =
-                assign({}, compose.deepStaticProperties, statics));
-    descs.unshift(compose);
+    const statics = omit(this, 'compose');
+
+    statics && (this.compose.deepStaticProperties =
+                assign({}, this.compose.deepStaticProperties, statics));
+    descs.unshift(this.compose);
   }
 
   forEach(descs, desc => {

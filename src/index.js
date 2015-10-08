@@ -5,7 +5,7 @@ import { compose } from './utils';
  *
  * (React?: object): stamp
  */
-export default function reactStamp(React) {
+export default function reactStamp (React) {
   const desc = {};
 
   if (React && React.Component) {

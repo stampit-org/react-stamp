@@ -23,7 +23,7 @@ const lifecycle = {
  *
  * (targ?: object, src?: object): new: object
  */
-export default function wrapMethods(targ = {}, src = {}) {
+export default function wrapMethods (targ = {}, src = {}) {
   const methods = mapValues(src, (val, key) => {
     switch (lifecycle[key]) {
       case 'wrap':
@@ -44,7 +44,7 @@ export default function wrapMethods(targ = {}, src = {}) {
           const res2 = val.apply(this, arguments);
 
           return res1 || res2;
-        }
+        };
       case 'override':
       default:
         return val;

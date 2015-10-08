@@ -12,15 +12,15 @@ const obj1 = {
     obj2: false,
   },
 
-  componentWillMount() {
+  componentWillMount () {
     this.setState({ obj1: true });
   },
 
-  _onClick() {
+  _onClick () {
     return this.state;
   },
 
-  render() {
+  render () {
     return (
       <input
         type='button'
@@ -32,14 +32,14 @@ const obj1 = {
 };
 
 const obj2 = {
-  componentWillMount() {
-    this.setState({ obj2: true });;
+  componentWillMount () {
+    this.setState({ obj2: true });
   },
 };
 
 const Button = reactStamp(React).compose(obj1, obj2);
 
-shallowRenderer.render(<Button />);
+shallowRenderer.render(React.createElement(Button));
 const button = shallowRenderer.getRenderOutput();
 
 test('readme example', (t) => {
