@@ -30,17 +30,17 @@ This method converts React's `Component` constructor function into a [stamp](htt
 
 ```js
 interface reactDesc {
-  init?: func,
+  init?: Function,
   state?: object,
   statics?: object,
   contextTypes?: object,
   childContextTypes?: object,
   propTypes?: object,
   defaultProps?: object,
-  ...methods?: func
+  ...methods?: Function
 }
 
-stamp.compose(...desc?: stamp || reactDesc || specDesc): stamp
+stamp.compose(...desc?: stamp | reactDesc | specDesc): stamp
 ```
 
 The most powerful feature of [stamps](https://github.com/stampit-org/stamp-specification) is their composability. What this means is that `n` number of stamps can be combined into a new stamp which inherits each passed stamp's behavior. This is perfect for React, since `class` is being pushed as the new norm and does not provide an idiomatic way to use mixins. (classical inheritance :disappointed:). Stamps embrace prototypal inheritance and as a result provide great flexibility when extending React components.

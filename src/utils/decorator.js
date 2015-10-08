@@ -25,7 +25,7 @@ function getNonEnum(src) {
 /**
  * ES7 decorator for converting an ES6 class to a stamp.
  *
- * (Class?: func): stamp
+ * (Class?: Function): stamp
  */
 export default function stamp(Class) {
   const desc = {};
