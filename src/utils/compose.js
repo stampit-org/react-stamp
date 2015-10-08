@@ -1,5 +1,6 @@
 import assign from 'lodash/object/assign';
 import forEach from 'lodash/collection/forEach';
+import isObject from 'lodash/lang/isObject';
 import merge from 'lodash/object/merge';
 import omit from 'lodash/object/omit';
 
@@ -25,8 +26,9 @@ function createStamp (desc = {}) {
 
     if (specDesc.initializers) {
       specDesc.initializers.forEach(initializer => {
-        const result = initializer.call(instance, options, { instance, stamp, args });
-        if (result) instance = result;
+        const result = initializer.call(instance, options,
+          { instance, stamp, args: [options].concat(args) });
+        if (isObject(result)) instance = result;
       });
     }
 

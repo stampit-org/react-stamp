@@ -1,3 +1,4 @@
+import './spec';
 import './basics';
 import './state';
 import './statics';
