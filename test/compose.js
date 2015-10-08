@@ -1,4 +1,3 @@
-import React from 'react';
 import test from 'tape';
 
 import { compose } from '../src/utils';
@@ -11,7 +10,7 @@ test('stamp composed of objects with state', (t) => {
       foo: true,
       bar: false,
     },
-  }
+  };
 
   const obj2 = {
     state: {
@@ -47,7 +46,7 @@ test('stamps composed of objects with React statics', (t) => {
       foo: true,
       bar: false,
     },
-  }
+  };
 
   const obj2 = {
     contextTypes: {
@@ -96,7 +95,7 @@ test('stamps composed of objects with non-React statics', (t) => {
         foo: true,
         bar: false,
       },
-      method() {
+      method () {
         return false;
       },
     },
@@ -107,7 +106,7 @@ test('stamps composed of objects with non-React statics', (t) => {
       obj: {
         bar: true,
       },
-      method() {
+      method () {
         return true;
       },
     },
@@ -135,42 +134,42 @@ test('stamps composed of stamps with methods', (t) => {
       mixin: false,
     },
 
-    getChildContext() {
+    getChildContext () {
       return {
         foo: true,
         bar: false,
       };
     },
 
-    componentDidMount() {
+    componentDidMount () {
       this.state.stamp = true;
     },
 
-    shouldComponentUpdate() {
+    shouldComponentUpdate () {
       return true;
     },
 
-    render() {
+    render () {
       return false;
     },
   };
 
   const obj2 = {
-    getChildContext() {
+    getChildContext () {
       return {
         bar: true,
       };
     },
 
-    componentDidMount() {
+    componentDidMount () {
       this.state.mixin = true;
     },
 
-    shouldComponentUpdate() {
+    shouldComponentUpdate () {
       return false;
     },
 
-    render() {
+    render () {
       return true;
     },
   };

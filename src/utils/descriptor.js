@@ -6,7 +6,7 @@ import isEmpty from 'lodash/lang/isEmpty';
  *
  * (desc?: reactDesc | specDesc): isSpec: boolean
  */
-function isSpecDescriptor(desc = {}) {
+function isSpecDescriptor (desc = {}) {
   return (
     desc.methods ||
     desc.properties ||
@@ -25,7 +25,7 @@ function isSpecDescriptor(desc = {}) {
  *
  * (desc?: reactDesc | specDesc): specDesc
  */
-export default function parseDesc(desc = {}) {
+export default function parseDesc (desc = {}) {
   if (isSpecDescriptor(desc) || isEmpty(desc)) return desc;
 
   let {

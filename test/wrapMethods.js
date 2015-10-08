@@ -17,19 +17,20 @@ const methods = {
 };
 
 
-let targ = {}, src = {}, fail = {};
+let targ = {}, src = {};
+
 forEach(methods, (type, method) => {
   if (type === 'wrap_merge') {
     targ[method] = () => ({ foo: true, bar: false });
     src[method] = () => ({ bar: true });
-  } else if (type == 'wrap_or') {
+  } else if (type === 'wrap_or') {
     targ[method] = () => false;
     src[method] = () => true;
   } else {
-    targ[method] = function() {
+    targ[method] = function () {
       this.result = [ 'foo' ];
     };
-    src[method] = function() {
+    src[method] = function () {
       this.result.push('bar');
     };
   }

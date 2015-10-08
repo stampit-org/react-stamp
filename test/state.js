@@ -1,4 +1,3 @@
-import React from 'react';
 import test from 'tape';
 
 import { compose } from '../src/utils';
@@ -22,7 +21,7 @@ test('compose({ init() {} })()', (t) => {
   t.plan(1);
 
   const stamp = compose({
-    init() {
+    init () {
       this.state = { foo: true };
     },
   });

@@ -1,4 +1,3 @@
-import React from 'react';
 import test from 'tape';
 
 import { compose } from '../src/utils';

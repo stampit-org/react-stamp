@@ -7,7 +7,7 @@ import { compose } from '.';
  *
  * (src: object): enums: object
  */
-function getNonEnum(src) {
+function getNonEnum (src) {
   let obj = {};
   const props = Object.getOwnPropertyNames(src),
       enumOnly = Object.keys(src);
@@ -27,7 +27,7 @@ function getNonEnum(src) {
  *
  * (Class?: Function): stamp
  */
-export default function stamp(Class) {
+export default function stamp (Class) {
   const desc = {};
 
   desc.initializers = [
@@ -38,7 +38,7 @@ export default function stamp(Class) {
   desc.methods = assign({},
     Object.getPrototypeOf(Class).prototype,
     getNonEnum(Class.prototype)
-  )
+  );
 
   return compose(desc);
 }

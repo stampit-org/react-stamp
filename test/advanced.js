@@ -8,7 +8,7 @@ test('stamp decorator', (t) => {
 
   @stamp
   class Component extends React.Component {
-    constructor(props) {
+    constructor (props) {
       super(props);
 
       this.state = {
@@ -16,7 +16,7 @@ test('stamp decorator', (t) => {
       };
     }
 
-    render() {
+    render () {
       return null;
     }
   }

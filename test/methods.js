@@ -1,4 +1,3 @@
-import React from 'react';
 import test from 'tape';
 
 import { compose } from '../src/utils';
@@ -7,7 +6,7 @@ test('compose({ method() {} })()', (t) => {
   t.plan(1);
 
   const stamp = compose({
-    render() {},
+    render () {},
   });
 
   t.equal(

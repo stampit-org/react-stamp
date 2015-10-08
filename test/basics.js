@@ -36,7 +36,7 @@ test('reactStamp(React).compose({ render() })()', (t) => {
   t.plan(1);
 
   const stamp = reactStamp(React).compose({
-    render() {},
+    render () {},
   });
 
   t.ok(
