@@ -1,11 +1,11 @@
 import compose from './compose';
-import parseDesc from './descriptor';
+import parseObj from './parser';
 import stamp from './decorator';
 import wrapMethods from './react';
 
 export {
   compose,
-  parseDesc,
+  parseObj,
   stamp,
   wrapMethods,
 };

@@ -83,7 +83,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function reactStamp(React) {
 	  var desc = {};
-
 	  if (React && React.Component) {
 	    desc.methods = _extends({}, React.Component.prototype);
 	    desc.initializers = [function (options, _ref) {
@@ -116,20 +115,20 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _compose2 = _interopRequireDefault(_compose);
 
-	var _descriptor = __webpack_require__(58);
+	var _parser = __webpack_require__(58);
 
-	var _descriptor2 = _interopRequireDefault(_descriptor);
+	var _parser2 = _interopRequireDefault(_parser);
 
-	var _decorator = __webpack_require__(61);
+	var _decorator = __webpack_require__(59);
 
 	var _decorator2 = _interopRequireDefault(_decorator);
 
-	var _react = __webpack_require__(62);
+	var _react = __webpack_require__(60);
 
 	var _react2 = _interopRequireDefault(_react);
 
 	exports.compose = _compose2['default'];
-	exports.parseDesc = _descriptor2['default'];
+	exports.parseObj = _parser2['default'];
 	exports.stamp = _decorator2['default'];
 	exports.wrapMethods = _react2['default'];
 
@@ -169,14 +168,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _ = __webpack_require__(2);
 
 	/**
-	 * Given a description object, return a stamp aka composable.
+	 * Given an object, return a stamp aka composable.
 	 *
-	 * (desc?: reactDesc | specDesc): stamp
+	 * (obj: Function|reactDesc|specDesc): stamp
 	 */
-	function createStamp() {
-	  var desc = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-	  var specDesc = (0, _.parseDesc)(desc);
+	function createStamp(obj) {
+	  var specDesc = (0, _.parseObj)(obj);
 
 	  var stamp = function stamp(options) {
 	    for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -211,16 +208,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * that encapsulates combined behavior. If nothing is passed in,
 	 * an empty stamp is returned.
 	 *
-	 * (...args?: stamp | reactDesc | specDesc): stamp
+	 * (...objs?: Function|reactDesc|specDesc[]): stamp
 	 */
 
 	function compose() {
-	  for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-	    args[_key2] = arguments[_key2];
+	  for (var _len2 = arguments.length, objs = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+	    objs[_key2] = arguments[_key2];
 	  }
 
-	  var descs = args.map(function (arg) {
-	    return arg.compose || (0, _.parseDesc)(arg);
+	  var descs = objs.map(function (obj) {
+	    return obj.compose || (0, _.parseObj)(obj);
 	  });
 	  var compDesc = {};
 
@@ -2351,7 +2348,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	exports['default'] = parseDesc;
+	exports['default'] = parseObj;
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -2361,157 +2358,67 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _lodashCollectionForEach2 = _interopRequireDefault(_lodashCollectionForEach);
 
-	var _lodashLangIsEmpty = __webpack_require__(59);
+	var _lodashLangIsFunction = __webpack_require__(9);
 
-	var _lodashLangIsEmpty2 = _interopRequireDefault(_lodashLangIsEmpty);
+	var _lodashLangIsFunction2 = _interopRequireDefault(_lodashLangIsFunction);
 
 	/**
 	 * Check if object is stamp spec compliant.
 	 *
-	 * (desc?: reactDesc | specDesc): isSpec: boolean
+	 * (obj: object): isSpec: boolean
 	 */
-	function isSpecDescriptor() {
-	  var desc = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-	  return desc.methods || desc.properties || desc.deepProperties || desc.initializers || desc.staticProperties || desc.deepStaticProperties || desc.propertyDescriptors || desc.staticPropertyDescriptors || desc.configuration;
+	function isSpecDescriptor(obj) {
+	  return obj.methods || obj.properties || obj.deepProperties || obj.initializers || obj.staticProperties || obj.deepStaticProperties || obj.propertyDescriptors || obj.staticPropertyDescriptors || obj.configuration;
 	}
 
 	/**
 	 * Create a stamp spec compliant desc object.
 	 *
-	 * (desc?: reactDesc | specDesc): specDesc
+	 * (obj: Function|reactDesc|specDesc): specDesc
 	 */
 
-	function parseDesc() {
-	  var desc = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	function parseObj(obj) {
+	  var desc = {};
 
-	  if (isSpecDescriptor(desc) || (0, _lodashLangIsEmpty2['default'])(desc)) return desc;
+	  if (isSpecDescriptor(obj)) {
+	    desc = obj;
+	  } else if ((0, _lodashLangIsFunction2['default'])(obj)) {
+	    // Support stateless functions
+	    desc.methods = {
+	      render: function render() {
+	        return obj.call(this, this.props);
+	      }
+	    };
+	  } else {
+	    var displayName = obj.displayName;
+	    var init = obj.init;
+	    var state = obj.state;
+	    var statics = obj.statics;
+	    var contextTypes = obj.contextTypes;
+	    var childContextTypes = obj.childContextTypes;
+	    var propTypes = obj.propTypes;
+	    var defaultProps = obj.defaultProps;
 
-	  var displayName = desc.displayName;
-	  var init = desc.init;
-	  var state = desc.state;
-	  var statics = desc.statics;
-	  var contextTypes = desc.contextTypes;
-	  var childContextTypes = desc.childContextTypes;
-	  var propTypes = desc.propTypes;
-	  var defaultProps = desc.defaultProps;
+	    var methods = _objectWithoutProperties(obj, ['displayName', 'init', 'state', 'statics', 'contextTypes', 'childContextTypes', 'propTypes', 'defaultProps']);
 
-	  var methods = _objectWithoutProperties(desc, ['displayName', 'init', 'state', 'statics', 'contextTypes', 'childContextTypes', 'propTypes', 'defaultProps']);
+	    !displayName && (displayName = 'ReactStamp');
+	    init && (desc.initializers = [init]);
+	    state && (desc.deepProperties = { state: state });
+	    methods && (desc.methods = methods);
+	    desc.deepStaticProperties = _extends({}, statics, { displayName: displayName });
 
-	  var parsedDesc = {};
+	    (0, _lodashCollectionForEach2['default'])({ contextTypes: contextTypes, childContextTypes: childContextTypes, propTypes: propTypes, defaultProps: defaultProps }, function (val, key) {
+	      return val && (desc.deepStaticProperties[key] = val);
+	    });
+	  }
 
-	  !displayName && (displayName = 'ReactStamp');
-	  init && (parsedDesc.initializers = [init]);
-	  state && (parsedDesc.deepProperties = { state: state });
-	  methods && (parsedDesc.methods = methods);
-	  parsedDesc.deepStaticProperties = _extends({}, statics, { displayName: displayName });
-
-	  (0, _lodashCollectionForEach2['default'])({ contextTypes: contextTypes, childContextTypes: childContextTypes, propTypes: propTypes, defaultProps: defaultProps }, function (val, key) {
-	    return val && (parsedDesc.deepStaticProperties[key] = val);
-	  });
-
-	  return parsedDesc;
+	  return desc;
 	}
 
 	module.exports = exports['default'];
 
 /***/ },
 /* 59 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var isArguments = __webpack_require__(17),
-	    isArray = __webpack_require__(18),
-	    isArrayLike = __webpack_require__(12),
-	    isFunction = __webpack_require__(9),
-	    isObjectLike = __webpack_require__(11),
-	    isString = __webpack_require__(60),
-	    keys = __webpack_require__(6);
-
-	/**
-	 * Checks if `value` is empty. A value is considered empty unless it's an
-	 * `arguments` object, array, string, or jQuery-like collection with a length
-	 * greater than `0` or an object with own enumerable properties.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @category Lang
-	 * @param {Array|Object|string} value The value to inspect.
-	 * @returns {boolean} Returns `true` if `value` is empty, else `false`.
-	 * @example
-	 *
-	 * _.isEmpty(null);
-	 * // => true
-	 *
-	 * _.isEmpty(true);
-	 * // => true
-	 *
-	 * _.isEmpty(1);
-	 * // => true
-	 *
-	 * _.isEmpty([1, 2, 3]);
-	 * // => false
-	 *
-	 * _.isEmpty({ 'a': 1 });
-	 * // => false
-	 */
-	function isEmpty(value) {
-	  if (value == null) {
-	    return true;
-	  }
-	  if (isArrayLike(value) && (isArray(value) || isString(value) || isArguments(value) || isObjectLike(value) && isFunction(value.splice))) {
-	    return !value.length;
-	  }
-	  return !keys(value).length;
-	}
-
-	module.exports = isEmpty;
-
-/***/ },
-/* 60 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var isObjectLike = __webpack_require__(11);
-
-	/** `Object#toString` result references. */
-	var stringTag = '[object String]';
-
-	/** Used for native method references. */
-	var objectProto = Object.prototype;
-
-	/**
-	 * Used to resolve the [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
-	 * of values.
-	 */
-	var objToString = objectProto.toString;
-
-	/**
-	 * Checks if `value` is classified as a `String` primitive or object.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
-	 * @example
-	 *
-	 * _.isString('abc');
-	 * // => true
-	 *
-	 * _.isString(1);
-	 * // => false
-	 */
-	function isString(value) {
-	  return typeof value == 'string' || isObjectLike(value) && objToString.call(value) == stringTag;
-	}
-
-	module.exports = isString;
-
-/***/ },
-/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2575,7 +2482,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 62 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2594,7 +2501,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _lodashObjectAssign2 = _interopRequireDefault(_lodashObjectAssign);
 
-	var _lodashObjectMapValues = __webpack_require__(63);
+	var _lodashObjectMapValues = __webpack_require__(61);
 
 	var _lodashObjectMapValues2 = _interopRequireDefault(_lodashObjectMapValues);
 
@@ -2618,7 +2525,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * functions for React lifecycle methods, starting
 	 * execution with first-in.
 	 *
-	 * (targ?: object, src?: object): new: object
+	 * (targ: object, src: object): new: object
 	 */
 
 	function wrapMethods() {
@@ -2658,12 +2565,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 63 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var createObjectMapper = __webpack_require__(64);
+	var createObjectMapper = __webpack_require__(62);
 
 	/**
 	 * Creates an object with the same keys as `object` and values generated by
@@ -2711,12 +2618,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = mapValues;
 
 /***/ },
-/* 64 */
+/* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var baseCallback = __webpack_require__(65),
+	var baseCallback = __webpack_require__(63),
 	    baseForOwn = __webpack_require__(31);
 
 	/**
@@ -2744,16 +2651,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = createObjectMapper;
 
 /***/ },
-/* 65 */
+/* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var baseMatches = __webpack_require__(66),
-	    baseMatchesProperty = __webpack_require__(77),
+	var baseMatches = __webpack_require__(64),
+	    baseMatchesProperty = __webpack_require__(75),
 	    bindCallback = __webpack_require__(24),
 	    identity = __webpack_require__(25),
-	    property = __webpack_require__(84);
+	    property = __webpack_require__(82);
 
 	/**
 	 * The base implementation of `_.callback` which supports specifying the
@@ -2782,13 +2689,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = baseCallback;
 
 /***/ },
-/* 66 */
+/* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var baseIsMatch = __webpack_require__(67),
-	    getMatchData = __webpack_require__(74),
+	var baseIsMatch = __webpack_require__(65),
+	    getMatchData = __webpack_require__(72),
 	    toObject = __webpack_require__(34);
 
 	/**
@@ -2819,12 +2726,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = baseMatches;
 
 /***/ },
-/* 67 */
+/* 65 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var baseIsEqual = __webpack_require__(68),
+	var baseIsEqual = __webpack_require__(66),
 	    toObject = __webpack_require__(34);
 
 	/**
@@ -2875,12 +2782,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = baseIsMatch;
 
 /***/ },
-/* 68 */
+/* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var baseIsEqualDeep = __webpack_require__(69),
+	var baseIsEqualDeep = __webpack_require__(67),
 	    isObject = __webpack_require__(10),
 	    isObjectLike = __webpack_require__(11);
 
@@ -2910,14 +2817,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = baseIsEqual;
 
 /***/ },
-/* 69 */
+/* 67 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var equalArrays = __webpack_require__(70),
-	    equalByTag = __webpack_require__(72),
-	    equalObjects = __webpack_require__(73),
+	var equalArrays = __webpack_require__(68),
+	    equalByTag = __webpack_require__(70),
+	    equalObjects = __webpack_require__(71),
 	    isArray = __webpack_require__(18),
 	    isTypedArray = __webpack_require__(43);
 
@@ -3019,12 +2926,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = baseIsEqualDeep;
 
 /***/ },
-/* 70 */
+/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var arraySome = __webpack_require__(71);
+	var arraySome = __webpack_require__(69);
 
 	/**
 	 * A specialized version of `baseIsEqualDeep` for arrays with support for
@@ -3077,7 +2984,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = equalArrays;
 
 /***/ },
-/* 71 */
+/* 69 */
 /***/ function(module, exports) {
 
 	/**
@@ -3107,7 +3014,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = arraySome;
 
 /***/ },
-/* 72 */
+/* 70 */
 /***/ function(module, exports) {
 
 	/** `Object#toString` result references. */
@@ -3160,7 +3067,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = equalByTag;
 
 /***/ },
-/* 73 */
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3231,13 +3138,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = equalObjects;
 
 /***/ },
-/* 74 */
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var isStrictComparable = __webpack_require__(75),
-	    pairs = __webpack_require__(76);
+	var isStrictComparable = __webpack_require__(73),
+	    pairs = __webpack_require__(74);
 
 	/**
 	 * Gets the propery names, values, and compare flags of `object`.
@@ -3259,7 +3166,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = getMatchData;
 
 /***/ },
-/* 75 */
+/* 73 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3281,7 +3188,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = isStrictComparable;
 
 /***/ },
-/* 76 */
+/* 74 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3321,20 +3228,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = pairs;
 
 /***/ },
-/* 77 */
+/* 75 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var baseGet = __webpack_require__(78),
-	    baseIsEqual = __webpack_require__(68),
-	    baseSlice = __webpack_require__(79),
+	var baseGet = __webpack_require__(76),
+	    baseIsEqual = __webpack_require__(66),
+	    baseSlice = __webpack_require__(77),
 	    isArray = __webpack_require__(18),
-	    isKey = __webpack_require__(80),
-	    isStrictComparable = __webpack_require__(75),
-	    last = __webpack_require__(81),
+	    isKey = __webpack_require__(78),
+	    isStrictComparable = __webpack_require__(73),
+	    last = __webpack_require__(79),
 	    toObject = __webpack_require__(34),
-	    toPath = __webpack_require__(82);
+	    toPath = __webpack_require__(80);
 
 	/**
 	 * The base implementation of `_.matchesProperty` which does not clone `srcValue`.
@@ -3371,7 +3278,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = baseMatchesProperty;
 
 /***/ },
-/* 78 */
+/* 76 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3407,7 +3314,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = baseGet;
 
 /***/ },
-/* 79 */
+/* 77 */
 /***/ function(module, exports) {
 
 	/**
@@ -3446,7 +3353,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = baseSlice;
 
 /***/ },
-/* 80 */
+/* 78 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3481,7 +3388,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = isKey;
 
 /***/ },
-/* 81 */
+/* 79 */
 /***/ function(module, exports) {
 
 	/**
@@ -3507,12 +3414,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = last;
 
 /***/ },
-/* 82 */
+/* 80 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var baseToString = __webpack_require__(83),
+	var baseToString = __webpack_require__(81),
 	    isArray = __webpack_require__(18);
 
 	/** Used to match property names within property paths. */
@@ -3542,7 +3449,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = toPath;
 
 /***/ },
-/* 83 */
+/* 81 */
 /***/ function(module, exports) {
 
 	/**
@@ -3562,14 +3469,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = baseToString;
 
 /***/ },
-/* 84 */
+/* 82 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var baseProperty = __webpack_require__(14),
-	    basePropertyDeep = __webpack_require__(85),
-	    isKey = __webpack_require__(80);
+	    basePropertyDeep = __webpack_require__(83),
+	    isKey = __webpack_require__(78);
 
 	/**
 	 * Creates a function that returns the property value at `path` on a
@@ -3600,13 +3507,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = property;
 
 /***/ },
-/* 85 */
+/* 83 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var baseGet = __webpack_require__(78),
-	    toPath = __webpack_require__(82);
+	var baseGet = __webpack_require__(76),
+	    toPath = __webpack_require__(80);
 
 	/**
 	 * A specialized version of `baseProperty` which supports deep paths.
