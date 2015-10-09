@@ -40,7 +40,7 @@ interface reactDesc {
   ...methods?: Function
 }
 
-stamp.compose(...desc?: stamp | reactDesc | specDesc): stamp
+stamp.compose(...desc?: stamp|reactDesc|specDesc[]): stamp
 ```
 
 The most powerful feature of [stamps](https://github.com/stampit-org/stamp-specification) is their composability. What this means is that `n` number of stamps can be combined into a new stamp which inherits each passed stamp's behavior. This is perfect for React, since `class` is being pushed as the new norm and does not provide an idiomatic way to use mixins. (classical inheritance :disappointed:). Stamps embrace prototypal inheritance and as a result provide great flexibility when extending React components.
