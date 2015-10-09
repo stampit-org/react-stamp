@@ -12,7 +12,7 @@ import {
 /**
  * Given an object, return a stamp aka composable.
  *
- * (obj: Function | reactDesc | specDesc): stamp
+ * (obj: Function|reactDesc|specDesc): stamp
  */
 function createStamp (obj) {
   const specDesc = parseObj(obj);
@@ -47,7 +47,7 @@ function createStamp (obj) {
  * that encapsulates combined behavior. If nothing is passed in,
  * an empty stamp is returned.
  *
- * (...objs?: Function | reactDesc | specDesc): stamp
+ * (...objs?: Function|reactDesc|specDesc[]): stamp
  */
 export default function compose (...objs) {
   const descs = objs.map(obj => obj.compose || parseObj(obj));

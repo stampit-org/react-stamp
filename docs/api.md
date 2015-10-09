@@ -11,7 +11,7 @@ Returns a stamp.
 ### stamp.compose
 
 ```js
-(...desc?: stamp | reactDesc | specDesc): stamp
+(...objs?: Function|reactDesc|specDesc[]): stamp
 ```
 
 Creates a new stamp using the current stamp as a base, composed with a list of stamps/descriptors passed as arguments.

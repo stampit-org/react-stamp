@@ -23,7 +23,7 @@ function isSpecDescriptor (obj) {
 /**
  * Create a stamp spec compliant desc object.
  *
- * (obj: Function | reactDesc | specDesc): specDesc
+ * (obj: Function|reactDesc|specDesc): specDesc
  */
 export default function parseObj (obj) {
   let desc = {};
