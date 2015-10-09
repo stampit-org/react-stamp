@@ -199,3 +199,24 @@ test('stamps composed of stamps with methods', (t) => {
     'should override `override` methods'
   );
 });
+
+test('composing with a stateless function', (t) => {
+  t.plan(1);
+
+  const pureFunc = ({ prop1 }) => prop1;
+
+  const mixin = {
+    init () {
+      this.props = {
+        prop1: 'foo'
+      };
+    },
+  };
+
+  const stamp = compose(mixin, pureFunc);
+
+  t.equal(
+    stamp().render(), 'foo',
+    'should produce a stateful stamp'
+  );
+});

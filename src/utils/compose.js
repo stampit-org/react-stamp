@@ -5,17 +5,17 @@ import merge from 'lodash/object/merge';
 import omit from 'lodash/object/omit';
 
 import {
-  parseDesc,
+  parseObj,
   wrapMethods,
 } from '.';
 
 /**
- * Given a description object, return a stamp aka composable.
+ * Given an object, return a stamp aka composable.
  *
- * (desc?: reactDesc | specDesc): stamp
+ * (obj: Function | reactDesc | specDesc): stamp
  */
-function createStamp (desc = {}) {
-  const specDesc = parseDesc(desc);
+function createStamp (obj) {
+  const specDesc = parseObj(obj);
 
   const stamp = (options, ...args) => {
     let instance = Object.create(specDesc.methods || {});
@@ -47,10 +47,10 @@ function createStamp (desc = {}) {
  * that encapsulates combined behavior. If nothing is passed in,
  * an empty stamp is returned.
  *
- * (...args?: stamp | reactDesc | specDesc): stamp
+ * (...objs?: Function | reactDesc | specDesc): stamp
  */
-export default function compose (...args) {
-  const descs = args.map(arg => arg.compose || parseDesc(arg));
+export default function compose (...objs) {
+  const descs = objs.map(obj => obj.compose || parseObj(obj));
   const compDesc = {};
 
   if (this && this.compose) {
