@@ -1,6 +1,6 @@
 import assign from 'lodash/object/assign';
 
-import { compose } from '.';
+import { compose } from './';
 
 /**
  * Get the non-enum properties of an object.

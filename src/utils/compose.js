@@ -7,7 +7,7 @@ import omit from 'lodash/object/omit';
 import {
   parseDesc,
   wrapMethods,
-} from '.';
+} from './';
 
 /**
  * Given a description object, return a stamp aka composable.
