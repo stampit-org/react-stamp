@@ -58,49 +58,65 @@ interface reactDesc {
 stamp.compose(...desc?: stamp|reactDesc|specDesc[]): stamp
 ```
 
-The most powerful feature of [stamps](https://github.com/stampit-org/stamp-specification) is their composability. Any number of stamps can be combined into a new stamp which inherits each passed stamp's behavior. This is perfect for React since `class` is being pushed as the new norm and does not provide an idiomatic way to use mixins. (classical inheritance :disappointed:). Stamps embrace prototypal inheritance and as a result provide great flexibility when composing React components.
+The most powerful feature of [stamps](https://github.com/stampit-org/stamp-specification) is their composability. Any number of stamps can be combined into a new stamp which inherits each passed stamp's behavior. This is perfect for React since `class` is being pushed as the new norm and does not provide an idiomatic way to use mixins. (classical inheritance :disappointed:).
 
 Let's go step by step through an example. It uses a pattern I call **Behavior Driven Composition**.
 
 __container.js__
 ```js
-container(React: object, components: object): componentDescriptor
+container(
+  React: object,
+  reactStamp: Function
+  components: array
+  behaviors: array
+): componentStamp
 ```
 ```js
-export default (React, { Button, Text }) => ({
-  init() {
-    this.behaviors = [];
-    this.state = { showBehaviors: false };
-  },
+export default (
+  React,
+  reactStamp,
+  components,
+  behaviors
+) => (
+  reactStamp(React).compose({
+    state: {
+      showText: false,
+      clickable: false
+    },
 
-  render() {
-    const { showBehaviors } = this.state;
-    const behaviors = showBehaviors && this.behaviors.toString();
+    render () {
+      const [ Button, Text ] = components;
+      const { clickable, showText } = this.state;
+      const { text } = this.props;
 
-    return (
-      <div>
-        <Button
-          value='Show Behaviors'
-          onClick={() => this._onClick()}
-        />
-        <Text
-          style={this.style}
-          behaviors={behaviors}
-        />
-      </div>
-    );
-  }
-});
+      return (
+        <div>
+          <Button
+            disabled={!clickable}
+            onClick={() => this.onClick && this.onClick()}
+            value='click me'
+          />
+          <Text
+            style={this.style}
+            value={showText && text}
+          />
+        </div>
+      );
+    }
+  }, ...behaviors)
+);
+
 ```
 
-BDC uses the concept of a container. The container is a HOC factory that defines the top level structure of the app. This particular container expects a `Button` component and a `Text` component. We only worry about designing the component signatures in the container, component behavior will be inherited later.
+BDC uses the concept of a container. The container is a HOC factory that defines the top level structure of the app. This particular container expects a `Button` component and a `Text` component. The container should be self-sufficient and boring. Personality is added by inheriting behaviors.
 
 __button.js__
 ```js
 export default React => (
-  ({ value, onClick }) => (
+  ({ disabled, onClick, value }) => (
     <input
       type='button'
+      disabled={disabled}
       onClick={onClick}
       value={value}
     />
@@ -111,8 +127,8 @@ export default React => (
 __text.js__
 ```js
 export default React => (
-  ({ behaviors, style }) => (
-    <div style={style}>{behaviors}</div>
+  ({ style, value }) => (
+    <div style={style}>{value}</div>
   )
 );
 ```
@@ -122,13 +138,13 @@ BDC loves pure components. Pure components are simply [stateless functions](http
 __buttonBehavior.js__
 ```js
 export default {
-  init() {
-    this.behaviors.push('button');
+  componentWillMount () {
+    this.state.clickable = true;
   },
 
-  _onClick () {
+  onClick () {
     this.setState({
-      showBehaviors: !this.state.showBehaviors
+      showText: !this.state.showText
     });
   },
 };
@@ -137,14 +153,13 @@ export default {
 __textBehavior.js__
 ```js
 export default {
-  init() {
-    this.behaviors.push('text');
-    this.style = { color: 'orange' }
-  },
+  init () {
+    this.style = { color: 'orange' };
+  }
 };
 ```
 
-The behavior mixins basically fill in the blanks. We see that `onClick`, `style`, and `behavior` have not been defined in the container. They get defined in behavior objects based on their behavior type.
+The behavior mixins add personality to the app. Behavior mixins should be arranged by their behavior type.
 
 __app.js__
 ```js
@@ -153,21 +168,22 @@ import ReactDOM from 'react-dom';
 import reactStamp from 'react-stamp';
 
 import container from './container';
-import buttonFactory from './button';
-import textFactory from './text';
+import button from './button';
+import text from '.text';
 import buttonBehavior from './buttonBehavior';
 import textBehavior from './textBehavior';
 
-const Button = buttonFactory(React);
-const Text = textFactory(React);
-
-const MyComponent = reactStamp(React).compose(
-  container(React, { Button, Text }),
-  buttonBehavior,
-  textBehavior
+const MyComponent = container(
+  React,
+  reactStamp,
+  [ button(React), text(React) ],
+  [ textBehavior, buttonBehavior ]
 );
 
-ReactDOM.render(<MyComponent />, document.getElementById('root'));
+ReactDOM.render(
+  <MyComponent text='am i all orange?!' />,
+  document.getElementById('root')
+);
 ```
 
 With all the pieces complete, we compose them together to produce the final component. [CodePen](http://codepen.io/troutowicz/pen/BoZqXX?editors=001)
