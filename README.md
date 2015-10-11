@@ -64,20 +64,19 @@ Let's go step by step through an example. It uses a pattern I call **Behavior Dr
 
 __container.js__
 ```js
-container(
+container({
   React: object,
-  reactStamp: Function
-  components: array
-  behaviors: array
-): componentStamp
+  ...components: Function[]
+}, ...behaviors?: descriptor[]): stamp
 ```
 ```js
-export default (
+import reactStamp from 'react-stamp';
+
+export default ({
   React,
-  reactStamp,
-  components,
-  behaviors
-) => (
+  Button,
+  Text,
+}, ...behaviors) => (
   reactStamp(React).compose({
     state: {
       showText: false,
@@ -85,7 +84,6 @@ export default (
     },
 
     render () {
-      const [ Button, Text ] = components;
       const { clickable, showText } = this.state;
       const { text } = this.props;
 
@@ -97,7 +95,6 @@ export default (
             value='click me'
           />
           <Text
-            style={this.style}
             value={showText && text}
           />
         </div>
@@ -105,7 +102,6 @@ export default (
     }
   }, ...behaviors)
 );
-
 ```
 
 BDC uses the concept of a container. The container is a HOC factory that defines the top level structure of the app. This particular container expects a `Button` component and a `Text` component. The container should be self-sufficient and boring. Personality is added by inheriting behaviors.
@@ -127,8 +123,8 @@ export default React => (
 __text.js__
 ```js
 export default React => (
-  ({ style, value }) => (
-    <div style={style}>{value}</div>
+  ({ value }) => (
+    <div>{value}</div>
   )
 );
 ```
@@ -150,38 +146,26 @@ export default {
 };
 ```
 
-__textBehavior.js__
-```js
-export default {
-  init () {
-    this.style = { color: 'orange' };
-  }
-};
-```
+Behavior mixins add personality to the app. Their properties should share a common behavior.
 
-The behavior mixins add personality to the app. Behavior mixins should be arranged by their behavior type.
-
-__app.js__
+__index.js__
 ```js
 import React from 'react';
 import ReactDOM from 'react-dom';
-import reactStamp from 'react-stamp';
 
 import container from './container';
 import button from './button';
-import text from '.text';
+import text from './text';
 import buttonBehavior from './buttonBehavior';
-import textBehavior from './textBehavior';
 
-const MyComponent = container(
+const MyComponent = container({
   React,
-  reactStamp,
-  [ button(React), text(React) ],
-  [ textBehavior, buttonBehavior ]
-);
+  Button: button(React),
+  Text: text(React),
+}, buttonBehavior);
 
 ReactDOM.render(
-  <MyComponent text='am i all orange?!' />,
+  <MyComponent text='behavior driven composition' />,
   document.getElementById('root')
 );
 ```
