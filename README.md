@@ -3,8 +3,7 @@
 # react-stamp
 > Composables for React.
 
-* **This library has replaced [react-stampit](https://github.com/stampit-org/react-stampit) and is compliant with the [stamp specification](https://github.com/stampit-org/stamp-specification).**
-* **The [Rtype specification](https://github.com/ericelliott/rtype#rtype) is used for documenting function signatures and data structures.**
+`react-stamp` has replaced [react-stampit](https://github.com/stampit-org/react-stampit) and is compliant with the [stamp specification](https://github.com/stampit-org/stamp-specification). The [Rtype specification](https://github.com/ericelliott/rtype#rtype) is used for documenting function signatures and data structures.
 
 ### Install
 
@@ -20,12 +19,11 @@ or by [downloading the latest release](https://github.com/stampit-org/react-stam
 
 Composition is the act of creating an object from a collection of other objects. Many will say this is actually
 multiple inheritance, not composition. Well, in the **classical** sense of the word, they're right! However, JavaScript
-favors [prototypal inheritance](https://medium.com/javascript-scene/common-misconceptions-about-inheritance-in-javascript-d5d9bab29b0a), and composition is actually Prototypal OO's primary mechanism. Composition encompasses
-differential inheritance, concatenative inheritance, and functional inheritance. [Source](http://ericleads.com/2013/02/fluent-javascript-three-different-kinds-of-prototypal-oo/)
+favors [prototypal inheritance](https://medium.com/javascript-scene/common-misconceptions-about-inheritance-in-javascript-d5d9bab29b0a), and composition is actually Prototypal OO's [primary mechanism](http://ericleads.com/2013/02/fluent-javascript-three-different-kinds-of-prototypal-oo/). Composition encompasses differential inheritance, concatenative inheritance, and functional inheritance.
 
 ### But I like [HOC](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750)s.
 
-So do I! HOC factories provide a functional API for component composition and stamp composition can be a nice complement. If the goal is to be functional and avoid APIs that expose `class` and it's **classical** inheritance headaches, why use `class` at all?
+So do I! HOC factories provide a functional API for component composition and stamp composition can be a nice complement. If the goal is to be functional and avoid APIs that expose `class` and it's **pseudo-classical** behavior, why use `class` at all?
 
 ### React.createClass 2.0?
 
@@ -33,9 +31,9 @@ No. The only similarity is that both provide forms of object composition. `react
 
 ### So what is this?
 
-This library is the result of wondering about what other ways a React component could be represented. [Stamps](https://github.com/stampit-org/stamp-specification) are a cool concept and more importantly have proven to be a great alternative to `React.createClass` and the ES2015 `class` due to their composability.
+`react-stamp` is the result of wondering about what other ways a React component could be represented. [Stamps](https://github.com/stampit-org/stamp-specification) are a cool concept and more importantly have proven to be a great alternative to `React.createClass` and the ES2015 `class` due to their composability.
 
-`reactStamp` accepts one parameter. The React library.
+`react-stamp` exports a function that accepts one parameter, the React library.
 
 ```js
 reactStamp(React?: object): stamp
@@ -58,9 +56,9 @@ interface reactDesc {
 stamp.compose(...desc?: stamp|reactDesc|specDesc[]): stamp
 ```
 
-The most powerful feature of [stamps](https://github.com/stampit-org/stamp-specification) is their composability. Any number of stamps can be combined into a new stamp which inherits each passed stamp's behavior. This is perfect for React since `class` is being pushed as the new norm and does not provide an idiomatic way to use mixins. (classical inheritance :disappointed:).
+The most powerful feature of [stamps](https://github.com/stampit-org/stamp-specification) is their composability. Any number of stamps can be combined into a new stamp which inherits each passed stamp's behavior. This behavior is suitable for React since `class` is being pushed as the new norm and does not provide an idiomatic way to utilize mixins. (classical inheritance :disappointed:).
 
-Let's go step by step through an example. It uses a pattern I call **Behavior Driven Composition**.
+Let's step through an example. It demos a pattern I call **Behavior Driven Composition**.
 
 __container.js__
 ```js
@@ -104,7 +102,7 @@ export default ({
 );
 ```
 
-BDC uses the concept of a container. The container is a HOC factory that defines the top level structure of the app. This particular container expects a `Button` component and a `Text` component. The container should be self-sufficient and boring. Personality is added by inheriting behaviors.
+BDC uses the concept of a container. The container is a [HOC](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750) factory that defines the structure of a [smart component](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0). This particular container expects two children components, `Button`and `Text`. The container should be self-sufficient and boring. Personality can be added by inheriting behaviors. Keep reading to see an example.
 
 __button.js__
 ```js
@@ -146,7 +144,7 @@ export default {
 };
 ```
 
-Behavior mixins add personality to the app. Their properties should share a common behavior.
+Behavior mixins add personality to the app. Their traits should share a common behavior.
 
 __index.js__
 ```js
@@ -170,7 +168,7 @@ ReactDOM.render(
 );
 ```
 
-With all the pieces complete, we compose them together to produce the final component. [CodePen](http://codepen.io/troutowicz/pen/BoZqXX?editors=001)
+With all of the pieces complete, we compose them together to produce the final React component. [CodePen](http://codepen.io/troutowicz/pen/BoZqXX?editors=001)
 
 ### Docs
 * [API](docs/api.md)
