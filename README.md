@@ -3,8 +3,7 @@
 # react-stamp
 > Composables for React.
 
-* **This library has replaced [react-stampit](https://github.com/stampit-org/react-stampit) and is compliant with the [stamp specification](https://github.com/stampit-org/stamp-specification).**
-* **The [Rtype specification](https://github.com/ericelliott/rtype#rtype) is used for documenting function signatures and data structures.**
+`react-stamp` has replaced [react-stampit](https://github.com/stampit-org/react-stampit) and is compliant with the [stamp specification](https://github.com/stampit-org/stamp-specification). The [Rtype specification](https://github.com/ericelliott/rtype#rtype) is used for documenting function signatures and data structures.
 
 ### Install
 
@@ -16,11 +15,25 @@ npm install react-stamp
 
 or by [downloading the latest release](https://github.com/stampit-org/react-stamp/releases).
 
-### What is this
+### What is composition?
 
-This library is the result of wondering about what other ways a React component could be represented. [Stamps](https://github.com/stampit-org/stamp-specification) are a cool concept, and more importantly have proven to be a great alternative to `React.createClass` and the ES2015 `class` due to their composability.
+Composition is the act of creating an object from a collection of other objects. Many will say this is actually
+multiple inheritance, not composition. Well, in the **classical** sense of the word, they're right! However, JavaScript
+favors [prototypal inheritance](https://medium.com/javascript-scene/common-misconceptions-about-inheritance-in-javascript-d5d9bab29b0a), and composition is actually Prototypal OO's [primary mechanism](http://ericleads.com/2013/02/fluent-javascript-three-different-kinds-of-prototypal-oo/). Composition encompasses differential inheritance, concatenative inheritance, and functional inheritance.
 
-`reactStamp` accepts one parameter. The React library.
+### But I like [HOC](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750)s.
+
+So do I! HOC factories provide a functional API for component composition and stamp composition can be a nice complement. If the goal is to be functional and avoid APIs that expose `class` and it's **pseudo-classical** behavior, why use `class` at all?
+
+### React.createClass 2.0?
+
+No. The only similarity is that both provide forms of object composition. `react-stamp` decouples the relationship between component and mixin while being less opinionated. This provides greater flexibility.
+
+### So what is this?
+
+`react-stamp` is the result of wondering about what other ways a React component could be represented. [Stamps](https://github.com/stampit-org/stamp-specification) are a cool concept and more importantly have proven to be a great alternative to `React.createClass` and the ES2015 `class` due to their composability.
+
+`react-stamp` exports a function that accepts one parameter, the React library.
 
 ```js
 reactStamp(React?: object): stamp
@@ -43,93 +56,124 @@ interface reactDesc {
 stamp.compose(...desc?: stamp|reactDesc|specDesc[]): stamp
 ```
 
-The most powerful feature of [stamps](https://github.com/stampit-org/stamp-specification) is their composability. What this means is that `n` number of stamps can be combined into a new stamp which inherits each passed stamp's behavior. This is perfect for React, since `class` is being pushed as the new norm and does not provide an idiomatic way to use mixins. (classical inheritance :disappointed:). Stamps embrace prototypal inheritance and as a result provide great flexibility when extending React components.
+The most powerful feature of [stamps](https://github.com/stampit-org/stamp-specification) is their composability. Any number of stamps can be combined into a new stamp which inherits each passed stamp's behavior. This behavior is suitable for React since `class` is being pushed as the new norm and does not provide an idiomatic way to utilize mixins. (classical inheritance :disappointed:).
 
-__reactStamp.js__
+Let's step through an example. It demos a pattern I call **Behavior Driven Composition**.
+
+__container.js__
 ```js
-import React from 'react';
+container({
+  React: object,
+  ...components: Function[]
+}, ...behaviors?: descriptor[]): stamp
+```
+```js
 import reactStamp from 'react-stamp';
 
-export default reactStamp(React);
+export default ({
+  React,
+  Button,
+  Text,
+}, ...behaviors) => (
+  reactStamp(React).compose({
+    state: {
+      showText: false,
+      clickable: false
+    },
+
+    render () {
+      const { clickable, showText } = this.state;
+      const { text } = this.props;
+
+      return (
+        <div>
+          <Button
+            disabled={!clickable}
+            onClick={() => this.onClick && this.onClick()}
+            value='click me'
+          />
+          <Text
+            value={showText && text}
+          />
+        </div>
+      );
+    }
+  }, ...behaviors)
+);
 ```
 
-__component.js__
+BDC uses the concept of a container. The container is a [HOC](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750) factory that defines the structure of a [smart component](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0). This particular container expects two children components, `Button`and `Text`. The container should be self-sufficient and boring. Personality can be added by inheriting behaviors. Keep reading to see an example.
 
+__button.js__
 ```js
-import reactStamp from './reactStamp';
-
-export default reactStamp.compose({
-  state: {
-    obj1: false,
-    obj2: false,
-  },
-
-  componentWillMount() {
-    this.setState({ obj1: true });
-  },
-
-  _onClick() {
-    return this.state;
-  },
-
-  render() {
-    return (
-      <input
-        type='button'
-        onClick={() => this._onClick()}
-        value='Click Me'
-       />
-    );
-  },
-});
+export default React => (
+  ({ disabled, onClick, value }) => (
+    <input
+      type='button'
+      disabled={disabled}
+      onClick={onClick}
+      value={value}
+    />
+  )
+);
 ```
 
-__mixin.js__
+__text.js__
+```js
+export default React => (
+  ({ value }) => (
+    <div>{value}</div>
+  )
+);
+```
 
+BDC loves pure components. Pure components are simply [stateless functions](https://facebook.github.io/react/blog/2015/10/07/react-v0.14.html#stateless-functional-components). Notice that we are exporting factories that inject React. Read why [here](https://github.com/ericelliott/react-pure-component-starter#pure-component-factories). The function signatures are designed based on the component signatures defined in the container.
+
+__buttonBehavior.js__
 ```js
 export default {
-  componentWillMount() {
-    this.setState({ obj2: true });;
+  componentWillMount () {
+    this.state.clickable = true;
+  },
+
+  onClick () {
+    this.setState({
+      showText: !this.state.showText
+    });
   },
 };
 ```
 
-__app.js__
+Behavior mixins add personality to the app. Their traits should share a common behavior.
 
+__index.js__
 ```js
-import Component from './component';
-import mixin from './mixin';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-const Button = Component.compose(mixin);
+import container from './container';
+import button from './button';
+import text from './text';
+import buttonBehavior from './buttonBehavior';
 
-React.render(<Button/>, document.body);
+const MyComponent = container({
+  React,
+  Button: button(React),
+  Text: text(React),
+}, buttonBehavior);
+
+ReactDOM.render(
+  <MyComponent text='behavior driven composition' />,
+  document.getElementById('root')
+);
 ```
 
-```js
-onClick() => { obj1: true, obj2: true }
-```
-
-* no autobinding
-
- Event handlers require explicit binding. No magic. This can be done using `.bind` or through lexical binding with ES2015 [arrow functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions) as shown in the example.
-* no `call super`
-
- React lifecycle methods, with the exception of `render`, are wrapped during composition providing functional inheritance.
-* components and mixins are POJOs
-
-If you feel limited by `class`, or want a fresh take on `React.createClass`'s mixability, maybe give react-stamp a try and learn more about what [stamps](https://github.com/stampit-org/stamp-specification) are all about.
+With all of the pieces complete, we compose them together to produce the final React component. [CodePen](http://codepen.io/troutowicz/pen/BoZqXX?editors=001)
 
 ### Docs
 * [API](docs/api.md)
 * [Composition logic](docs/composition.md)
 * [Advanced use cases](docs/advanced.md)
-
-### Examples
-* [react-hello](https://github.com/stampit-org/react-hello)
-
-### Pending Issues
-* [x] [childContextTypes](https://github.com/facebook/react/pull/3940)
-* [x] [component testing](https://github.com/facebook/react/pull/3941)
 
 ### License
 [![MIT](https://img.shields.io/badge/license-MIT-blue.svg)](http://troutowicz.mit-license.org)
