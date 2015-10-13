@@ -35,11 +35,11 @@ export default function parseDesc (desc = {}) {
   } = desc;
   const parsedDesc = {};
 
-  !displayName && (displayName = 'ReactStamp');
+  displayName && (parsedDesc.staticProperties = { displayName });
   init && (parsedDesc.initializers = [ init ]);
   state && (parsedDesc.deepProperties = { state });
   methods && (parsedDesc.methods = methods);
-  parsedDesc.deepStaticProperties = { ...statics, displayName };
+  parsedDesc.deepStaticProperties = { ...statics };
 
   forEach({ contextTypes, childContextTypes, propTypes, defaultProps },
     (val, key) => val && (parsedDesc.deepStaticProperties[key] = val)

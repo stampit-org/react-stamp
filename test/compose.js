@@ -2,7 +2,7 @@ import test from 'tape';
 
 import { compose } from '../src/utils';
 
-test('stamp composed of objects with state', (t) => {
+test('composing objects with state', (t) => {
   t.plan(1);
 
   const obj1 = {
@@ -26,7 +26,7 @@ test('stamp composed of objects with state', (t) => {
   );
 });
 
-test('stamps composed of objects with React statics', (t) => {
+test('composing objects with React statics', (t) => {
   t.plan(4);
 
   const obj1 = {
@@ -86,7 +86,7 @@ test('stamps composed of objects with React statics', (t) => {
   );
 });
 
-test('stamps composed of objects with non-React statics', (t) => {
+test('composing objects with non-React statics', (t) => {
   t.plan(2);
 
   const obj1 = {
@@ -125,7 +125,7 @@ test('stamps composed of objects with non-React statics', (t) => {
   );
 });
 
-test('stamps composed of stamps with methods', (t) => {
+test('composing objects with methods', (t) => {
   t.plan(4);
 
   const obj1 = {
@@ -197,5 +197,32 @@ test('stamps composed of stamps with methods', (t) => {
   t.ok(
     instance.render(),
     'should override `override` methods'
+  );
+});
+
+test('compose', (t) => {
+  t.plan(3);
+
+  const obj1 = {
+    displayName: 'obj1',
+  };
+
+  const obj2 = {
+    displayName: 'obj2',
+  };
+
+  t.equal(
+    compose(obj1, {}).displayName, obj1.displayName,
+    'should ignore undefined `displayName` prop'
+  );
+
+  t.equal(
+    compose(obj1, obj2).displayName, obj2.displayName,
+    'should override defined `displayName` props'
+  );
+
+  t.equal(
+    compose({}).displayName, 'Component',
+    'should set undefined `displayName` prop to \'Component\''
   );
 });
