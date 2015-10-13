@@ -14,10 +14,8 @@ import {
  *
  * (desc?: reactDesc | specDesc): stamp
  */
-function createStamp (desc = {}) {
-  const specDesc = parseDesc(desc);
-
-  const stamp = (options, ...args) => {
+function createStamp (specDesc = {}) {
+  const Component = (options, ...args) => {
     let instance = Object.create(specDesc.methods || {});
 
     merge(instance, specDesc.deepProperties);
@@ -27,7 +25,7 @@ function createStamp (desc = {}) {
     if (specDesc.initializers) {
       specDesc.initializers.forEach(initializer => {
         const result = initializer.call(instance, options,
-          { instance, stamp, args: [options].concat(args) });
+          { instance, stamp: Component, args: [options].concat(args) });
         if (isObject(result)) instance = result;
       });
     }
@@ -35,11 +33,13 @@ function createStamp (desc = {}) {
     return instance;
   };
 
-  merge(stamp, specDesc.deepStaticProperties);
-  assign(stamp, specDesc.staticProperties);
-  Object.defineProperties(stamp, specDesc.staticPropertyDescriptors || {});
+  merge(Component, specDesc.deepStaticProperties);
+  assign(Component, specDesc.staticProperties);
+  Object.defineProperties(Component, specDesc.staticPropertyDescriptors || {});
 
-  return stamp;
+  if (!Component.displayName) Component.displayName = 'Component';
+
+  return Component;
 }
 
 /**
