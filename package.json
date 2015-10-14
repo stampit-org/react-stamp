@@ -1,6 +1,6 @@
 {
   "name": "react-stamp",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Composables for React.",
   "main": "lib",
   "files": [
