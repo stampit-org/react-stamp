@@ -171,14 +171,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * Given a description object, return a stamp aka composable.
 	 *
-	 * (desc?: reactDesc | specDesc): stamp
+	 * (desc?: reactDesc|specDesc): stamp
 	 */
 	function createStamp() {
-	  var desc = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	  var specDesc = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-	  var specDesc = (0, _.parseDesc)(desc);
-
-	  var stamp = function stamp(options) {
+	  var Component = function Component(options) {
 	    for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
 	      args[_key - 1] = arguments[_key];
 	    }
@@ -191,7 +189,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    if (specDesc.initializers) {
 	      specDesc.initializers.forEach(function (initializer) {
-	        var result = initializer.call(instance, options, { instance: instance, stamp: stamp, args: [options].concat(args) });
+	        var result = initializer.call(instance, options, { instance: instance, stamp: Component, args: [options].concat(args) });
 	        if ((0, _lodashLangIsObject2['default'])(result)) instance = result;
 	      });
 	    }
@@ -199,11 +197,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return instance;
 	  };
 
-	  (0, _lodashObjectMerge2['default'])(stamp, specDesc.deepStaticProperties);
-	  (0, _lodashObjectAssign2['default'])(stamp, specDesc.staticProperties);
-	  Object.defineProperties(stamp, specDesc.staticPropertyDescriptors || {});
+	  (0, _lodashObjectMerge2['default'])(Component, specDesc.deepStaticProperties);
+	  (0, _lodashObjectAssign2['default'])(Component, specDesc.staticProperties);
+	  Object.defineProperties(Component, specDesc.staticPropertyDescriptors || {});
 
-	  return stamp;
+	  if (!Component.displayName) Component.displayName = 'Component';
+
+	  return Component;
 	}
 
 	/**
@@ -211,7 +211,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * that encapsulates combined behavior. If nothing is passed in,
 	 * an empty stamp is returned.
 	 *
-	 * (...args?: stamp | reactDesc | specDesc): stamp
+	 * (...args?: stamp|reactDesc|specDesc[]): stamp
 	 */
 
 	function compose() {
@@ -2368,7 +2368,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * Check if object is stamp spec compliant.
 	 *
-	 * (desc?: reactDesc | specDesc): isSpec: boolean
+	 * (desc?: reactDesc|specDesc): isSpec: boolean
 	 */
 	function isSpecDescriptor() {
 	  var desc = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -2379,7 +2379,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * Create a stamp spec compliant desc object.
 	 *
-	 * (desc?: reactDesc | specDesc): specDesc
+	 * (desc?: reactDesc|specDesc): specDesc
 	 */
 
 	function parseDesc() {
@@ -2400,11 +2400,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  var parsedDesc = {};
 
-	  !displayName && (displayName = 'ReactStamp');
+	  displayName && (parsedDesc.staticProperties = { displayName: displayName });
 	  init && (parsedDesc.initializers = [init]);
 	  state && (parsedDesc.deepProperties = { state: state });
 	  methods && (parsedDesc.methods = methods);
-	  parsedDesc.deepStaticProperties = _extends({}, statics, { displayName: displayName });
+	  parsedDesc.deepStaticProperties = _extends({}, statics);
 
 	  (0, _lodashCollectionForEach2['default'])({ contextTypes: contextTypes, childContextTypes: childContextTypes, propTypes: propTypes, defaultProps: defaultProps }, function (val, key) {
 	    return val && (parsedDesc.deepStaticProperties[key] = val);
@@ -2535,7 +2535,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * Get the non-enum properties of an object.
 	 *
-	 * (src: object): enums: object
+	 * (src: object): nonEnums: object
 	 */
 	function getNonEnum(src) {
 	  var obj = {};
