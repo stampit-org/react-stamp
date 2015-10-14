@@ -4,7 +4,7 @@ import isEmpty from 'lodash/lang/isEmpty';
 /**
  * Check if object is stamp spec compliant.
  *
- * (desc?: reactDesc | specDesc): isSpec: boolean
+ * (desc?: reactDesc|specDesc): isSpec: boolean
  */
 function isSpecDescriptor (desc = {}) {
   return (
@@ -23,7 +23,7 @@ function isSpecDescriptor (desc = {}) {
 /**
  * Create a stamp spec compliant desc object.
  *
- * (desc?: reactDesc | specDesc): specDesc
+ * (desc?: reactDesc|specDesc): specDesc
  */
 export default function parseDesc (desc = {}) {
   if (isSpecDescriptor(desc) || isEmpty(desc)) return desc;

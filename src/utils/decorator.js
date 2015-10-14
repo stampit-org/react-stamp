@@ -5,7 +5,7 @@ import { compose } from './';
 /**
  * Get the non-enum properties of an object.
  *
- * (src: object): enums: object
+ * (src: object): nonEnums: object
  */
 function getNonEnum (src) {
   let obj = {};
