@@ -173,7 +173,6 @@ With all of the pieces complete, we compose them together to produce the final R
 ### Docs
 * [API](docs/api.md)
 * [Composition logic](docs/composition.md)
-* [Advanced use cases](docs/advanced.md)
 
 ### License
 [![MIT](https://img.shields.io/badge/license-MIT-blue.svg)](http://troutowicz.mit-license.org)

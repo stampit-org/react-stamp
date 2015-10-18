@@ -2,7 +2,6 @@ import assign from 'lodash/object/assign';
 import forEach from 'lodash/collection/forEach';
 import isObject from 'lodash/lang/isObject';
 import merge from 'lodash/object/merge';
-import omit from 'lodash/object/omit';
 
 import {
   parseDesc,
@@ -12,7 +11,7 @@ import {
 /**
  * Given a description object, return a stamp aka composable.
  *
- * (desc?: reactDesc|specDesc): stamp
+ * (desc?: specDesc): stamp
  */
 function createStamp (specDesc = {}) {
   const Component = (options, ...args) => {
@@ -54,14 +53,6 @@ export default function compose (...args) {
   const compDesc = {};
 
   if (this && this.compose) {
-    /**
-     * Speical handling is required for statics when using
-     * the ES7 stamp decorator... should we support this?
-     */
-    const statics = omit(this, 'compose');
-
-    statics && (this.compose.deepStaticProperties =
-                assign({}, this.compose.deepStaticProperties, statics));
     descs.unshift(this.compose);
   }
 
