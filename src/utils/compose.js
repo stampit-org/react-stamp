@@ -2,6 +2,7 @@ import assign from 'lodash/object/assign';
 import forEach from 'lodash/collection/forEach';
 import isObject from 'lodash/lang/isObject';
 import merge from 'lodash/object/merge';
+import { isStamp } from 'stamp-utils';
 
 import {
   parseDesc,
@@ -49,12 +50,10 @@ function createStamp (specDesc = {}) {
  * (...args?: stamp|reactDesc|specDesc[]): stamp
  */
 export default function compose (...args) {
-  const descs = args.map(arg => arg.compose || parseDesc(arg));
+  const descs = args.map(arg => parseDesc(arg));
   const compDesc = {};
 
-  if (this && this.compose) {
-    descs.unshift(this.compose);
-  }
+  isStamp(this) && descs.unshift(this.compose);
 
   forEach(descs, desc => {
     const {
