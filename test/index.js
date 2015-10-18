@@ -5,4 +5,3 @@ import './statics';
 import './methods';
 import './compose';
 import './wrapMethods';
-import './advanced';
