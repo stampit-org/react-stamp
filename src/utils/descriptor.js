@@ -1,32 +1,18 @@
 import forEach from 'lodash/collection/forEach';
 import isEmpty from 'lodash/lang/isEmpty';
-
-/**
- * Check if object is stamp spec compliant.
- *
- * (desc?: reactDesc|specDesc): isSpec: boolean
- */
-function isSpecDescriptor (desc = {}) {
-  return (
-    desc.methods ||
-    desc.properties ||
-    desc.deepProperties ||
-    desc.initializers ||
-    desc.staticProperties ||
-    desc.deepStaticProperties ||
-    desc.propertyDescriptors ||
-    desc.staticPropertyDescriptors ||
-    desc.configuration
-  );
-}
+import { isDescriptor, isStamp } from 'stamp-utils';
 
 /**
  * Create a stamp spec compliant desc object.
  *
- * (desc?: reactDesc|specDesc): specDesc
+ * (desc?: stamp|reactDesc|specDesc): specDesc
  */
 export default function parseDesc (desc = {}) {
-  if (isSpecDescriptor(desc) || isEmpty(desc)) return desc;
+  if (isStamp(desc)) {
+    return desc.compose;
+  } else if (isDescriptor(desc) || isEmpty(desc)) {
+    return desc;
+  }
 
   let {
     displayName, init, state, statics,
