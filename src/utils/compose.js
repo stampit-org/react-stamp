@@ -1,6 +1,6 @@
 import assign from 'lodash/object/assign';
 import forEach from 'lodash/collection/forEach';
-import isObject from 'lodash/lang/isObject';
+import isUndefined from 'lodash/lang/isUndefined';
 import merge from 'lodash/object/merge';
 import { isStamp } from 'stamp-utils';
 
@@ -26,7 +26,7 @@ function createStamp (specDesc = {}) {
       specDesc.initializers.forEach(initializer => {
         const result = initializer.call(instance, options,
           { instance, stamp: Component, args: [options].concat(args) });
-        if (isObject(result)) instance = result;
+        if (!isUndefined(result)) instance = result;
       });
     }
 
