@@ -1,6 +1,5 @@
 import assign from 'lodash/object/assign';
 import forEach from 'lodash/collection/forEach';
-import isUndefined from 'lodash/lang/isUndefined';
 import merge from 'lodash/object/merge';
 import { isStamp } from 'stamp-utils';
 
@@ -26,7 +25,7 @@ function createStamp (specDesc = {}) {
       specDesc.initializers.forEach(initializer => {
         const result = initializer.call(instance, options,
           { instance, stamp: Component, args: [options].concat(args) });
-        if (!isUndefined(result)) instance = result;
+        typeof result !== 'undefined' && (instance = result);
       });
     }
 
@@ -37,7 +36,7 @@ function createStamp (specDesc = {}) {
   assign(Component, specDesc.staticProperties);
   Object.defineProperties(Component, specDesc.staticPropertyDescriptors || {});
 
-  if (!Component.displayName) Component.displayName = 'Component';
+  !Component.displayName && (Component.displayName = 'Component');
 
   return Component;
 }
@@ -66,7 +65,7 @@ export default function compose (...args) {
 
     // Stamp spec
     compDesc.initializers = (compDesc.initializers || []).concat(initializers)
-      .filter(initializer => initializer !== undefined);
+      .filter(initializer => typeof initializer === 'function');
 
     forEach({ properties, staticProperties, propertyDescriptors, staticPropertyDescriptors },
       (val, key) => val && (compDesc[key] = assign(compDesc[key] || {}, val))
