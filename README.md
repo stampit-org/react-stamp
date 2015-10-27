@@ -1,19 +1,15 @@
-[![Build Status](https://travis-ci.org/stampit-org/react-stamp.svg)](https://travis-ci.org/stampit-org/react-stamp)
+[![build status](https://img.shields.io/travis/stampit-org/react-stamp.svg?style=flat-square)](https://travis-ci.org/stampit-org/react-stamp)
+[![npm version](https://img.shields.io/npm/v/react-stamp.svg?style=flat-square)](https://www.npmjs.com/package/react-stamp)
+[![license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](http://troutowicz.mit-license.org)
 
 # react-stamp
 > Composables for React.
 
 `react-stamp` has replaced [react-stampit](https://github.com/stampit-org/react-stampit) and is compliant with the [stamp specification](https://github.com/stampit-org/stamp-specification). The [Rtype specification](https://github.com/ericelliott/rtype#rtype) is used for documenting function signatures and data structures.
 
-### Install
-
-react-stamp can be [installed via npm](https://www.npmjs.com/package/react-stamp)
-
 ```
-npm install react-stamp
+npm install react-stamp --save
 ```
-
-or by [downloading the latest release](https://github.com/stampit-org/react-stamp/releases).
 
 ### What is composition?
 
@@ -173,6 +169,3 @@ With all of the pieces complete, we compose them together to produce the final R
 ### Docs
 * [API](docs/api.md)
 * [Composition logic](docs/composition.md)
-
-### License
-[![MIT](https://img.shields.io/badge/license-MIT-blue.svg)](http://troutowicz.mit-license.org)
