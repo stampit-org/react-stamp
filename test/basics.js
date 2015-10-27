@@ -1,9 +1,8 @@
-import React from 'react/addons';
+import React from 'react';
 import test from 'tape';
+import { isCompositeComponent } from 'react-addons-test-utils';
 
 import reactStamp from '../src';
-
-const TestUtils = React.addons.TestUtils;
 
 test('reactStamp()', (t) => {
   t.plan(1);
@@ -40,7 +39,7 @@ test('reactStamp(React).compose({ render() })()', (t) => {
   });
 
   t.ok(
-    TestUtils.isCompositeComponent(stamp()),
+    isCompositeComponent(stamp()),
     'should return a React component'
   );
 });
