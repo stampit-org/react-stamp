@@ -22,6 +22,7 @@ The properties that define a React component/mixin.
 
 ```js
 interface reactDesc {
+  displayName?: String,
   init?: Function,
   state?: Object,
   statics?: Object,
@@ -33,6 +34,7 @@ interface reactDesc {
 }
 ```
 
+* `displayName` - A string used in React debugging messages.
 * `init` - A method that gets called when a stamp is invoked.
 * `state` - An object for defining component state.
 * `statics` - An object for defining component statics.

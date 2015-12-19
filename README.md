@@ -39,6 +39,7 @@ This method converts React's `Component` constructor function into a [stamp](htt
 
 ```js
 interface reactDesc {
+  displayName?: String,
   init?: Function,
   state?: Object,
   statics?: Object,
