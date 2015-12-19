@@ -3,7 +3,7 @@
 ### reactStamp
 
 ```js
-(React?: object): stamp
+(React?: Object) => Stamp
 ```
 
 Returns a stamp.
@@ -11,7 +11,7 @@ Returns a stamp.
 ### stamp.compose
 
 ```js
-(...desc?: stamp|reactDesc|specDesc[]): stamp
+(...desc?: Stamp|ReactDesc|SpecDesc[]) => Stamp
 ```
 
 Creates a new stamp using the current stamp as a base, composed with a list of stamps/descriptors passed as arguments.
@@ -23,12 +23,12 @@ The properties that define a React component/mixin.
 ```js
 interface reactDesc {
   init?: Function,
-  state?: object,
-  statics?: object,
-  contextTypes?: object,
-  childContextTypes?: object,
-  propTypes?: object,
-  defaultProps?: object,
+  state?: Object,
+  statics?: Object,
+  contextTypes?: Object,
+  childContextTypes?: Object,
+  propTypes?: Object,
+  defaultProps?: Object,
   ...methods?: Function
 }
 ```

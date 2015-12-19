@@ -5,7 +5,7 @@ import { isDescriptor, isStamp } from 'stamp-utils';
 /**
  * Create a stamp spec compliant desc object.
  *
- * (desc?: stamp|reactDesc|specDesc): specDesc
+ * (desc?: Stamp | ReactDesc | SpecDesc) => SpecDesc
  */
 export default function parseDesc (desc = {}) {
   if (isStamp(desc)) {
