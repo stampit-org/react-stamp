@@ -15,7 +15,14 @@ module.exports = {
 
   module: {
     loaders: [
-      { test: /\.js$/, loader: 'babel-loader' },
+      {
+        test: /\.js$/,
+        loader: 'babel',
+        query: {
+          cacheDirectory: true,
+          presets: ['es2015', 'stage-2'],
+        }
+      },
     ],
   },
 };
