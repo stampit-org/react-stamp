@@ -32,24 +32,25 @@ No. The only similarity is that both provide forms of object composition. `react
 `react-stamp` exports a function that accepts one parameter, the React library.
 
 ```js
-reactStamp(React?: object): stamp
+reactStamp(React?: Object) => Stamp
 ```
 
 This method converts React's `Component` constructor function into a [stamp](https://github.com/stampit-org/stamp-specification). To create a React component, we pass a descriptor object to the stamp's `compose` method.
 
 ```js
 interface reactDesc {
+  displayName?: String,
   init?: Function,
-  state?: object,
-  statics?: object,
-  contextTypes?: object,
-  childContextTypes?: object,
-  propTypes?: object,
-  defaultProps?: object,
+  state?: Object,
+  statics?: Object,
+  contextTypes?: Object,
+  childContextTypes?: Object,
+  propTypes?: Object,
+  defaultProps?: Object,
   ...methods?: Function
 }
 
-stamp.compose(...desc?: stamp|reactDesc|specDesc[]): stamp
+stamp.compose(...desc?: Stamp|ReactDesc|SpecDesc[]) => Stamp
 ```
 
 The most powerful feature of [stamps](https://github.com/stampit-org/stamp-specification) is their composability. Any number of stamps can be combined into a new stamp which inherits each passed stamp's behavior. This behavior is suitable for React since `class` is being pushed as the new norm and does not provide an idiomatic way to utilize mixins. (classical inheritance :disappointed:).
@@ -59,9 +60,9 @@ Let's step through an example. It demos a pattern I call **Behavior Driven Compo
 __container.js__
 ```js
 container({
-  React: object,
+  React: Object,
   ...components: Function[]
-}, ...behaviors?: descriptor[]): stamp
+}, ...behaviors?: Descriptor[]) => Stamp
 ```
 ```js
 import reactStamp from 'react-stamp';
