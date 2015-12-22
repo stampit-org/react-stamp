@@ -63,24 +63,22 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	exports['default'] = reactStamp;
-
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = reactStamp;
 
 	var _utils = __webpack_require__(2);
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 	/**
 	 * Convert the React component constructor function to a stamp.
 	 *
-	 * (React?: object): stamp
+	 * (React?: Object) => Stamp
 	 */
-
 	function reactStamp(React) {
 	  var desc = {};
 
@@ -98,19 +96,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return (0, _utils.compose)(desc);
 	}
 
-	module.exports = exports['default'];
-
 /***/ },
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	exports.wrapMethods = exports.parseDesc = exports.compose = undefined;
 
 	var _compose = __webpack_require__(3);
 
@@ -124,9 +119,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react2 = _interopRequireDefault(_react);
 
-	exports.compose = _compose2['default'];
-	exports.parseDesc = _descriptor2['default'];
-	exports.wrapMethods = _react2['default'];
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.compose = _compose2.default;
+	exports.parseDesc = _descriptor2.default;
+	exports.wrapMethods = _react2.default;
 
 /***/ },
 /* 3 */
@@ -134,33 +131,33 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports['default'] = compose;
+	exports.default = compose;
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	var _assign = __webpack_require__(4);
 
-	var _lodashObjectAssign = __webpack_require__(4);
+	var _assign2 = _interopRequireDefault(_assign);
 
-	var _lodashObjectAssign2 = _interopRequireDefault(_lodashObjectAssign);
+	var _forEach = __webpack_require__(28);
 
-	var _lodashCollectionForEach = __webpack_require__(28);
+	var _forEach2 = _interopRequireDefault(_forEach);
 
-	var _lodashCollectionForEach2 = _interopRequireDefault(_lodashCollectionForEach);
+	var _merge = __webpack_require__(37);
 
-	var _lodashObjectMerge = __webpack_require__(37);
-
-	var _lodashObjectMerge2 = _interopRequireDefault(_lodashObjectMerge);
+	var _merge2 = _interopRequireDefault(_merge);
 
 	var _stampUtils = __webpack_require__(45);
 
 	var _ = __webpack_require__(2);
 
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	/**
 	 * Given a description object, return a stamp aka composable.
 	 *
-	 * (desc?: specDesc): stamp
+	 * (desc?: SpecDesc) => Stamp
 	 */
 	function createStamp() {
 	  var specDesc = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -172,8 +169,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var instance = Object.create(specDesc.methods || {});
 
-	    (0, _lodashObjectMerge2['default'])(instance, specDesc.deepProperties);
-	    (0, _lodashObjectAssign2['default'])(instance, specDesc.properties, specDesc.configuration);
+	    (0, _merge2.default)(instance, specDesc.deepProperties);
+	    (0, _assign2.default)(instance, specDesc.properties, specDesc.configuration);
 	    Object.defineProperties(instance, specDesc.propertyDescriptors || {});
 
 	    if (specDesc.initializers) {
@@ -186,8 +183,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return instance;
 	  };
 
-	  (0, _lodashObjectMerge2['default'])(Component, specDesc.deepStaticProperties);
-	  (0, _lodashObjectAssign2['default'])(Component, specDesc.staticProperties);
+	  (0, _merge2.default)(Component, specDesc.deepStaticProperties);
+	  (0, _assign2.default)(Component, specDesc.staticProperties);
 	  Object.defineProperties(Component, specDesc.staticPropertyDescriptors || {});
 
 	  !Component.displayName && (Component.displayName = 'Component');
@@ -200,9 +197,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * that encapsulates combined behavior. If nothing is passed in,
 	 * an empty stamp is returned.
 	 *
-	 * (...args?: stamp|reactDesc|specDesc[]): stamp
+	 * (...args?: Stamp|ReactDesc|SpecDesc[]) => Stamp
 	 */
-
 	function compose() {
 	  for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
 	    args[_key2] = arguments[_key2];
@@ -215,7 +211,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  (0, _stampUtils.isStamp)(this) && descs.unshift(this.compose);
 
-	  (0, _lodashCollectionForEach2['default'])(descs, function (desc) {
+	  (0, _forEach2.default)(descs, function (desc) {
 	    var initializers = desc.initializers;
 	    var methods = desc.methods;
 	    var properties = desc.properties;
@@ -227,6 +223,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var configuration = desc.configuration;
 
 	    // Wrap React lifecycle methods
+
 	    compDesc.methods = (0, _.wrapMethods)(compDesc.methods, methods);
 
 	    // Stamp spec
@@ -234,22 +231,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return typeof initializer === 'function';
 	    });
 
-	    (0, _lodashCollectionForEach2['default'])({ properties: properties, staticProperties: staticProperties, propertyDescriptors: propertyDescriptors, staticPropertyDescriptors: staticPropertyDescriptors }, function (val, key) {
-	      return val && (compDesc[key] = (0, _lodashObjectAssign2['default'])(compDesc[key] || {}, val));
+	    (0, _forEach2.default)({ properties: properties, staticProperties: staticProperties, propertyDescriptors: propertyDescriptors, staticPropertyDescriptors: staticPropertyDescriptors }, function (val, key) {
+	      return val && (compDesc[key] = (0, _assign2.default)(compDesc[key] || {}, val));
 	    });
 
-	    (0, _lodashCollectionForEach2['default'])({ deepProperties: deepProperties, deepStaticProperties: deepStaticProperties, configuration: configuration }, function (val, key) {
-	      return val && (compDesc[key] = (0, _lodashObjectMerge2['default'])(compDesc[key] || {}, val));
+	    (0, _forEach2.default)({ deepProperties: deepProperties, deepStaticProperties: deepStaticProperties, configuration: configuration }, function (val, key) {
+	      return val && (compDesc[key] = (0, _merge2.default)(compDesc[key] || {}, val));
 	    });
 	  });
 
 	  var stamp = createStamp(compDesc);
-	  stamp.compose = (0, _lodashObjectAssign2['default'])(compose.bind(stamp), compDesc);
+	  stamp.compose = (0, _assign2.default)(compose.bind(stamp), compDesc);
 
 	  return stamp;
 	}
-
-	module.exports = exports['default'];
 
 /***/ },
 /* 4 */
@@ -512,6 +507,10 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 10 */
 /***/ function(module, exports) {
 
+	'use strict';
+
+	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+
 	/**
 	 * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
 	 * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
@@ -532,12 +531,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * _.isObject(1);
 	 * // => false
 	 */
-	'use strict';
-
 	function isObject(value) {
 	  // Avoid a V8 JIT bug in Chrome 19-20.
 	  // See https://code.google.com/p/v8/issues/detail?id=2291 for more details.
-	  var type = typeof value;
+	  var type = typeof value === 'undefined' ? 'undefined' : _typeof(value);
 	  return !!value && (type == 'object' || type == 'function');
 	}
 
@@ -547,6 +544,10 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 11 */
 /***/ function(module, exports) {
 
+	'use strict';
+
+	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+
 	/**
 	 * Checks if `value` is object-like.
 	 *
@@ -554,10 +555,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param {*} value The value to check.
 	 * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
 	 */
-	'use strict';
-
 	function isObjectLike(value) {
-	  return !!value && typeof value == 'object';
+	  return !!value && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) == 'object';
 	}
 
 	module.exports = isObjectLike;
@@ -610,6 +609,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 14 */
 /***/ function(module, exports) {
 
+	"use strict";
+
 	/**
 	 * The base implementation of `_.property` without support for deep paths.
 	 *
@@ -617,8 +618,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param {string} key The key of the property to get.
 	 * @returns {Function} Returns the new function.
 	 */
-	"use strict";
-
 	function baseProperty(key) {
 	  return function (object) {
 	    return object == null ? undefined : object[key];
@@ -631,12 +630,12 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 15 */
 /***/ function(module, exports) {
 
+	'use strict';
+
 	/**
 	 * Used as the [maximum length](http://ecma-international.org/ecma-262/6.0/#sec-number.max_safe_integer)
 	 * of an array-like value.
 	 */
-	'use strict';
-
 	var MAX_SAFE_INTEGER = 9007199254740991;
 
 	/**
@@ -792,9 +791,9 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 19 */
 /***/ function(module, exports) {
 
-	/** Used to detect unsigned integer values. */
 	'use strict';
 
+	/** Used to detect unsigned integer values. */
 	var reIsUint = /^\d+$/;
 
 	/**
@@ -916,6 +915,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 22 */
 /***/ function(module, exports) {
 
+	"use strict";
+
 	/**
 	 * Copies properties of `source` to `object`.
 	 *
@@ -925,8 +926,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param {Object} [object={}] The object to copy properties to.
 	 * @returns {Object} Returns `object`.
 	 */
-	"use strict";
-
 	function baseCopy(source, props, object) {
 	  object || (object = {});
 
@@ -1044,6 +1043,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 25 */
 /***/ function(module, exports) {
 
+	"use strict";
+
 	/**
 	 * This method returns the first argument provided to it.
 	 *
@@ -1059,8 +1060,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * _.identity(object) === object;
 	 * // => true
 	 */
-	"use strict";
-
 	function identity(value) {
 	  return value;
 	}
@@ -1072,6 +1071,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
+
+	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 
 	var isArrayLike = __webpack_require__(12),
 	    isIndex = __webpack_require__(19),
@@ -1090,7 +1091,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (!isObject(object)) {
 	    return false;
 	  }
-	  var type = typeof index;
+	  var type = typeof index === 'undefined' ? 'undefined' : _typeof(index);
 	  if (type == 'number' ? isArrayLike(object) && isIndex(index, object.length) : type == 'string' && index in object) {
 	    var other = object[index];
 	    return value === value ? value === other : other !== other;
@@ -1104,9 +1105,9 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 27 */
 /***/ function(module, exports) {
 
-	/** Used as the `TypeError` message for "Functions" methods. */
 	'use strict';
 
+	/** Used as the `TypeError` message for "Functions" methods. */
 	var FUNC_ERROR_TEXT = 'Expected a function';
 
 	/* Native method references for those with the same name as other `lodash` methods. */
@@ -1216,6 +1217,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 29 */
 /***/ function(module, exports) {
 
+	"use strict";
+
 	/**
 	 * A specialized version of `_.forEach` for arrays without support for callback
 	 * shorthands and `this` binding.
@@ -1225,8 +1228,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param {Function} iteratee The function invoked per iteration.
 	 * @returns {Array} Returns `array`.
 	 */
-	"use strict";
-
 	function arrayEach(array, iteratee) {
 	  var index = -1,
 	      length = array.length;
@@ -1623,6 +1624,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 40 */
 /***/ function(module, exports) {
 
+	"use strict";
+
 	/**
 	 * Copies the values of `source` to `array`.
 	 *
@@ -1631,8 +1634,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param {Array} [array=[]] The array to copy values to.
 	 * @returns {Array} Returns `array`.
 	 */
-	"use strict";
-
 	function arrayCopy(source, array) {
 	  var index = -1,
 	      length = source.length;
@@ -1914,7 +1915,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _toConsumableArray(arr) {
 	  if (Array.isArray(arr)) {
-	    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];return arr2;
+	    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
+	      arr2[i] = arr[i];
+	    }return arr2;
 	  } else {
 	    return Array.from(arr);
 	  }
@@ -2104,6 +2107,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 48 */
 /***/ function(module, exports) {
 
+	"use strict";
+
 	/**
 	 * A specialized version of `_.map` for arrays without support for callback
 	 * shorthands and `this` binding.
@@ -2113,8 +2118,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param {Function} iteratee The function invoked per iteration.
 	 * @returns {Array} Returns the new mapped array.
 	 */
-	"use strict";
-
 	function arrayMap(array, iteratee) {
 	  var index = -1,
 	      length = array.length,
@@ -2134,6 +2137,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+
 	var baseMatches = __webpack_require__(50),
 	    baseMatchesProperty = __webpack_require__(61),
 	    bindCallback = __webpack_require__(24),
@@ -2151,7 +2156,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @returns {Function} Returns the callback.
 	 */
 	function baseCallback(func, thisArg, argCount) {
-	  var type = typeof func;
+	  var type = typeof func === 'undefined' ? 'undefined' : _typeof(func);
 	  if (type == 'function') {
 	    return thisArg === undefined ? func : bindCallback(func, thisArg, argCount);
 	  }
@@ -2465,6 +2470,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 55 */
 /***/ function(module, exports) {
 
+	"use strict";
+
 	/**
 	 * A specialized version of `_.some` for arrays without support for callback
 	 * shorthands and `this` binding.
@@ -2475,8 +2482,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @returns {boolean} Returns `true` if any element passes the predicate check,
 	 *  else `false`.
 	 */
-	"use strict";
-
 	function arraySome(array, predicate) {
 	  var index = -1,
 	      length = array.length;
@@ -2495,9 +2500,9 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 56 */
 /***/ function(module, exports) {
 
-	/** `Object#toString` result references. */
 	'use strict';
 
+	/** `Object#toString` result references. */
 	var boolTag = '[object Boolean]',
 	    dateTag = '[object Date]',
 	    errorTag = '[object Error]',
@@ -2606,7 +2611,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        othCtor = other.constructor;
 
 	    // Non `Object` object instances with different constructors are not equal.
-	    if (objCtor != othCtor && ('constructor' in object && 'constructor' in other) && !(typeof objCtor == 'function' && objCtor instanceof objCtor && typeof othCtor == 'function' && othCtor instanceof othCtor)) {
+	    if (objCtor != othCtor && 'constructor' in object && 'constructor' in other && !(typeof objCtor == 'function' && objCtor instanceof objCtor && typeof othCtor == 'function' && othCtor instanceof othCtor)) {
 	      return false;
 	    }
 	  }
@@ -2795,6 +2800,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 63 */
 /***/ function(module, exports) {
 
+	"use strict";
+
 	/**
 	 * The base implementation of `_.slice` without an iteratee call guard.
 	 *
@@ -2804,8 +2811,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param {number} [end=array.length] The end position.
 	 * @returns {Array} Returns the slice of `array`.
 	 */
-	"use strict";
-
 	function baseSlice(array, start, end) {
 	  var index = -1,
 	      length = array.length;
@@ -2836,6 +2841,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+
 	var isArray = __webpack_require__(18),
 	    toObject = __webpack_require__(34);
 
@@ -2852,7 +2859,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @returns {boolean} Returns `true` if `value` is a property name, else `false`.
 	 */
 	function isKey(value, object) {
-	  var type = typeof value;
+	  var type = typeof value === 'undefined' ? 'undefined' : _typeof(value);
 	  if (type == 'string' && reIsPlainProp.test(value) || type == 'number') {
 	    return true;
 	  }
@@ -2869,6 +2876,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 65 */
 /***/ function(module, exports) {
 
+	"use strict";
+
 	/**
 	 * Gets the last element of `array`.
 	 *
@@ -2882,8 +2891,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * _.last([1, 2, 3]);
 	 * // => 3
 	 */
-	"use strict";
-
 	function last(array) {
 	  var length = array ? array.length : 0;
 	  return length ? array[length - 1] : undefined;
@@ -2930,6 +2937,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 67 */
 /***/ function(module, exports) {
 
+	'use strict';
+
 	/**
 	 * Converts `value` to a string if it's not one. An empty string is returned
 	 * for `null` or `undefined` values.
@@ -2938,8 +2947,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param {*} value The value to process.
 	 * @returns {string} Returns the string.
 	 */
-	'use strict';
-
 	function baseToString(value) {
 	  return value == null ? '' : value + '';
 	}
@@ -3044,6 +3051,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 71 */
 /***/ function(module, exports) {
 
+	"use strict";
+
 	/**
 	 * Checks if `value` is `undefined`.
 	 *
@@ -3060,8 +3069,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * _.isUndefined(null);
 	 * // => false
 	 */
-	"use strict";
-
 	function isUndefined(value) {
 	  return value === undefined;
 	}
@@ -3170,40 +3177,38 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	exports['default'] = parseDesc;
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = parseDesc;
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	var _forEach = __webpack_require__(28);
 
-	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+	var _forEach2 = _interopRequireDefault(_forEach);
 
-	var _lodashCollectionForEach = __webpack_require__(28);
+	var _isEmpty = __webpack_require__(77);
 
-	var _lodashCollectionForEach2 = _interopRequireDefault(_lodashCollectionForEach);
-
-	var _lodashLangIsEmpty = __webpack_require__(77);
-
-	var _lodashLangIsEmpty2 = _interopRequireDefault(_lodashLangIsEmpty);
+	var _isEmpty2 = _interopRequireDefault(_isEmpty);
 
 	var _stampUtils = __webpack_require__(45);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
 	/**
 	 * Create a stamp spec compliant desc object.
 	 *
-	 * (desc?: stamp|reactDesc|specDesc): specDesc
+	 * (desc?: Stamp | ReactDesc | SpecDesc) => SpecDesc
 	 */
-
 	function parseDesc() {
 	  var desc = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
 	  if ((0, _stampUtils.isStamp)(desc)) {
 	    return desc.compose;
-	  } else if ((0, _stampUtils.isDescriptor)(desc) || (0, _lodashLangIsEmpty2['default'])(desc)) {
+	  } else if ((0, _stampUtils.isDescriptor)(desc) || (0, _isEmpty2.default)(desc)) {
 	    return desc;
 	  }
 
@@ -3226,14 +3231,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  methods && (parsedDesc.methods = methods);
 	  parsedDesc.deepStaticProperties = _extends({}, statics);
 
-	  (0, _lodashCollectionForEach2['default'])({ contextTypes: contextTypes, childContextTypes: childContextTypes, propTypes: propTypes, defaultProps: defaultProps }, function (val, key) {
+	  (0, _forEach2.default)({ contextTypes: contextTypes, childContextTypes: childContextTypes, propTypes: propTypes, defaultProps: defaultProps }, function (val, key) {
 	    return val && (parsedDesc.deepStaticProperties[key] = val);
 	  });
 
 	  return parsedDesc;
 	}
-
-	module.exports = exports['default'];
 
 /***/ },
 /* 77 */
@@ -3336,23 +3339,22 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	exports['default'] = wrapMethods;
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = wrapMethods;
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	var _assign = __webpack_require__(4);
 
-	var _lodashObjectAssign = __webpack_require__(4);
+	var _assign2 = _interopRequireDefault(_assign);
 
-	var _lodashObjectAssign2 = _interopRequireDefault(_lodashObjectAssign);
+	var _mapValues = __webpack_require__(80);
 
-	var _lodashObjectMapValues = __webpack_require__(80);
+	var _mapValues2 = _interopRequireDefault(_mapValues);
 
-	var _lodashObjectMapValues2 = _interopRequireDefault(_lodashObjectMapValues);
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	/**
 	 * React lifecycle methods
@@ -3374,14 +3376,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * functions for React lifecycle methods, starting
 	 * execution with first-in.
 	 *
-	 * (targ?: object, src?: object): new: object
+	 * (targ?: Object, src?: Object) => new: Object
 	 */
-
 	function wrapMethods() {
 	  var targ = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	  var src = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
-	  var methods = (0, _lodashObjectMapValues2['default'])(src, function (val, key) {
+	  var methods = (0, _mapValues2.default)(src, function (val, key) {
 	    switch (lifecycle[key]) {
 	      case 'wrap':
 	        return function () {
@@ -3393,7 +3394,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          var res1 = targ[key] && targ[key].apply(this, arguments);
 	          var res2 = val.apply(this, arguments);
 
-	          return res1 ? (0, _lodashObjectAssign2['default'])(res1, res2) : res2;
+	          return res1 ? (0, _assign2.default)(res1, res2) : res2;
 	        };
 	      case 'wrap_or':
 	        return function () {
@@ -3408,10 +3409,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  });
 
-	  return (0, _lodashObjectAssign2['default'])(_extends({}, targ), methods);
+	  return (0, _assign2.default)(_extends({}, targ), methods);
 	}
-
-	module.exports = exports['default'];
 
 /***/ },
 /* 80 */
