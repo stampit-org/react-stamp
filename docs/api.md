@@ -16,12 +16,12 @@ Returns a stamp.
 
 Creates a new stamp using the current stamp as a base, composed with a list of stamps/descriptors passed as arguments.
 
-### reactDesc
+### ReactDesc
 
 The properties that define a React component/mixin.
 
 ```js
-interface reactDesc {
+interface ReactDesc {
   displayName?: String,
   init?: Function,
   state?: Object,

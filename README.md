@@ -38,7 +38,7 @@ reactStamp(React?: Object) => Stamp
 This method converts React's `Component` constructor function into a [stamp](https://github.com/stampit-org/stamp-specification). To create a React component, we pass a descriptor object to the stamp's `compose` method.
 
 ```js
-interface reactDesc {
+interface ReactDesc {
   displayName?: String,
   init?: Function,
   state?: Object,
