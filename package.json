@@ -13,8 +13,8 @@
     "clean": "rimraf lib",
     "lint": "eslint src test",
     "prepublish": "npm run test && npm run build",
-    "test": "npm run lint && babel-node --presets es2015,stage-2 test/index",
-    "transpile": "babel --presets es2015,stage-2 src --out-dir lib"
+    "test": "npm run lint && babel-node test/index",
+    "transpile": "babel src --out-dir lib"
   },
   "repository": {
     "type": "git",
