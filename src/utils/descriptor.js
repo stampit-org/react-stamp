@@ -1,5 +1,5 @@
-import forEach from 'lodash/collection/forEach';
-import isEmpty from 'lodash/lang/isEmpty';
+import forEach from 'lodash/forEach';
+import isEmpty from 'lodash/isEmpty';
 import { isDescriptor, isStamp } from 'stamp-utils';
 
 /**

@@ -1,6 +1,6 @@
-import assign from 'lodash/object/assign';
-import forEach from 'lodash/collection/forEach';
-import merge from 'lodash/object/merge';
+import assign from 'lodash/assign';
+import forEach from 'lodash/forEach';
+import merge from 'lodash/merge';
 import { isStamp } from 'stamp-utils';
 
 import {

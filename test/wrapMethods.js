@@ -1,4 +1,4 @@
-import forEach from 'lodash/collection/forEach';
+import forEach from 'lodash/forEach';
 import test from 'tape';
 
 import { wrapMethods } from '../src/utils';

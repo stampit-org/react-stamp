@@ -1,5 +1,5 @@
-import assign from 'lodash/object/assign';
-import mapValues from 'lodash/object/mapValues';
+import assign from 'lodash/assign';
+import mapValues from 'lodash/mapValues';
 
 /**
  * React lifecycle methods
