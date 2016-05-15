@@ -129,48 +129,14 @@ test('composing objects with methods', (t) => {
   t.plan(4);
 
   const obj1 = {
-    state: {
-      stamp: false,
-      mixin: false,
-    },
-
-    getChildContext () {
-      return {
-        foo: true,
-        bar: false,
-      };
-    },
-
     componentDidMount () {
       this.state.stamp = true;
-    },
-
-    shouldComponentUpdate () {
-      return true;
-    },
-
-    render () {
-      return false;
     },
   };
 
   const obj2 = {
-    getChildContext () {
-      return {
-        bar: true,
-      };
-    },
-
     componentDidMount () {
       this.state.mixin = true;
-    },
-
-    shouldComponentUpdate () {
-      return false;
-    },
-
-    render () {
-      return true;
     },
   };
 

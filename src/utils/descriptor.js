@@ -1,18 +1,31 @@
 import forEach from 'lodash/forEach';
-import isEmpty from 'lodash/isEmpty';
-import { isDescriptor, isStamp } from 'stamp-utils';
+import has from 'lodash/has';
+
+function isSpecDescriptor (obj) {
+  const properties = [
+    'methods',
+    'properties',
+    'deepProperties',
+    'propertyDescriptors',
+    'staticProperties',
+    'staticDeepProperties',
+    'staticPropertyDescriptors',
+    'initializers',
+    'configuration',
+    'deepConfiguration'
+  ];
+
+  return properties.filter(property => has(obj, property)).length;
+}
 
 /**
  * Create a stamp spec compliant desc object.
  *
- * (desc?: Stamp | ReactDesc | SpecDesc) => SpecDesc
+ * (desc?: ReactDesc | SpecDesc) => SpecDesc
  */
 export default function parseDesc (desc = {}) {
-  if (isStamp(desc)) {
-    return desc.compose;
-  } else if (isDescriptor(desc) || isEmpty(desc)) {
-    return desc;
-  }
+  //console.log(desc);
+  if (isSpecDescriptor(desc)) return desc;
 
   let {
     displayName, init, state, statics,
@@ -21,14 +34,16 @@ export default function parseDesc (desc = {}) {
   } = desc;
   const parsedDesc = {};
 
+  //console.log(methods);
+
   displayName && (parsedDesc.staticProperties = { displayName });
   init && (parsedDesc.initializers = [ init ]);
   state && (parsedDesc.deepProperties = { state });
   methods && (parsedDesc.methods = methods);
-  parsedDesc.deepStaticProperties = { ...statics };
+  parsedDesc.staticDeepProperties = { ...statics };
 
   forEach({ contextTypes, childContextTypes, propTypes, defaultProps },
-    (val, key) => val && (parsedDesc.deepStaticProperties[key] = val)
+    (val, key) => val && (parsedDesc.staticDeepProperties[key] = val)
   );
 
   return parsedDesc;

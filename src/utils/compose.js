@@ -1,19 +1,30 @@
 import assign from 'lodash/assign';
-import forEach from 'lodash/forEach';
-import merge from 'lodash/merge';
-import { isStamp } from 'stamp-utils';
+import isFunction from 'lodash/isFunction';
+import isObject from 'lodash/isObject';
+import mergeWith from 'lodash/mergeWith';
+//import compose from 'stamp-specification';
 
 import {
   parseDesc,
   wrapMethods,
 } from './';
 
+const isDescriptor = isObject;
+const merge = (dst, src) => mergeWith(dst, src, (dstValue, srcValue) => {
+  if (Array.isArray(dstValue)) {
+    if (Array.isArray(srcValue)) return dstValue.concat(srcValue);
+    if (isObject(srcValue)) return merge({}, srcValue);
+  }
+
+  return undefined;
+});
+
 /**
  * Given a description object, return a stamp aka composable.
  *
  * (desc?: SpecDesc) => Stamp
  */
-function createStamp (specDesc = {}) {
+function createStamp (specDesc = {}, composeFunction) {
   const Component = (options, ...args) => {
     let instance = Object.create(specDesc.methods || {});
 
@@ -32,52 +43,67 @@ function createStamp (specDesc = {}) {
     return instance;
   };
 
-  merge(Component, specDesc.deepStaticProperties);
+  merge(Component, specDesc.staticDeepProperties);
   assign(Component, specDesc.staticProperties);
   Object.defineProperties(Component, specDesc.staticPropertyDescriptors || {});
 
   !Component.displayName && (Component.displayName = 'Component');
 
+  const composeImplementation = isFunction(Component.compose) ? Component.compose : composeFunction;
+  Component.compose = function () {
+    return composeImplementation.apply(this, arguments);
+  };
+  assign(Component.compose, specDesc);
+
   return Component;
 }
 
 /**
- * Take any number of stamps or descriptors. Return a new stamp
- * that encapsulates combined behavior. If nothing is passed in,
- * an empty stamp is returned.
- *
- * (...args?: Stamp|ReactDesc|SpecDesc[]) => Stamp
+ * Mutates the dstDescriptor by merging the srcComposable data into it.
+ * @param {object} dstDescriptor The descriptor object to merge into.
+ * @param {object} [srcComposable] The composable (either descriptor or stamp) to merge data form.
+ * @returns {object} Returns the dstDescriptor argument.
  */
-export default function compose (...args) {
-  const descs = args.map(arg => parseDesc(arg));
-  const compDesc = {};
+function mergeComposable (dstDescriptor, srcComposable) {
+  const srcDescriptor = parseDesc(srcComposable && srcComposable.compose || srcComposable);
+  if (!isDescriptor(srcDescriptor)) return dstDescriptor;
 
-  isStamp(this) && descs.unshift(this.compose);
+  const combineProperty = (propName, action) => {
+    if (!isObject(srcDescriptor[propName])) return;
+    if (!isObject(dstDescriptor[propName])) dstDescriptor[propName] = {};
+    action(dstDescriptor[propName], srcDescriptor[propName]);
+  };
 
-  forEach(descs, desc => {
-    const {
-      initializers, methods, properties, staticProperties, propertyDescriptors,
-      staticPropertyDescriptors, deepProperties, deepStaticProperties, configuration,
-    } = desc;
+  console.log(dstDescriptor.methods);
+  combineProperty('methods', wrapMethods); // Wrap React lifecycle methods
 
-    // Wrap React lifecycle methods
-    compDesc.methods = wrapMethods(compDesc.methods, methods);
+  //console.log(dstDescriptor.methods);
 
-    // Stamp spec
-    compDesc.initializers = (compDesc.initializers || []).concat(initializers)
-      .filter(initializer => typeof initializer === 'function');
+  combineProperty('properties', assign);
+  combineProperty('deepProperties', merge);
+  combineProperty('propertyDescriptors', assign);
+  combineProperty('staticProperties', assign);
+  combineProperty('staticDeepProperties', merge);
+  combineProperty('staticPropertyDescriptors', assign);
+  combineProperty('configuration', assign);
+  combineProperty('deepConfiguration', merge);
+  if (Array.isArray(srcDescriptor.initializers)) {
+    if (!Array.isArray(dstDescriptor.initializers)) dstDescriptor.initializers = [];
+    dstDescriptor.initializers.push.apply(dstDescriptor.initializers, srcDescriptor.initializers.filter(isFunction));
+  }
 
-    forEach({ properties, staticProperties, propertyDescriptors, staticPropertyDescriptors },
-      (val, key) => val && (compDesc[key] = assign(compDesc[key] || {}, val))
-    );
+  //console.log(dstDescriptor);
 
-    forEach({ deepProperties, deepStaticProperties, configuration },
-      (val, key) => val && (compDesc[key] = merge(compDesc[key] || {}, val))
-    );
-  });
+  return dstDescriptor;
+}
 
-  const stamp = createStamp(compDesc);
-  stamp.compose = assign(compose.bind(stamp), compDesc);
-
-  return stamp;
+/**
+ * Given the list of composables (stamp descriptors and stamps) returns a new stamp (composable factory function).
+ * @param {...(object|Function)} [composables] The list of composables.
+ * @returns {Function} A new stamp (aka composable factory function).
+ */
+export default function compose (...composables) {
+  const descriptor = [this].concat(composables).filter(isObject).reduce(mergeComposable, {});
+  //console.log(descriptor);
+  return createStamp(descriptor, compose);
 }
