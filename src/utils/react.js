@@ -24,6 +24,8 @@ const lifecycle = {
  * (targ?: Object, src?: Object) => new: Object
  */
 export default function wrapMethods (targ = {}, src = {}) {
+  //console.log(targ);
+  //console.log(src);
   const methods = mapValues(src, (val, key) => {
     switch (lifecycle[key]) {
       case 'wrap':
@@ -51,5 +53,5 @@ export default function wrapMethods (targ = {}, src = {}) {
     }
   });
 
-  return assign({ ...targ }, methods);
+  return assign(targ, methods);
 }
