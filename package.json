@@ -35,8 +35,8 @@
   },
   "homepage": "https://github.com/stampit-org/react-stamp#readme",
   "dependencies": {
-    "lodash": "^4.6.1",
-    "stamp-utils": "^1.2.4"
+    "lodash": "4.6.1",
+    "stamp-utils": "1.2.4"
   },
   "devDependencies": {
     "babel-cli": "^6.6.5",
