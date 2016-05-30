@@ -1,6 +1,6 @@
 {
   "name": "react-stamp",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Composables for React.",
   "main": "lib",
   "jsnext:main": "src",
