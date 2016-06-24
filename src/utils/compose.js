@@ -79,5 +79,9 @@ export default function compose (...args) {
   const stamp = createStamp(compDesc);
   stamp.compose = assign(compose.bind(stamp), compDesc);
 
+  if (compDesc.methods && compDesc.methods.render) {
+    stamp.prototype.render = compDesc.methods.render;
+  }
+
   return stamp;
 }

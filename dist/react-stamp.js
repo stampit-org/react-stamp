@@ -244,6 +244,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var stamp = createStamp(compDesc);
 	  stamp.compose = (0, _assign2.default)(compose.bind(stamp), compDesc);
 
+	  if (compDesc.methods && compDesc.methods.render) {
+	    stamp.prototype.render = compDesc.methods.render;
+	  }
+
 	  return stamp;
 	}
 
