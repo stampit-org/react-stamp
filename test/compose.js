@@ -126,7 +126,7 @@ test('composing objects with non-React statics', (t) => {
 });
 
 test('composing objects with methods', (t) => {
-  t.plan(4);
+  t.plan(5);
 
   const obj1 = {
     state: {
@@ -175,6 +175,11 @@ test('composing objects with methods', (t) => {
   };
 
   const stamp = compose(obj1, obj2);
+
+  t.ok(
+    typeof stamp.prototype.render === 'function',
+    'should attach render() to stamp prototype'
+  );
 
   const instance = stamp();
   instance.componentDidMount();
