@@ -2,6 +2,17 @@ import forEach from 'lodash/forEach';
 import isEmpty from 'lodash/isEmpty';
 import { isDescriptor, isStamp } from 'stamp-utils';
 
+const descriptorNames = [ 'methods', 'properties', 'deepProperties', 'propertyDescriptors', 'staticProperties', 'deepStaticProperties', 'staticPropertyDescriptors', 'initializers', 'configuration' ];
+
+export function isDesc (desc) {
+  if (isDescriptor(desc) && Object.keys(desc).some((name) => descriptorNames.includes(name))) {
+    return true;
+  } else if (isEmpty(desc)) {
+    return true;
+  }
+  return false;
+}
+
 /**
  * Create a stamp spec compliant desc object.
  *
@@ -10,7 +21,7 @@ import { isDescriptor, isStamp } from 'stamp-utils';
 export default function parseDesc (desc = {}) {
   if (isStamp(desc)) {
     return desc.compose;
-  } else if (isDescriptor(desc) || isEmpty(desc)) {
+  } else if (isDesc(desc)) {
     return desc;
   }
 
