@@ -1,38 +1,8 @@
 {
-  "parser": "babel-eslint",
-
-  "env": {
-    "browser": true,
-    "node": true,
-    "es6": true
-  },
-
-  "ecmaFeatures": {
-    "arrowFunctions": true,
-    "binaryLiterals": true,
-    "blockBindings": true,
-    "classes": false,
-    "defaultParams": true,
-    "destructuring": true,
-    "forOf": true,
-    "generators": true,
-    "modules": true,
-    "objectLiteralComputedProperties": true,
-    "objectLiteralDuplicateProperties": true,
-    "objectLiteralShorthandMethods": true,
-    "objectLiteralShorthandProperties": true,
-    "octalLiterals": true,
-    "regexUFlag": true,
-    "regexYFlag": true,
-    "spread": true,
-    "superInFunctions": false,
-    "templateStrings": true,
-    "unicodeCodePointEscapes": true,
-    "globalReturn": true,
-    "jsx": true
-  },
-
   "rules": {
+    "no-empty-label": [0],
+    "space-after-keywords": [0],
+    "space-return-throw-case": [0],
     "block-scoped-var": [0],
     "brace-style": [2, "1tbs", {"allowSingleLine": true}],
     "camelcase": [0],
