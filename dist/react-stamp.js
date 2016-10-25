@@ -5437,7 +5437,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	exports.isDesc = isDesc;
+	exports.isStampDescriptor = isStampDescriptor;
 	exports.default = parseDesc;
 
 	var _forEach = __webpack_require__(51);
@@ -5456,7 +5456,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var descriptorNames = ['methods', 'properties', 'deepProperties', 'propertyDescriptors', 'staticProperties', 'deepStaticProperties', 'staticPropertyDescriptors', 'initializers', 'configuration'];
 
-	function isDesc(desc) {
+	function isStampDescriptor(desc) {
 	  if ((0, _stampUtils.isDescriptor)(desc) && Object.keys(desc).some(function (name) {
 	    return descriptorNames.includes(name);
 	  })) {
@@ -5477,7 +5477,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  if ((0, _stampUtils.isStamp)(desc)) {
 	    return desc.compose;
-	  } else if (isDesc(desc)) {
+	  } else if (isStampDescriptor(desc)) {
 	    return desc;
 	  }
 

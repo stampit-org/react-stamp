@@ -4,7 +4,7 @@ import { isDescriptor, isStamp } from 'stamp-utils';
 
 const descriptorNames = [ 'methods', 'properties', 'deepProperties', 'propertyDescriptors', 'staticProperties', 'deepStaticProperties', 'staticPropertyDescriptors', 'initializers', 'configuration' ];
 
-export function isDesc (desc) {
+export function isStampDescriptor (desc) {
   if (isDescriptor(desc) && Object.keys(desc).some((name) => descriptorNames.includes(name))) {
     return true;
   } else if (isEmpty(desc)) {
@@ -21,7 +21,7 @@ export function isDesc (desc) {
 export default function parseDesc (desc = {}) {
   if (isStamp(desc)) {
     return desc.compose;
-  } else if (isDesc(desc)) {
+  } else if (isStampDescriptor(desc)) {
     return desc;
   }
 

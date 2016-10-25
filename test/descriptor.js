@@ -1,10 +1,10 @@
 import test from 'tape';
-import { isDesc } from '../src/utils/descriptor';
+import { isStampDescriptor } from '../src/utils/descriptor';
 
-test('isDesc({ render() {} })', (t) => {
+test('isStampDescriptor({ render() {} })', (t) => {
   t.plan(1);
 
-  const result = isDesc({ render () {} });
+  const result = isStampDescriptor({ render () {} });
 
   t.ok(
     result === false,
@@ -13,10 +13,10 @@ test('isDesc({ render() {} })', (t) => {
 });
 
 
-test('isDesc({ methods: {}, initializers: [] })', (t) => {
+test('isStampDescriptor({ methods: {}, initializers: [] })', (t) => {
   t.plan(1);
 
-  const result = isDesc(
+  const result = isStampDescriptor(
     { methods: {
         isReactComponent: {},
         setState () {},
