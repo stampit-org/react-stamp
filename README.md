@@ -1,8 +1,5 @@
-[![build status](https://img.shields.io/travis/stampit-org/react-stamp.svg?style=flat-square)](https://travis-ci.org/stampit-org/react-stamp)
-[![npm version](https://img.shields.io/npm/v/react-stamp.svg?style=flat-square)](https://www.npmjs.com/package/react-stamp)
-[![license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](http://troutowicz.mit-license.org)
+# react-stamp [![build status](https://img.shields.io/travis/stampit-org/react-stamp.svg?style=flat-square)](https://travis-ci.org/stampit-org/react-stamp)![Greenkeeper Badge](https://badges.greenkeeper.io/stampit-org/react-stamp.svg) [![npm version](https://img.shields.io/npm/v/react-stamp.svg?style=flat-square)](https://www.npmjs.com/package/react-stamp) [![license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](http://troutowicz.mit-license.org)
 
-# react-stamp
 > Composables for React.
 
 `react-stamp` has replaced [react-stampit](https://github.com/stampit-org/react-stampit) and is compliant with the [stamp specification](https://github.com/stampit-org/stamp-specification). The [Rtype specification](https://github.com/ericelliott/rtype#rtype) is used for documenting function signatures and data structures.
