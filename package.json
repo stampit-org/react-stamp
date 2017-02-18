@@ -48,7 +48,7 @@
     "eslint": "^3.8.1",
     "react": "^15.3.2",
     "react-addons-test-utils": "^15.3.2",
-    "rimraf": "^2.5.2",
+    "rimraf": "2.5.4",
     "tape": "^4.5.1",
     "webpack": "^1.12.14"
   }
