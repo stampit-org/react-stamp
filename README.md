@@ -8,6 +8,10 @@
 npm install react-stamp --save
 ```
 
+# Status - DEPRECATED
+
+Try [React hooks](https://reactjs.org/docs/hooks-intro.html) or compose components with [higher-order components](https://reactjs.org/docs/higher-order-components.html) and function composition, instead.
+
 ### What is composition?
 
 Composition is the act of creating an object from a collection of other objects. Many will say this is actually
